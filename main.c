@@ -18,7 +18,7 @@ int main(){
 
     while(1){
         
-        matrix = matrix_construct(matrix);
+        create_matrix(matrix);
 
         printf("c? ");
         scanf("%d", &i);
@@ -27,11 +27,11 @@ int main(){
         break;
     }
 
-    assign_value_matrix(matrix); //ERRO
-    // read_node_value_matrix(matrix); 
+    assign_value_matrix(matrix); 
+    read_node_value_matrix(matrix); 
     // lalalu
   
-    matrix_destroy(matrix);
+    destroy_matrix(matrix);
 
 
     // while(1){

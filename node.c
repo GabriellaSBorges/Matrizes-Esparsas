@@ -71,12 +71,12 @@ Node_pt node_return_prev(Node_pt n, char list_type){
         return n->prev_column;
 }
 
-int node_return_place(Node_pt n, char list_type){
+int node_return_place(Node_pt n, char position_type){
 
-    if( list_type == 'l')
+    if( position_type == 'l')
         return position_return_line(n->place);
 
-    if( list_type == 'c' )
+    if( position_type == 'c' )
         return position_return_column(n->place);
 }
 

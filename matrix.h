@@ -9,15 +9,17 @@ typedef struct Matrix Matrix;
 typedef Matrix* Matrix_pt;
 
 
-Matrix_pt *matrix_construct(Matrix_pt *matrix);
+void create_matrix(Matrix_pt matrix);
 
-Matrix_pt *alloc_and_realloc_matrices(Matrix_pt *matrix, int qty_matrices);
+void *matrix_construct(Matrix_pt *matrix, int qty_lines, qty_columns);
 
-Matrix_pt *initialize_matrix(Matrix_pt *matrix, int l, int c);
+void *matrix_alloc_and_realloc(Matrix_pt *matrix, int qty_matrices);
 
-void verify_matrix(Matrix_pt *matrix);
+void *matrix_initialize(Matrix_pt *matrix, int l, int c);
 
-void matrix_destroy(Matrix_pt *matrix);
+void matrix_verify(Matrix_pt *matrix);
+
+void destroy_matrix(Matrix_pt *matrix);
 
 void assign_value_matrix(Matrix_pt *matrix);
 

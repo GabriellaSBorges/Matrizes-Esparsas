@@ -9,18 +9,8 @@ struct Matrix{
     int quantity;
 };
 
-Matrix_pt *matrix_construct(Matrix_pt *matrix){
+void create_matrix(Matrix_pt matrix){
     int l = 0, c = 0;
-    int i = 0, qty = 0;
-
-    if( matrix != NULL )
-        qty = matrix[0]->quantity;
-
-    matrix = alloc_and_realloc_matrices(matrix, qty); 
-
-    if( matrix == NULL ){
-        printf("oi");
-    }
 
     while(1){
         printf("Quantity of lines and columns of the desired matrix, respectively: ");
@@ -32,22 +22,31 @@ Matrix_pt *matrix_construct(Matrix_pt *matrix){
             break;        
     }
 
-    matrix = initialize_matrix(matrix, l, c);
+    matrix_construct(matrix, l, c);
+
+}
+
+void *matrix_construct(Matrix_pt *matrix, int qty_lines, int qty_columns){
+    int i = 0, qty = 0;
+
+    if( matrix != NULL )
+        qty = matrix[0]->quantity;
+
+    matrix = matrix_alloc_and_realloc(matrix, qty); 
+    matrix = matrix_initialize(matrix, qty_lines, qty_columns);
 
     int index = matrix[0]->quantity-1;
 
-    printf("VAL %d %d\n", matrix[index]->number_lines, matrix[index]->number_columns);
-    printf("Q %d  A %d\n", matrix[0]->quantity, matrix[0]->qty_allocated);
+    // printf("VAL %d %d\n", matrix[index]->number_lines, matrix[index]->number_columns);
+    // printf("Q %d  A %d\n", matrix[0]->quantity, matrix[0]->qty_allocated);
 
     matrix[index]->lines = list_construct( matrix[index]->lines, matrix[index]->number_lines );
     matrix[index]->columns = list_construct( matrix[index]->lines, matrix[index]->number_columns );
 
-    verify_matrix(matrix);
-    
-    return matrix;
+    matrix_verify(matrix);
 }
 
-Matrix_pt *alloc_and_realloc_matrices(Matrix_pt *matrix, int qty_matrices){
+void *matrix_alloc_and_realloc(Matrix_pt *matrix, int qty_matrices){
     int i = 0, inicial_qty = 0;
 
     if( !qty_matrices ){
@@ -70,20 +69,16 @@ Matrix_pt *alloc_and_realloc_matrices(Matrix_pt *matrix, int qty_matrices){
             matrix[i] = (Matrix_pt) malloc( sizeof(Matrix) );
         }
     }
-
-    return matrix;
 }
 
-Matrix_pt *initialize_matrix(Matrix_pt *matrix, int l, int c){
+void *matrix_initialize(Matrix_pt *matrix, int l, int c){
     
     matrix[matrix[0]->quantity]->number_lines = l;
     matrix[matrix[0]->quantity]->number_columns = c;
     matrix[0]->quantity++;
-
-    return matrix;
 }
 
-void verify_matrix(Matrix_pt *matrix){
+void matrix_verify(Matrix_pt *matrix){
 
     if( matrix != NULL ){
         printf("The matrix-%d was constructed!\n\n", matrix[0]->quantity-1);
@@ -94,7 +89,7 @@ void verify_matrix(Matrix_pt *matrix){
     }
 }
 
-void matrix_destroy(Matrix_pt *matrix){
+void destroy_matrix(Matrix_pt *matrix){
     int qty_alloc = matrix[0]->qty_allocated;
     int qty_matrices = matrix[0]->quantity;
 
@@ -123,15 +118,15 @@ void assign_value_matrix(Matrix_pt *matrix){
     printf("\nValue of the node: ");
     scanf("%f", &val);
 
-printf("%d %d %d %f\n\n", index, l, c, val);
+    int position_occupied = verify_position_occupied(matrix[index]->lines[l], c, 'c');
 
-    if( verify_position_occupied(matrix[index]->lines[l], c) && val != 0 )
-        list_assign_value(matrix[index]->lines[l], c, val);
+    if( position_occupied && val != 0 )
+        list_assign_value(matrix[index]->lines[l], c, val, 'p');
 
-    else if( verify_position_occupied(matrix[index]->lines[l], l) && val == 0 )
+    else if( position_occupied && val == 0 )
         list_decrement(matrix[index]->lines[l], matrix[index]->columns[c], l, c);
 
-    else if( !verify_position_occupied(matrix[index]->lines[l], c) && val != 0 )
+    else if( !position_occupied && val != 0 )
         list_increment(matrix[index]->lines[l], matrix[index]->columns[c], l, c, val);
 
 }
@@ -203,9 +198,9 @@ void read_node_value_matrix(Matrix_pt *matrix){
 
     int index = matrix_return_index(matrix);
 
-    int l = matrix_return_position(matrix, index,'l');
-    int c = matrix_return_position(matrix, index,'c');
-    
+    int l = matrix_return_position(matrix, index, 'l');
+    int c = matrix_return_position(matrix, index, 'c');
+
     Node_pt n = find_node_row(matrix[index]->lines[l], c, 'a', 'l', 'c');
 
     if( n == NULL )
@@ -213,3 +208,22 @@ void read_node_value_matrix(Matrix_pt *matrix){
     else
         printf("Value of the node [%d,%d]: %f\n\n", l, c, node_return_value(n));
 }
+
+void add_matrices(Matrix_pt *matrix){
+    printf("|ADD TWO MATRICES|\n");
+
+    int index_1 = matrix_return_index(matrix);
+    int qty_lines = matrix[index_1]->number_lines;
+    int qty_columns = matrix[index_1]->number_columns;
+
+    while(){
+        int index_2 = matrix_return_index(matrix);
+    }
+    
+
+    matrix_construct(matrix);
+}
+
+// Matrix_pt (Matrix_pt matrix_1, Matrix_pt matrix_2) {
+
+// }

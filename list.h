@@ -14,9 +14,9 @@ List_pt *list_construct(List_pt *row, int size_row);
 
 void list_destroy(List_pt *list, int qty_lists, char list_type);
 
-int verify_position_occupied(List_pt line, int l_searched);
+int verify_position_occupied(List_pt row, int p_searched, char position_type);
 
-void list_assign_value(List_pt line, int l_searched, data_type val);
+void list_assign_value(List_pt row, int p_searched, data_type val, char position_type);
 
 void list_decrement(List_pt line, List_pt column, int l, int c);
 

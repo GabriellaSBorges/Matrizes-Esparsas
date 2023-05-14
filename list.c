@@ -60,39 +60,45 @@ void list_destroy(List_pt *list, int qty_lists, char list_type){
     free(list);  
 }
 
-int verify_position_occupied(List_pt line, int c_searched){
-    ListIterator_pt li = list_front_iterator(line);
-    int c = 0;
+int verify_position_occupied(List_pt row, int p_searched, char position_type){
+    ListIterator_pt li = list_front_iterator(row);
+    int p = 0;
 
-    while( !list_iterator_is_over(li) ){
-        c = list_iterator_next(li, 'l', 'c');
-
-        if( c == c_searched ){
-            // free(li);
-            printf("occupied!");
-            return 1;
-        }     
-
+    if( row->head != NULL ){
+        printf("VAL %f \n", node_return_value(row->head));
+        printf("L %d C %d\n", node_return_place(row->head, 'l'), node_return_place(row->head, 'c'));
     }
 
-    printf("not occupied");
+    while( !list_iterator_is_over(li) ){
+        p = node_return_place(li->current, position_type);
+
+        if( p == p_searched ){
+            free(li);
+            printf("occupied!");
+            return 1;
+        }       
+        
+        li->current = node_return_next(li->current, position_type);   
+    }
+
+    printf("not occupied\n");
     free(li);
 
     return 0;
 }
 
 // pode mesclar com a find row
-void list_assign_value(List_pt line, int c_searched, data_type val){
-    ListIterator_pt li = list_front_iterator(line);
-    int c = 0;
+void list_assign_value(List_pt row, int p_searched, data_type val, char position_type){
+    ListIterator_pt li = list_front_iterator(row);
+    int p = 0;
 
     while( !list_iterator_is_over(li) ){
-        c = list_iterator_next(li, 'l', 'c');
+        p = node_return_place(li->current, position_type);
 
-        if( c == c_searched ){
+        if( p == p_searched ){
             node_assign_value(li->current, val);
             break;
-        } 
+        }         
     }
 
     free(li); 
@@ -149,6 +155,11 @@ void list_increment(List_pt line, List_pt column, int l, int c, data_type val){
     Node_pt next_column = find_node_row(column, l, 'n', 'c', 'l');
     Node_pt prev_column = find_node_row(column, l, 'p', 'c', 'l');
 
+    if( next_line = NULL )
+        printf("OI %f\n", node_return_value(next_line));
+    else 
+        printf("NULL\n");
+
     Node *n = node_construct(val, l, c, next_line, prev_line, next_column, prev_column);
 
     line->size++;
@@ -156,8 +167,10 @@ void list_increment(List_pt line, List_pt column, int l, int c, data_type val){
     
     list_insert_node(line, n, next_line, prev_line, 'l');
     list_insert_node(column, n, next_column, prev_column, 'c');
-    
-    printf("VAL %f\n", node_return_value(n));
+
+    printf("VAL %f %f %f\n", node_return_value(n), node_return_value(line->head), node_return_value(column->head));
+    printf("L %d C %d\n", node_return_place(line->head, 'l'), node_return_place(line->head, 'c'));
+
 }
 
 Node_pt find_node_row(List_pt row, int index_searched, char node_type, char list_type, char position_type){
@@ -223,11 +236,17 @@ ListIterator_pt list_front_iterator(List_pt l){
     return it;
 }
 
-int list_iterator_next(ListIterator_pt li, char list_type, char position_type){
-    li->current = node_return_next(li->current, list_type);
+// int list_iterator_next(ListIterator_pt li, char list_type, char position_type){
+//     int p = -1;
 
-    return node_return_place(li->current, position_type);
-}
+//     li->current = node_return_next(li->current, list_type);
+
+//     if( li->current != NULL )
+//         p = node_return_place(li->current, position_type);
+
+
+//     return p;
+// }
 
 Node_pt list_iterator_find_node(ListIterator_pt li, int index, char node_type, char list_type, char position_type){
     //aplicar o switch
@@ -251,13 +270,15 @@ Node_pt list_iterator_find_node(ListIterator_pt li, int index, char node_type, c
 
 
     } else if( node_type == 'a' ) { /* actual node */
-        int c = 0;
+        int p = 0;
 
         while( !list_iterator_is_over(li) ){
-            c = list_iterator_next(li, list_type, position_type);
+            p = node_return_place(li->current, position_type);
 
-            if( c == index )
+            if( p == index )
                 return li->current;
+
+            li->current = node_return_next(li->current, position_type);
         }
     }
     
