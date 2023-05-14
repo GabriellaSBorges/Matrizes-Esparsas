@@ -1,0 +1,12 @@
+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
+
+holly
+
+git remote set-url origin https://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@github.com/GabriellaSBorges/Matrizes-Esparsa
+
+git push -u origin main
+
+git add . 
+git status
+git commit -m "<msg>"
+git push origin main

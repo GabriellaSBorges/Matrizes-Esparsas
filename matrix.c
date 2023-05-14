@@ -123,6 +123,8 @@ void assign_value_matrix(Matrix_pt *matrix){
     printf("\nValue of the node: ");
     scanf("%f", &val);
 
+printf("%d %d %d %f\n\n", index, l, c, val);
+
     if( verify_position_occupied(matrix[index]->lines[l], c) && val != 0 )
         list_assign_value(matrix[index]->lines[l], c, val);
 
@@ -143,7 +145,7 @@ int matrix_return_index(Matrix_pt *matrix){
         printf("\n|Available indexes: 0 to %d\n", matrix[0]->quantity-1);
 
     while(1){
-        printf("Matrix you want to increment: ");
+        printf("Matrix that you are interested: ");
         scanf("%d", &index);
 
         if( index < 0 || index >= matrix[0]->quantity )
@@ -166,7 +168,7 @@ int matrix_return_position(Matrix_pt *matrix, int index, char position_type){
                 printf("\n|Available lines: 0 to %d\n", matrix[index]->number_lines-1);
 
             while(1){
-                printf("Line of the new node: ");
+                printf("Line of the node: ");
                 scanf("%d", &p);  
 
                 if( p < 0 || p >= matrix[index]->number_lines )
@@ -183,7 +185,7 @@ int matrix_return_position(Matrix_pt *matrix, int index, char position_type){
                 printf("\n|Available columns: 0 to %d\n", matrix[index]->number_columns-1);
 
             while(1){
-                printf("Column of the new node: ");
+                printf("Column of the node: ");
                 scanf("%d", &p);  
 
                 if( p < 0 || p >= matrix[index]->number_columns )

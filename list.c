@@ -67,15 +67,21 @@ int verify_position_occupied(List_pt line, int c_searched){
     while( !list_iterator_is_over(li) ){
         c = list_iterator_next(li, 'l', 'c');
 
-        if( c == c_searched )
+        if( c == c_searched ){
+            // free(li);
+            printf("occupied!");
             return 1;
+        }     
+
     }
 
+    printf("not occupied");
     free(li);
 
     return 0;
 }
 
+// pode mesclar com a find row
 void list_assign_value(List_pt line, int c_searched, data_type val){
     ListIterator_pt li = list_front_iterator(line);
     int c = 0;
@@ -151,6 +157,7 @@ void list_increment(List_pt line, List_pt column, int l, int c, data_type val){
     list_insert_node(line, n, next_line, prev_line, 'l');
     list_insert_node(column, n, next_column, prev_column, 'c');
     
+    printf("VAL %f\n", node_return_value(n));
 }
 
 Node_pt find_node_row(List_pt row, int index_searched, char node_type, char list_type, char position_type){
@@ -247,7 +254,7 @@ Node_pt list_iterator_find_node(ListIterator_pt li, int index, char node_type, c
         int c = 0;
 
         while( !list_iterator_is_over(li) ){
-            c = list_iterator_next(li, 'l', 'c');
+            c = list_iterator_next(li, list_type, position_type);
 
             if( c == index )
                 return li->current;

@@ -27,8 +27,8 @@ int main(){
         break;
     }
 
-    assign_value_matrix(matrix);
-    // read_node_value_matrix(matrix); heyhey
+    assign_value_matrix(matrix); //ERRO
+    // read_node_value_matrix(matrix); 
     // lalalu
   
     matrix_destroy(matrix);
