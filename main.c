@@ -29,6 +29,7 @@ int main(){
 
     assign_value_matrix(matrix);
     // read_node_value_matrix(matrix); heyhey
+    // lalalu
   
     matrix_destroy(matrix);
 
