@@ -1,6 +1,7 @@
 #include "headers/matrix.h"
 
 //hyabak na holly
+// gcc main.c -g -o main node.c position.c list.c matrix.c
 
 void printMenu(){
 
@@ -16,38 +17,22 @@ int main(){
     printf("---------------\n Bem-vindo! :) \n---------------\n");
     printf("Uma matriz foi criada!\n");
 
-    while(1){
-        
-        matrix = create_matrix(matrix);
-        assign_value_matrix(matrix); 
-        print_dense_matrix(matrix);
+    matrix = matrix_construct(matrix, 2, 2);
 
-        printf("c? ");
-        scanf("%d", &i);
+    matrix = matrix_construct(matrix, 2, 2);
 
-        if( i == 0 )
-        break;
-    }
+    assign_value_matrix(matrix, 0, 0, 0, 1); 
+    print_dense_matrix(matrix, 0);
 
-    add_matrices(matrix); 
+    assign_value_matrix(matrix, 1, 1, 1, 2); 
+    print_dense_matrix(matrix, 1);
 
-    while(1){ 
-        //read_node_value_matrix(matrix); 
-
-        print_dense_matrix(matrix);
-
-        printf("c? ");
-        scanf("%d", &i);
-
-        if( i == 0 )
-        break;
-    }
+    read_node_value_matrix(matrix, 0, 0, 0); 
+    read_node_value_matrix(matrix, 0, 1, 1); 
     
 
   
     destroy_matrix(matrix);
-
-
 
 
     return 0;
