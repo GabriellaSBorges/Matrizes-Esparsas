@@ -214,14 +214,43 @@ void read_node_value_matrix(Matrix_pt *matrix){
 }
 
 //mostrar quais matrizes têm o msm tamanho
+// ta percorrendo as listas toda hora MUDAR
 void add_matrices(Matrix_pt *matrix){
-    int index_1 = 0, index_2 = 0;
 
-    printf("|ADD TWO MATRICES|\n");
+    printf("\n|ADD TWO MATRICES|\n");
 
-    index_1 = matrix_return_index(matrix);
+    int index_1 = matrix_return_index(matrix);
     int qty_lines = matrix[index_1]->number_lines;
     int qty_columns = matrix[index_1]->number_columns;
+
+    int index_2 = matrix_return_index_2(matrix, qty_lines, qty_columns);
+
+    matrix = matrix_construct(matrix, qty_lines, qty_columns);
+    int new_index = matrix[0]->quantity-1;
+
+    data_type value_1 = 0, value_2 = 0, new_value = 0;
+    ListIterator_pt li_1 = NULL, li_2 = NULL;
+
+    for( int l = 0; l < qty_lines; l++ ){
+        li_1 = list_front_iterator(matrix[index_1]->lines[l]);
+        li_2 = list_front_iterator(matrix[index_2]->lines[l]);
+
+        for( int c = 0; c < qty_columns; c++ ){ 
+            value_1 = list_return_value(matrix[index_1]->lines[l], c, 'c');
+            value_2 = list_return_value(matrix[index_2]->lines[l], c, 'c');
+
+            new_value = value_1 + value_2;
+
+            printf("NEW %.0f\n", new_value);
+
+            if( new_value != 0 )
+                list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+        }
+    }
+}
+
+int matrix_return_index_2(Matrix_pt *matrix, int qty_lines, int qty_columns){
+    int index_2 = 0;
 
     while(1){
         index_2 = matrix_return_index(matrix);
@@ -234,25 +263,25 @@ void add_matrices(Matrix_pt *matrix){
             break;
     }
 
-    matrix_construct(matrix, qty_lines, qty_columns);
-    int new_index = matrix[0]->quantity-1;
+    return index_2;
+}
 
-    data_type value_1 = 0, value_2 = 0, new_value = 0;
+// ta percorrendo o vetor inteiro, mudar isso
+void print_dense_matrix(Matrix_pt *matrix){
+    data_type value = 0;
+
+    int index = matrix_return_index(matrix);
+
+    int qty_lines = matrix[index]->number_lines;
+    int qty_columns = matrix[index]->number_columns;
 
     for( int l = 0; l < qty_lines; l++ ){
         for( int c = 0; c < qty_columns; c++ ){
-            
-            if( verify_position_occupied(matrix[index_1]->lines[l], c, 'c') )
-                value_1 = list_return_value(matrix[index_1]->lines[l], c, 'c');
 
-            if( verify_position_occupied(matrix[index_2]->lines[l], c, 'c') )
-                value_2 = list_return_value(matrix[index_2]->lines[l], c, 'c');
+            value = list_return_value(matrix[index]->lines[l], c, 'c');
 
-            list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+            // printf("%.1f ", value);
         }
+        printf("\n");
     }
 }
-
-// Matrix_pt (Matrix_pt matrix_1, Matrix_pt matrix_2) {
-
-// }

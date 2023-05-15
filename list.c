@@ -66,7 +66,7 @@ int verify_position_occupied(List_pt row, int p_searched, char position_type){
 
     if( row->head != NULL ){
         printf("VAL %f \n", node_return_value(row->head));
-        printf("L %d C %d\n", node_return_place(row->head, 'l'), node_return_place(row->head, 'c'));
+        // printf("L %d C %d\n", node_return_place(row->head, 'l'), node_return_place(row->head, 'c'));
     }
 
     while( !list_iterator_is_over(li) ){
@@ -74,14 +74,12 @@ int verify_position_occupied(List_pt row, int p_searched, char position_type){
 
         if( p == p_searched ){
             free(li);
-            printf("occupied!");
             return 1;
         }       
         
         li->current = node_return_next(li->current, position_type);   
     }
 
-    printf("not occupied\n");
     free(li);
 
     return 0;
@@ -168,8 +166,8 @@ void list_increment(List_pt line, List_pt column, int l, int c, data_type val){
     list_insert_node(line, n, next_line, prev_line, 'l');
     list_insert_node(column, n, next_column, prev_column, 'c');
 
-    printf("VAL %f %f %f\n", node_return_value(n), node_return_value(line->head), node_return_value(column->head));
-    printf("L %d C %d\n", node_return_place(line->head, 'l'), node_return_place(line->head, 'c'));
+    // printf("VAL %f %f %f\n", node_return_value(n), node_return_value(line->head), node_return_value(column->head));
+    // printf("L %d C %d\n", node_return_place(line->head, 'l'), node_return_place(line->head, 'c'));
 
 }
 
@@ -297,16 +295,44 @@ void list_iterator_node_destroy(ListIterator_pt li, char list_type){
 
 data_type list_return_value(List_pt row, int p_searched, char position_type){
     ListIterator_pt li = list_front_iterator(row);
+    data_type n;
     int p = 0;
 
     while( !list_iterator_is_over(li) ){
             p = node_return_place(li->current, position_type);
 
-            if( p == p_searched )
-                return node_return_value(li->current);
+            if( p == p_searched ){
+                n = node_return_value(li->current);
+                free(li);
+                printf("%.0f ", n);
+                return n;
+            } 
 
             li->current = node_return_next(li->current, position_type);
         }
-
+    printf("0 ");
+    free(li);
     return 0;
 }
+
+// data_type list_return_value(List_pt row, int p_searched, char position_type){
+//     ListIterator_pt li = list_front_iterator(row);
+//     data_type n;
+//     int p = 0;
+
+//     while( !list_iterator_is_over(li) ){
+//             p = node_return_place(li->current, position_type);
+
+//             if( p == p_searched ){
+//                 n = node_return_value(li->current);
+//                 free(li);
+//                 printf("%.0f ", n);
+//                 return n;
+//             } 
+
+//             li->current = node_return_next(li->current, position_type);
+//         }
+//     printf("0 ");
+//     free(li);
+//     return 0;
+// }

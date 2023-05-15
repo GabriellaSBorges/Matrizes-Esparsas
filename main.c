@@ -19,6 +19,8 @@ int main(){
     while(1){
         
         matrix = create_matrix(matrix);
+        assign_value_matrix(matrix); 
+        print_dense_matrix(matrix);
 
         printf("c? ");
         scanf("%d", &i);
@@ -27,17 +29,25 @@ int main(){
         break;
     }
 
-    assign_value_matrix(matrix); 
-    read_node_value_matrix(matrix); 
-    // lalalu
+    add_matrices(matrix); 
+
+    while(1){ 
+        //read_node_value_matrix(matrix); 
+
+        print_dense_matrix(matrix);
+
+        printf("c? ");
+        scanf("%d", &i);
+
+        if( i == 0 )
+        break;
+    }
+    
+
   
     destroy_matrix(matrix);
 
 
-    // while(1){
-    //     //printMenu;
-    //     scanf("\n%d");
-    // }
 
 
     return 0;

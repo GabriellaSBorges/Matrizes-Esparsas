@@ -31,7 +31,8 @@ void read_node_value_matrix(Matrix_pt *matrix);
 
 void add_matrices(Matrix_pt *matrix);
 
+int matrix_return_index_2(Matrix_pt *matrix, int qty_lines, int qty_columns);
 
-
+void print_dense_matrix(Matrix_pt *matrix);
 
 #endif
