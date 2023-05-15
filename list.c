@@ -290,29 +290,66 @@ void list_iterator_node_destroy(ListIterator_pt li, char list_type){
     node_destroy(n);
 }
 
+Node_pt list_iterator_return_current(ListIterator_pt li, int list_type){
+    Node_pt n = li->current;
+    li->current = node_return_next(li->current, list_type);
+
+    return n;
+}
+
 
 /* FUNCOES DE RETORNO */
 
-data_type list_return_value(List_pt row, int p_searched, char position_type){
-    ListIterator_pt li = list_front_iterator(row);
+data_type list_return_value(ListIterator_pt li, int p_searched, char position_type){
     data_type n;
     int p = 0;
 
     while( !list_iterator_is_over(li) ){
-            p = node_return_place(li->current, position_type);
+        p = node_return_place(li->current, position_type);
 
-            if( p == p_searched ){
-                n = node_return_value(li->current);
-                free(li);
-                printf("%.0f ", n);
-                return n;
-            } 
+        if( p == p_searched ){
+            n = node_return_value(li->current);
+            printf("%.0f ", n);
+            return n;
+        } 
 
-            li->current = node_return_next(li->current, position_type);
-        }
+        if( p > p_searched ) 
+            break;
+
+        li->current = node_return_next(li->current, position_type);
+    }
+
     printf("0 ");
-    free(li);
     return 0;
+}
+
+// data_type list_return_value(ListIterator_pt li, int p_searched, char position_type){
+//     data_type n;
+//     int p = 0;
+
+//     while( !list_iterator_is_over(li) ){
+//         p = node_return_place(li->current, position_type);
+
+//         if( p == p_searched ){
+//             n = node_return_value(li->current);
+//             printf("%.0f ", n);
+//             return n;
+//         } 
+
+//         if( p > p_searched ) 
+//             break;
+
+//         li->current = node_return_next(li->current, position_type);
+//     }
+
+//     printf("0 ");
+//     return 0;
+// }
+
+
+
+int list_return_size(List_pt row){
+    return row->size;
 }
 
 // data_type list_return_value(List_pt row, int p_searched, char position_type){

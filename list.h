@@ -41,8 +41,13 @@ Node_pt list_iterator_find_node(ListIterator_pt li, int index, char node_type, c
 
 void list_iterator_node_destroy(ListIterator_pt li, char list_type);
 
-data_type list_return_value(List_pt row, int p_searched, char position_type);
+Node_pt list_iterator_return_current(ListIterator_pt li, int position_type);
 
 
+
+
+data_type list_return_value(ListIterator_pt li, int p_searched, char list_type);
+
+int list_return_size(List_pt row);
 
 #endif 

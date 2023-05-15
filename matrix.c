@@ -228,26 +228,109 @@ void add_matrices(Matrix_pt *matrix){
     matrix = matrix_construct(matrix, qty_lines, qty_columns);
     int new_index = matrix[0]->quantity-1;
 
-    data_type value_1 = 0, value_2 = 0, new_value = 0;
-    ListIterator_pt li_1 = NULL, li_2 = NULL;
+    data_type value = 0;
+    ListIterator_pt li = NULL;
+    Node_pt current_node = NULL;
+    int size_line = 0, c = 0;
+
+    // *matrix[new_index] = *matrix[index_1];
+    // memcpy(matrix[new_index], matrix[index_1], sizeof(Matrix));
+
+    // print_dense_matrix(matrix);
+
 
     for( int l = 0; l < qty_lines; l++ ){
-        li_1 = list_front_iterator(matrix[index_1]->lines[l]);
-        li_2 = list_front_iterator(matrix[index_2]->lines[l]);
+        li = list_front_iterator(matrix[index_1]->lines[l]);
+        size_line = list_return_size(matrix[index_1]->lines[l]);
 
-        for( int c = 0; c < qty_columns; c++ ){ 
-            value_1 = list_return_value(matrix[index_1]->lines[l], c, 'c');
-            value_2 = list_return_value(matrix[index_2]->lines[l], c, 'c');
+        for( int p = 0; p < size_line; p++ ){
+            current_node = list_iterator_return_current(li, 'l');
 
-            new_value = value_1 + value_2;
+            value = node_return_value(current_node);
+            c = node_return_place(current_node, 'c');
 
-            printf("NEW %.0f\n", new_value);
-
-            if( new_value != 0 )
-                list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+            list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, value);
         }
     }
+
+    print_dense_matrix(matrix);
+
+    // for( int l = 0; l < qty_lines; l++ ){
+    //     li_1 = list_front_iterator(matrix[index_1]->lines[l]);
+    //     li_2 = list_front_iterator(matrix[index_2]->lines[l]);
+
+    //     for( int c = 0; c < qty_columns; c++ ){ 
+    //         value_1 = list_return_value(matrix[index_1]->lines[l], c, 'c');
+    //         value_2 = list_return_value(matrix[index_2]->lines[l], c, 'c');
+
+    //         new_value = value_1 + value_2;
+
+    //         printf("NEW %.0f\n", new_value);
+
+    //         if( new_value != 0 )
+    //             list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+    //     }
+
+    //     free(li_1);
+    //     free(li_2);
+    // }
+
 }
+
+// void add_matrices(Matrix_pt *matrix){
+
+//     printf("\n|ADD TWO MATRICES|\n");
+
+//     int index_1 = matrix_return_index(matrix);
+//     int qty_lines = matrix[index_1]->number_lines;
+//     int qty_columns = matrix[index_1]->number_columns;
+
+//     int index_2 = matrix_return_index_2(matrix, qty_lines, qty_columns);
+
+//     matrix = matrix_construct(matrix, qty_lines, qty_columns);
+//     int new_index = matrix[0]->quantity-1;
+
+//     data_type value_1 = 0, value_2 = 0, new_value = 0;
+//     ListIterator_pt li_1 = NULL, li_2 = NULL;
+//     int size_line = 0;
+
+//     // *matrix[new_index] = *matrix[index_1];
+//     // memcpy(matrix[new_index], matrix[index_1], sizeof(Matrix));
+
+//     // print_dense_matrix(matrix);
+
+
+//     for( int l = 0; l < qty_lines; l++ ){
+        
+//         size_line = list_return_size(matrix[index_1]->lines[l]);
+
+//         for( int p = 0; p < size_line; p++ ){
+            
+//         }
+//     }
+
+
+//     for( int l = 0; l < qty_lines; l++ ){
+//         li_1 = list_front_iterator(matrix[index_1]->lines[l]);
+//         li_2 = list_front_iterator(matrix[index_2]->lines[l]);
+
+//         for( int c = 0; c < qty_columns; c++ ){ 
+//             value_1 = list_return_value(matrix[index_1]->lines[l], c, 'c');
+//             value_2 = list_return_value(matrix[index_2]->lines[l], c, 'c');
+
+//             new_value = value_1 + value_2;
+
+//             printf("NEW %.0f\n", new_value);
+
+//             if( new_value != 0 )
+//                 list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+//         }
+
+//         free(li_1);
+//         free(li_2);
+//     }
+
+// }
 
 int matrix_return_index_2(Matrix_pt *matrix, int qty_lines, int qty_columns){
     int index_2 = 0;
@@ -268,6 +351,7 @@ int matrix_return_index_2(Matrix_pt *matrix, int qty_lines, int qty_columns){
 
 // ta percorrendo o vetor inteiro, mudar isso
 void print_dense_matrix(Matrix_pt *matrix){
+    ListIterator_pt li = NULL;
     data_type value = 0;
 
     int index = matrix_return_index(matrix);
@@ -276,12 +360,37 @@ void print_dense_matrix(Matrix_pt *matrix){
     int qty_columns = matrix[index]->number_columns;
 
     for( int l = 0; l < qty_lines; l++ ){
-        for( int c = 0; c < qty_columns; c++ ){
+        li = list_front_iterator(matrix[index]->lines[l]);
 
-            value = list_return_value(matrix[index]->lines[l], c, 'c');
+        for( int c = 0; c < qty_columns; c++ ){
+            value = list_return_value(li, c, 'c');
 
             // printf("%.1f ", value);
         }
         printf("\n");
+        free(li);
     }
 }
+
+// // ta percorrendo o vetor inteiro, mudar isso
+// void print_dense_matrix(Matrix_pt *matrix){
+//     ListIterator_pt li = NULL;
+//     data_type value = 0;
+
+//     int index = matrix_return_index(matrix);
+
+//     int qty_lines = matrix[index]->number_lines;
+//     int qty_columns = matrix[index]->number_columns;
+
+//     for( int l = 0; l < qty_lines; l++ ){
+//         li = list_front_iterator(matrix[index]->lines[l]);
+
+//         for( int c = 0; c < qty_columns; c++ ){
+//             value = list_return_value(li, c, 'c');
+
+//             // printf("%.1f ", value);
+//         }
+//         printf("\n");
+//         free(li);
+//     }
+// }
