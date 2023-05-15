@@ -29,7 +29,7 @@ Node_pt find_node_row(List_pt row, int index, char node_type, char list_type, ch
 void list_insert_node(List_pt row, Node_pt new_node, Node_pt next_node, Node_pt prev_node, char list_type);
 
 
-// Node_pt list_return_head(List_pt row);
+
 
 int list_iterator_is_over(ListIterator *li);
 
@@ -41,12 +41,8 @@ Node_pt list_iterator_find_node(ListIterator_pt li, int index, char node_type, c
 
 void list_iterator_node_destroy(ListIterator_pt li, char list_type);
 
-// data_type list_iterator_next_line(ListIterator *li);
+data_type list_return_value(List_pt row, int p_searched, char position_type);
 
 
-
-
-// void print_matrix(Matrix_pt matrix);
-// int return_size(List_pt *row, int size_row);
 
 #endif 

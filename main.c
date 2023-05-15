@@ -18,7 +18,7 @@ int main(){
 
     while(1){
         
-        create_matrix(matrix);
+        matrix = create_matrix(matrix);
 
         printf("c? ");
         scanf("%d", &i);

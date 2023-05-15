@@ -155,10 +155,10 @@ void list_increment(List_pt line, List_pt column, int l, int c, data_type val){
     Node_pt next_column = find_node_row(column, l, 'n', 'c', 'l');
     Node_pt prev_column = find_node_row(column, l, 'p', 'c', 'l');
 
-    if( next_line = NULL )
-        printf("OI %f\n", node_return_value(next_line));
-    else 
-        printf("NULL\n");
+    // if( next_line = NULL )
+    //     printf("OI %f\n", node_return_value(next_line));
+    // else 
+    //     printf("NULL\n");
 
     Node *n = node_construct(val, l, c, next_line, prev_line, next_column, prev_column);
 
@@ -278,7 +278,7 @@ Node_pt list_iterator_find_node(ListIterator_pt li, int index, char node_type, c
             if( p == index )
                 return li->current;
 
-            li->current = node_return_next(li->current, position_type);
+            li->current = node_return_next(li->current, list_type);
         }
     }
     
@@ -292,11 +292,21 @@ void list_iterator_node_destroy(ListIterator_pt li, char list_type){
     node_destroy(n);
 }
 
-// void print_matrix(Matrix_pt matrix){
-//     printf("L = %d C = %d\n", matrix->number_lines, matrix->number_columns);
-//     printf("%d %d\n", return_size(matrix->lines, matrix->number_lines), return_size(matrix->columns, matrix->number_columns));
-// }
 
-// int return_size(List_pt *row, int size_row){
-//     return (*row+size_row)->size;
-// }
+/* FUNCOES DE RETORNO */
+
+data_type list_return_value(List_pt row, int p_searched, char position_type){
+    ListIterator_pt li = list_front_iterator(row);
+    int p = 0;
+
+    while( !list_iterator_is_over(li) ){
+            p = node_return_place(li->current, position_type);
+
+            if( p == p_searched )
+                return node_return_value(li->current);
+
+            li->current = node_return_next(li->current, position_type);
+        }
+
+    return 0;
+}
