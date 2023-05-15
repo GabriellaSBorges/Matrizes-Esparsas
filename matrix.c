@@ -9,24 +9,6 @@ struct Matrix{
     int quantity;
 };
 
-Matrix_pt *create_matrix(Matrix_pt *matrix){
-    int l = 0, c = 0;
-
-    while(1){
-        printf("Quantity of lines and columns of the desired matrix, respectively: ");
-        scanf("%d %d", &l, &c);
-
-        if( l <= 0 || c <= 0 )
-            printf("Please, type numbers above zero!\n\n");
-        else 
-            break;        
-    }
-
-    matrix = matrix_construct(matrix, l, c);
-
-    return matrix;
-}
-
 Matrix_pt *matrix_construct(Matrix_pt *matrix, int qty_lines, int qty_columns){
     int i = 0, qty = 0;
 
@@ -110,17 +92,15 @@ void destroy_matrix(Matrix_pt *matrix){
     free(matrix);
 }
 
-// nao permitir adicionar valor sem que uma matriz tenha sido criada
-void assign_value_matrix(Matrix_pt *matrix){
-    data_type val = 0;
+void assign_value_matrix(Matrix_pt *matrix, int index, int l, int c, data_type val){
     
-    int index = matrix_return_index(matrix);
+    // int index = matrix_return_index(matrix);
 
-    int l = matrix_return_position(matrix, index,'l');
-    int c = matrix_return_position(matrix, index,'c');
+    // int l = matrix_return_position(matrix, index,'l');
+    // int c = matrix_return_position(matrix, index,'c');
 
-    printf("\nValue of the node: ");
-    scanf("%f", &val);
+    // printf("\nValue of the node: ");
+    // scanf("%f", &val);
 
     int position_occupied = verify_position_occupied(matrix[index]->lines[l], c, 'c');
 
@@ -198,12 +178,12 @@ int matrix_return_position(Matrix_pt *matrix, int index, char position_type){
     return p;
 }
 
-void read_node_value_matrix(Matrix_pt *matrix){
+void read_node_value_matrix(Matrix_pt *matrix, int index, int l, int c){
 
-    int index = matrix_return_index(matrix);
+    // int index = matrix_return_index(matrix);
 
-    int l = matrix_return_position(matrix, index, 'l');
-    int c = matrix_return_position(matrix, index, 'c');
+    // int l = matrix_return_position(matrix, index, 'l');
+    // int c = matrix_return_position(matrix, index, 'c');
 
     Node_pt n = find_node_row(matrix[index]->lines[l], c, 'a', 'l', 'c');
 
@@ -213,47 +193,55 @@ void read_node_value_matrix(Matrix_pt *matrix){
         printf("Value of the node [%d,%d]: %f\n\n", l, c, node_return_value(n));
 }
 
-//mostrar quais matrizes têm o msm tamanho
-// ta percorrendo as listas toda hora MUDAR
-void add_matrices(Matrix_pt *matrix){
+// //ja receber os valores!
+// // ta percorrendo as listas toda hora MUDAR
+// void add_matrices(Matrix_pt *matrix){
 
-    printf("\n|ADD TWO MATRICES|\n");
+//     printf("\n|ADD TWO MATRICES|\n");
 
-    int index_1 = matrix_return_index(matrix);
-    int qty_lines = matrix[index_1]->number_lines;
-    int qty_columns = matrix[index_1]->number_columns;
+//     int index_1 = matrix_return_index(matrix);
+//     int qty_lines = matrix[index_1]->number_lines;
+//     int qty_columns = matrix[index_1]->number_columns;
 
-    int index_2 = matrix_return_index_2(matrix, qty_lines, qty_columns);
+//     int index_2 = matrix_return_index_2(matrix, qty_lines, qty_columns);
 
-    matrix = matrix_construct(matrix, qty_lines, qty_columns);
-    int new_index = matrix[0]->quantity-1;
+//     matrix = matrix_construct(matrix, qty_lines, qty_columns);
+//     int new_index = matrix[0]->quantity-1;
 
-    data_type value = 0;
-    ListIterator_pt li = NULL;
-    Node_pt current_node = NULL;
-    int size_line = 0, c = 0;
+//     ListIterator_pt li = NULL;
+//     Node_pt current_node = NULL;
 
-    // *matrix[new_index] = *matrix[index_1];
-    // memcpy(matrix[new_index], matrix[index_1], sizeof(Matrix));
+//     for( int l = 0; l < qty_lines; l++ ){
+//         li = list_front_iterator(matrix[index_1]->lines[l]);
+//         int size_line = list_return_size(matrix[index_1]->lines[l]);
 
-    // print_dense_matrix(matrix);
+//         for( int p = 0; p < size_line; p++ ){
+//             current_node = list_iterator_return_current(li, 'l');
 
+//             data_type value = node_return_value(current_node);
+//             int c = node_return_place(current_node, 'c');
 
-    for( int l = 0; l < qty_lines; l++ ){
-        li = list_front_iterator(matrix[index_1]->lines[l]);
-        size_line = list_return_size(matrix[index_1]->lines[l]);
+//             list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, value);
+//         }
+//         free(li);
+//     }
 
-        for( int p = 0; p < size_line; p++ ){
-            current_node = list_iterator_return_current(li, 'l');
+//     print_dense_matrix(matrix, new_index);
 
-            value = node_return_value(current_node);
-            c = node_return_place(current_node, 'c');
+//     for( int l = 0; l < qty_lines; l++ ){
+//         li = list_front_iterator(matrix[index_1]->lines[l]);
+//         int size_line = list_return_size(matrix[index_1]->lines[l]);
 
-            list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, value);
-        }
-    }
+//         for( int p = 0; p < size_line; p++ ){
+//             current_node = list_iterator_return_current(li, 'l');
 
-    print_dense_matrix(matrix);
+//             data_type value = node_return_value(current_node);
+//             int c = node_return_place(current_node, 'c');
+
+//             list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, value);
+//         }
+//         free(li);
+//     }
 
     // for( int l = 0; l < qty_lines; l++ ){
     //     li_1 = list_front_iterator(matrix[index_1]->lines[l]);
@@ -275,7 +263,7 @@ void add_matrices(Matrix_pt *matrix){
     //     free(li_2);
     // }
 
-}
+// }
 
 // void add_matrices(Matrix_pt *matrix){
 
@@ -332,29 +320,28 @@ void add_matrices(Matrix_pt *matrix){
 
 // }
 
-int matrix_return_index_2(Matrix_pt *matrix, int qty_lines, int qty_columns){
-    int index_2 = 0;
+// int matrix_return_index_2(Matrix_pt *matrix, int qty_lines, int qty_columns){
+//     int index_2 = 0;
 
-    while(1){
-        index_2 = matrix_return_index(matrix);
+//     while(1){
+//         index_2 = matrix_return_index(matrix);
 
-        if( matrix[index_2]->number_lines != qty_lines || 
-        matrix[index_2]->number_columns != qty_columns )
-            ("Please, type an matrix with %d lines and %d columns!\n\n", qty_lines, qty_columns);
+//         if( matrix[index_2]->number_lines != qty_lines || 
+//         matrix[index_2]->number_columns != qty_columns )
+//             ("Please, type an matrix with %d lines and %d columns!\n\n", qty_lines, qty_columns);
 
-        else
-            break;
-    }
+//         else
+//             break;
+//     }
 
-    return index_2;
-}
+//     return index_2;
+// }
 
 // ta percorrendo o vetor inteiro, mudar isso
-void print_dense_matrix(Matrix_pt *matrix){
+void print_dense_matrix(Matrix_pt *matrix, int index){
     ListIterator_pt li = NULL;
-    data_type value = 0;
 
-    int index = matrix_return_index(matrix);
+    // int index = matrix_return_index(matrix);
 
     int qty_lines = matrix[index]->number_lines;
     int qty_columns = matrix[index]->number_columns;
@@ -363,11 +350,11 @@ void print_dense_matrix(Matrix_pt *matrix){
         li = list_front_iterator(matrix[index]->lines[l]);
 
         for( int c = 0; c < qty_columns; c++ ){
-            value = list_return_value(li, c, 'c');
+            data_type value = list_return_value(li, c, 'c');
 
             // printf("%.1f ", value);
         }
-        printf("\n");
+        printf("\n\n");
         free(li);
     }
 }
