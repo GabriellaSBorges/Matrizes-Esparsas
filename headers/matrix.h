@@ -20,7 +20,7 @@ void verify_matrix(Matrix **matrix);
 
 void matrix_destroy(Matrix **matrix);
 
-void matrix_assign_value(Matrix *matrix, int l, int c, data_type val);
+Matrix **matrix_assign_value(Matrix **matrix, int index, int l, int c, data_type val);
 
 int matrix_return_index(Matrix **matrix);
 
@@ -28,7 +28,7 @@ int matrix_return_position(Matrix **matrix, int index, char position_type);
 
 void matrix_read_value(Matrix *matrix, int index, int l, int c);
 
-void add_matrices(Matrix **matrix);
+void add_matrices(Matrix **matrix, int index_1, int index_2);
 
 
 void print_dense_matrix(Matrix *matrix);
