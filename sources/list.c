@@ -41,7 +41,6 @@ List_pt *list_construct(List_pt *list, int qty_lists){
 
 void list_destroy(List_pt *list, int qty_lists, char list_type){
     ListIterator_pt li = NULL;
-    int c = 0;
 
     for( int i = 0; i < qty_lists; i++ ){
 
@@ -309,7 +308,7 @@ data_type list_return_value(ListIterator_pt li, int p_searched, char position_ty
 
         if( p == p_searched ){
             n = node_return_value(li->current);
-            printf("%.0f ", n);
+            // printf("%.0f ", n);
             return n;
         } 
 
@@ -319,7 +318,7 @@ data_type list_return_value(ListIterator_pt li, int p_searched, char position_ty
         li->current = node_return_next(li->current, position_type);
     }
 
-    printf("0 ");
+    // printf("0 ");
     return 0;
 }
 

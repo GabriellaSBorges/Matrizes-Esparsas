@@ -9,30 +9,29 @@ typedef struct Matrix Matrix;
 typedef Matrix* Matrix_pt;
 
 
-// Matrix_pt *create_matrix(Matrix_pt *matrix, int l, int c);
 
-Matrix_pt *matrix_construct(Matrix_pt *matrix, int qty_lines, int qty_columns);
+Matrix **matrix_construct(Matrix **matrix, int qty_lines, int qty_columns);
 
-Matrix_pt *matrix_alloc_and_realloc(Matrix_pt *matrix, int qty_matrices);
+Matrix **alloc_and_realloc_matrix(Matrix **matrix, int qty_matrices);
 
-Matrix_pt *matrix_initialize(Matrix_pt *matrix, int l, int c);
+Matrix **initialize_matrix(Matrix **matrix, int l, int c);
 
-void matrix_verify(Matrix_pt *matrix);
+void verify_matrix(Matrix **matrix);
 
-void destroy_matrix(Matrix_pt *matrix);
+void matrix_destroy(Matrix **matrix);
 
-void assign_value_matrix(Matrix_pt *matrix, int index, int l, int c, data_type val);
+void matrix_assign_value(Matrix *matrix, int l, int c, data_type val);
 
-int matrix_return_index(Matrix_pt *matrix);
+int matrix_return_index(Matrix **matrix);
 
-int matrix_return_position(Matrix_pt *matrix, int index, char position_type);
+int matrix_return_position(Matrix **matrix, int index, char position_type);
 
-void read_node_value_matrix(Matrix_pt *matrix, int index, int l, int c);
+void matrix_read_value(Matrix *matrix, int index, int l, int c);
 
-void add_matrices(Matrix_pt *matrix);
+void add_matrices(Matrix **matrix);
 
-// int matrix_return_index_2(Matrix_pt *matrix, int qty_lines, int qty_columns);
 
-void print_dense_matrix(Matrix_pt *matrix, int index);
+void print_dense_matrix(Matrix *matrix);
+
 
 #endif
