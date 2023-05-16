@@ -259,7 +259,7 @@ void list_iterator_node_destroy(ListIterator *li, char list_type){
 }
 
 int list_iterator_return_place(ListIterator *li, int position_type){
-    if( li->current == NULL)
+    if( li->current == NULL) // é necessário?
         return -1;
 
     if( position_type == 'l')

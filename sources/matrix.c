@@ -184,6 +184,53 @@ void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar){
 
 }
 
+void multiply_matrices(Matrix **matrix, int index_1, int index_2){
+    data_type value_1 = 0, value_2 = 0, new_value = 0;
+
+    if( matrix[index_1]->number_columns != matrix[index_2]->number_lines ){
+        printf("These matrices cannot be added!\n\n");
+
+    } else {
+        matrix = matrix_construct(matrix, matrix[index_1]->number_lines, matrix[index_1]->number_columns);
+        int new_index = matrix[0]->quantity-1;
+
+        for( int l = 0; l < matrix[index_1]->number_lines; l++ ){ 
+            for( int c = 0; c < matrix[index_2]->number_columns; c++ ){
+                ListIterator *li_1 = list_front_iterator(matrix[index_1]->lines[l]);
+                ListIterator *li_2 = list_front_iterator(matrix[index_2]->lines[l]);
+                new_value = 0;
+                
+
+                while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
+
+                    if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
+                     list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'c') ){
+
+                        value_1 = *list_iterator_next(li_1, 'c');
+                        value_2 = *list_iterator_next(li_2, 'c');
+                        new_value += value_1 * value_2;
+
+                    } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
+                    list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c')) ){
+                        list_iterator_next(li_1, 'c');
+
+                    } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
+                    list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'c')) ){
+                        list_iterator_next(li_2, 'c');
+                    }     
+                }  
+
+                if( new_value != 0 )
+                    list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+                
+                free(li_1);
+                free(li_2);
+            }                     
+        }
+      
+    }
+}
+
 void print_dense_matrix(Matrix *matrix){
     ListIterator *li = NULL;
     data_type value = 0;

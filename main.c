@@ -6,8 +6,8 @@ int main(){
     printf("---------------\n Bem-vindo! :) \n---------------\n");
 
 
-    matrix = matrix_construct(matrix, 2, 2);
-    matrix = matrix_construct(matrix, 2, 2);
+    matrix = matrix_construct(matrix, 2, 2); // matriz 0
+    matrix = matrix_construct(matrix, 2, 2); // matriz 1
 
     matrix = matrix_assign_value(matrix, 0, 0, 0, 1); 
     print_dense_matrix(matrix[0]);
@@ -18,11 +18,14 @@ int main(){
     matrix_read_value(matrix[0], 0, 0, 0); 
     matrix_read_value(matrix[0], 0, 1, 1); 
     
-    add_matrices(matrix, 0, 1);
+    add_matrices(matrix, 0, 1); // matriz 2
     print_dense_matrix(matrix[2]);
 
     matrix_multiply_by_scalar(matrix[2], 3);
     print_dense_matrix(matrix[2]);
+
+    multiply_matrices(matrix, 1, 2); // matriz 3
+    print_dense_matrix(matrix[3]);
 
 
     matrix_destroy(matrix);
