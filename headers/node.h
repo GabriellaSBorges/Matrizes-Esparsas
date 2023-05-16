@@ -18,7 +18,7 @@ void assign_value_next_node(Node_pt node, Node_pt new_node, char list_type);
 
 void node_assign_value(Node_pt n, data_type val);
 
-data_type node_return_value(Node_pt n);
+data_type *node_return_value(Node_pt n);
 
 Node_pt node_return_next(Node_pt n, char list_type);
 

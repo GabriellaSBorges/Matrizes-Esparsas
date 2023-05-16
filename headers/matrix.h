@@ -30,6 +30,8 @@ void matrix_read_value(Matrix *matrix, int index, int l, int c);
 
 void add_matrices(Matrix **matrix, int index_1, int index_2);
 
+void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar);
+
 
 void print_dense_matrix(Matrix *matrix);
 

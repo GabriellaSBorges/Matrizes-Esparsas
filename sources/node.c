@@ -51,8 +51,10 @@ void node_assign_value(Node_pt n, data_type val){
     n->value = val;
 }
 
-data_type node_return_value(Node_pt n){
-    return n->value;
+data_type *node_return_value(Node_pt n){
+    data_type *val = &n->value;
+
+    return val;
 }
 
 Node_pt node_return_next(Node_pt n, char list_type){

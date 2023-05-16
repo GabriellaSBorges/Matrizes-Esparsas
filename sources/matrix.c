@@ -109,15 +109,16 @@ Matrix **matrix_assign_value(Matrix **matrix, int index, int l, int c, data_type
 void matrix_read_value(Matrix *matrix, int index, int l, int c){
 
     Node_pt n = find_node_row(matrix->lines[l], c, 'a', 'l', 'c');
+    data_type *val = node_return_value(n);
 
     if( n == NULL )
         printf("Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, 0.0);
     else
-        printf("Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, node_return_value(n));
+        printf("Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, *val);
 }
 
 void add_matrices(Matrix **matrix, int index_1, int index_2){
-    data_type value_1 = 0, value_2 = 0, new_value = 0;
+    data_type *value_1 = 0, *value_2 = 0, *new_value = 0;
     int c = 0;
 
     if( matrix[index_1]->number_lines != matrix[index_2]->number_lines || 
@@ -141,22 +142,22 @@ void add_matrices(Matrix **matrix, int index_1, int index_2){
                         value_1 = list_iterator_next(li_1, 'c');
                         value_2 = list_iterator_next(li_2, 'c');
 
-                        new_value = value_1 + value_2;
-                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+                        *new_value = *value_1 + *value_2;
+                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, *new_value);
 
                     } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
                     list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c')) ){
                         c = list_iterator_return_place(li_1, 'c');
                         new_value = list_iterator_next(li_1, 'c');
 
-                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, *new_value);
 
                     } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
                     list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'c')) ){
                         c = list_iterator_return_place(li_2, 'c');
                         new_value = list_iterator_next(li_2, 'c');
 
-                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, *new_value);
                     }     
             }  
             free(li_1);
@@ -167,25 +168,39 @@ void add_matrices(Matrix **matrix, int index_1, int index_2){
 
 }
 
+void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar){
+    ListIterator *li = NULL;
+    data_type *val;
+
+    for( int l = 0; l < matrix->number_lines; l++ ){
+        li = list_front_iterator(matrix->lines[l]);
+
+        while( !list_iterator_is_over(li) ){
+            val = list_iterator_next(li, 'c');
+            (*val) *= scalar;
+        }
+        free(li);
+    }
+
+}
+
 void print_dense_matrix(Matrix *matrix){
     ListIterator *li = NULL;
     data_type value = 0;
     int p = -1;
 
-    int qty_lines = matrix->number_lines;
-    int qty_columns = matrix->number_columns;
-
-    for( int l = 0; l < qty_lines; l++ ){
+    for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);
         p = -1;
 
-        for( int c = 0; c < qty_columns; c++ ){
+        for( int c = 0; c < matrix->number_columns; c++ ){
+            // data_type *value = (data_type*) malloc(sizeof(data_type));
 
             if( !list_iterator_is_over(li) )
                 p = list_iterator_return_place(li, 'c');
 
             if( p == c ){
-                value = list_iterator_next(li, 'c');
+                value = *list_iterator_next(li, 'c');
 
             } else {
                 value = 0;
@@ -196,6 +211,7 @@ void print_dense_matrix(Matrix *matrix){
         free(li);
         printf("\n");
     }
-
     printf("\n");
+
+    // 
 }

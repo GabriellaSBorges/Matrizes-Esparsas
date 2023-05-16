@@ -269,9 +269,10 @@ int list_iterator_return_place(ListIterator *li, int position_type){
 
 }
 
-data_type list_iterator_next(ListIterator *li, char position_type){
-
-    data_type n = node_return_value(li->current);
+data_type *list_iterator_next(ListIterator *li, char position_type){
+    
+    // data_type *n = NULL;
+    data_type *n = node_return_value(li->current);
     li->current = node_return_next(li->current, position_type);
 
     return n;

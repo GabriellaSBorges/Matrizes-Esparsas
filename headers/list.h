@@ -44,7 +44,7 @@ int list_iterator_return_place(ListIterator *li, int position_type);
 
 
 
-data_type list_iterator_next(ListIterator *li, char position_type);
+data_type *list_iterator_next(ListIterator *li, char position_type);
 
 int list_return_size(List *row);
 

@@ -21,6 +21,9 @@ int main(){
     add_matrices(matrix, 0, 1);
     print_dense_matrix(matrix[2]);
 
+    matrix_multiply_by_scalar(matrix[2], 3);
+    print_dense_matrix(matrix[2]);
+
 
     matrix_destroy(matrix);
 
