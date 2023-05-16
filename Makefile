@@ -1,5 +1,4 @@
-all: clean main 
-# gcc -g main.c -o main sources/node.c sources/list.c sources/matrix.c sources/position.c
+all: clean main valgrind
 
 main: objects/main.o objects/position.o objects/node.o objects/list.o objects/matrix.o
 	gcc -g objects/main.o objects/position.o objects/node.o objects/list.o objects/matrix.o -o main
@@ -9,20 +8,23 @@ main: objects/main.o objects/position.o objects/node.o objects/list.o objects/ma
 
 
 objects/main.o: main.c headers/position.h headers/node.h headers/list.h headers/matrix.h
-	gcc -g main.c -o objects/main.o -c -Wall
+	gcc -g -o objects/main.o main.c  -c -Wall
 
 objects/position.o: sources/position.c headers/position.h
-	gcc -g sources/position.c -o objects/position.o -c -Wall
+	gcc -g -o objects/position.o sources/position.c -c -Wall
 
 objects/node.o: sources/node.c headers/node.h
-	gcc -g sources/node.c -o objects/node.o -c -Wall
+	gcc -g -o  objects/node.o sources/node.c -c -Wall
 
 objects/list.o: sources/list.c headers/list.h
-	gcc -g sources/list.c -o objects/list.o -c -Wall
+	gcc -g -o objects/list.o sources/list.c -c -Wall
 
 objects/matrix.o: sources/matrix.c headers/matrix.h
-	gcc -g sources/matrix.c -o objects/matrix.o -c -Wall
+	gcc -g -o objects/matrix.o sources/matrix.c -c -Wall
 
+
+valgrind: 
+	valgrind -s --leak-check=full --show-leak-kinds=all ./main
 
 org: clean
 	rm -r sources

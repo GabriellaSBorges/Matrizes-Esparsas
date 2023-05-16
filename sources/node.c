@@ -63,6 +63,8 @@ Node_pt node_return_next(Node_pt n, char list_type){
         return n->next_line;
     if( list_type == 'c' )
         return n->next_column;
+
+    return NULL;
 }
 
 Node_pt node_return_prev(Node_pt n, char list_type){
@@ -71,6 +73,8 @@ Node_pt node_return_prev(Node_pt n, char list_type){
         return n->prev_line;
     if( list_type == 'c' )
         return n->prev_column;
+    
+    return NULL;
 }
 
 int node_return_place(Node_pt n, char position_type){
@@ -80,8 +84,6 @@ int node_return_place(Node_pt n, char position_type){
 
     if( position_type == 'c' )
         return position_return_column(n->place);
+    
+    return -1;
 }
-
-// Node_pt node_return(Node_pt n){
-//     return n;
-// }
