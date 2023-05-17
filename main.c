@@ -37,8 +37,8 @@ int main(){
     // multiply_matrices(matrix, 0, 1); // matriz 3
     // print_dense_matrix(matrix[3]);
 
-    multiply_point_to_point(matrix, 0, 1); // matriz 4
-    print_dense_matrix(matrix[2]);
+    // multiply_point_to_point(matrix, 0, 1); // matriz 4
+    // print_dense_matrix(matrix[4]);
     
 
 

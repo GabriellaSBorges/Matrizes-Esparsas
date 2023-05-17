@@ -246,27 +246,26 @@ void multiply_point_to_point(Matrix **matrix, int index_1, int index_2){
         for( int l = 0; l < matrix[index_1]->number_lines; l++ ){ 
             ListIterator *li_1 = list_front_iterator(matrix[index_1]->lines[l]);
             ListIterator *li_2 = list_front_iterator(matrix[index_2]->lines[l]);
-            new_value = 0;
 
             while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
 
                 if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
-                    list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'l') ){
+                    list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'c') ){
                     int c = list_iterator_return_place(li_1, 'c');
 
                     value_1 = *list_iterator_next(li_1, 'l');
-                    value_2 = *list_iterator_next(li_2, 'c');
-                    new_value = value_1 * value_2;
+                    value_2 = *list_iterator_next(li_2, 'l');
+                    new_value = value_1*value_2;
 
                     list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
 
                 } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
-                list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'l')) ){
+                list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c')) ){
                     list_iterator_next(li_1, 'l');
 
                 } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
-                list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'l')) ){
-                    list_iterator_next(li_2, 'c');
+                list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'c')) ){
+                    list_iterator_next(li_2, 'l');
                 }     
             }  
             free(li_1);
