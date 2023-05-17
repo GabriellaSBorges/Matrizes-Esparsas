@@ -20,7 +20,7 @@ void verify_matrix(Matrix **matrix);
 
 void matrix_destroy(Matrix **matrix);
 
-Matrix **matrix_assign_value(Matrix **matrix, int index, int l, int c, data_type val);
+void matrix_assign_value(Matrix *matrix, int l, int c, data_type val);
 
 int matrix_return_index(Matrix **matrix);
 
@@ -34,7 +34,7 @@ void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar);
 
 void multiply_matrices(Matrix **matrix, int index_1, int index_2);
 
-
+void multiply_point_to_point(Matrix **matrix, int index_1, int index_2);
 
 
 
@@ -42,5 +42,6 @@ void multiply_matrices(Matrix **matrix, int index_1, int index_2);
 
 void print_dense_matrix(Matrix *matrix);
 
+void print_sparse_matrix(Matrix *matrix);
 
 #endif

@@ -3,13 +3,13 @@
 struct Node{
     Position_pt place;
     data_type value;
-    Node_pt next_line;
+    Node_pt next_line; // next in line
     Node_pt next_column;
     Node_pt prev_line;
     Node_pt prev_column;
 };
 
-Node_pt node_construct(data_type value, int l, int c, Node *next_line, Node *prev_line, Node *next_column, Node* prev_column){
+Node_pt node_construct(data_type value, int l, int c, Node *next_line, Node *prev_line, Node *next_column, Node *prev_column){
 
     Node_pt n = (Node_pt) malloc( sizeof(Node) );
 

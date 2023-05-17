@@ -90,20 +90,20 @@ void matrix_destroy(Matrix **matrix){
     free(matrix);
 }
 
-Matrix **matrix_assign_value(Matrix **matrix, int index, int l, int c, data_type val){
+void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
     
-    int position_occupied = verify_position_occupied(matrix[index]->lines[l], c, 'c');
+    int position_occupied = verify_position_occupied(matrix->lines[l], c, 'c');
 
     if( position_occupied && val != 0 )
-        list_assign_value(matrix[index]->lines[l], c, val, 'p');
+        list_assign_value(matrix->lines[l], c, val, 'c');
 
     else if( position_occupied && val == 0 )
-        list_decrement(matrix[index]->lines[l], matrix[index]->columns[c], l, c);
+        list_decrement(matrix->lines[l], matrix->columns[c], l, c);
 
-    else if( !position_occupied && val != 0 )
-        list_increment(matrix[index]->lines[l], matrix[index]->columns[c], l, c, val);
+    else if( !position_occupied && val != 0 ){
+        list_increment(matrix->lines[l], matrix->columns[c], l, c, val);
 
-    return matrix;
+    }
 }
 
 void matrix_read_value(Matrix *matrix, int index, int l, int c){
@@ -118,7 +118,7 @@ void matrix_read_value(Matrix *matrix, int index, int l, int c){
 }
 
 void add_matrices(Matrix **matrix, int index_1, int index_2){
-    data_type *value_1 = 0, *value_2 = 0, *new_value = 0;
+    data_type value_1 = 0, value_2 = 0, new_value = 0;
     int c = 0;
 
     if( matrix[index_1]->number_lines != matrix[index_2]->number_lines || 
@@ -139,25 +139,25 @@ void add_matrices(Matrix **matrix, int index_1, int index_2){
                      list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'c') ){
                         c = list_iterator_return_place(li_1, 'c');
 
-                        value_1 = list_iterator_next(li_1, 'c');
-                        value_2 = list_iterator_next(li_2, 'c');
+                        value_1 = *list_iterator_next(li_1, 'l');
+                        value_2 = *list_iterator_next(li_2, 'l');
 
-                        *new_value = *value_1 + *value_2;
-                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, *new_value);
+                        new_value = value_1 + value_2;
+                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
 
                     } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
                     list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c')) ){
                         c = list_iterator_return_place(li_1, 'c');
-                        new_value = list_iterator_next(li_1, 'c');
+                        new_value = *list_iterator_next(li_1, 'l');
 
-                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, *new_value);
+                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
 
                     } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
                     list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'c')) ){
                         c = list_iterator_return_place(li_2, 'c');
-                        new_value = list_iterator_next(li_2, 'c');
+                        new_value = *list_iterator_next(li_2, 'l');
 
-                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, *new_value);
+                        list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
                     }     
             }  
             free(li_1);
@@ -168,6 +168,8 @@ void add_matrices(Matrix **matrix, int index_1, int index_2){
 
 }
 
+
+
 void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar){
     ListIterator *li = NULL;
     data_type *val;
@@ -176,7 +178,7 @@ void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar){
         li = list_front_iterator(matrix->lines[l]);
 
         while( !list_iterator_is_over(li) ){
-            val = list_iterator_next(li, 'c');
+            val = list_iterator_next(li, 'l');
             (*val) *= scalar;
         }
         free(li);
@@ -197,31 +199,30 @@ void multiply_matrices(Matrix **matrix, int index_1, int index_2){
         for( int l = 0; l < matrix[index_1]->number_lines; l++ ){ 
             for( int c = 0; c < matrix[index_2]->number_columns; c++ ){
                 ListIterator *li_1 = list_front_iterator(matrix[index_1]->lines[l]);
-                ListIterator *li_2 = list_front_iterator(matrix[index_2]->lines[l]);
+                ListIterator *li_2 = list_front_iterator(matrix[index_2]->columns[c]);
                 new_value = 0;
                 
 
                 while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
 
                     if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
-                     list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'c') ){
+                     list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'l') ){
 
-                        value_1 = *list_iterator_next(li_1, 'c');
+                        value_1 = *list_iterator_next(li_1, 'l');
                         value_2 = *list_iterator_next(li_2, 'c');
                         new_value += value_1 * value_2;
 
                     } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
-                    list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c')) ){
-                        list_iterator_next(li_1, 'c');
+                    list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'l')) ){
+                        list_iterator_next(li_1, 'l');
 
                     } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
-                    list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'c')) ){
+                    list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'l')) ){
                         list_iterator_next(li_2, 'c');
                     }     
                 }  
 
-                if( new_value != 0 )
-                    list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+                list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
                 
                 free(li_1);
                 free(li_2);
@@ -230,6 +231,50 @@ void multiply_matrices(Matrix **matrix, int index_1, int index_2){
       
     }
 }
+
+void multiply_point_to_point(Matrix **matrix, int index_1, int index_2){
+    data_type value_1 = 0, value_2 = 0, new_value = 0;
+
+    if( matrix[index_1]->number_lines != matrix[index_2]->number_lines || 
+    matrix[index_1]->number_columns != matrix[index_2]->number_columns ){
+        printf("These matrices cannot be added!\n\n");
+
+    } else {
+        matrix = matrix_construct(matrix, matrix[index_1]->number_lines, matrix[index_1]->number_columns);
+        int new_index = matrix[0]->quantity-1;
+
+        for( int l = 0; l < matrix[index_1]->number_lines; l++ ){ 
+            ListIterator *li_1 = list_front_iterator(matrix[index_1]->lines[l]);
+            ListIterator *li_2 = list_front_iterator(matrix[index_2]->lines[l]);
+            new_value = 0;
+
+            while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
+
+                if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
+                    list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'l') ){
+                    int c = list_iterator_return_place(li_1, 'c');
+
+                    value_1 = *list_iterator_next(li_1, 'l');
+                    value_2 = *list_iterator_next(li_2, 'c');
+                    new_value = value_1 * value_2;
+
+                    list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+
+                } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
+                list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'l')) ){
+                    list_iterator_next(li_1, 'l');
+
+                } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
+                list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'l')) ){
+                    list_iterator_next(li_2, 'c');
+                }     
+            }  
+            free(li_1);
+            free(li_2);                                 
+        }     
+    }
+}
+
 
 void print_dense_matrix(Matrix *matrix){
     ListIterator *li = NULL;
@@ -247,7 +292,7 @@ void print_dense_matrix(Matrix *matrix){
                 p = list_iterator_return_place(li, 'c');
 
             if( p == c ){
-                value = *list_iterator_next(li, 'c');
+                value = *list_iterator_next(li, 'l');
 
             } else {
                 value = 0;
@@ -261,4 +306,23 @@ void print_dense_matrix(Matrix *matrix){
     printf("\n");
 
     // 
+}
+
+void print_sparse_matrix(Matrix *matrix){
+    ListIterator *li = NULL;
+    data_type value = 0;
+    int p = -1;
+
+    for( int l = 0; l < matrix->number_lines; l++ ){
+        li = list_front_iterator(matrix->lines[l]);
+
+        while( !list_iterator_is_over(li) ){
+            value = *list_iterator_next(li, 'l');
+            printf("%.0f ", value);
+        }
+                 
+        free(li);
+        printf("\n");
+    }
+    printf("\n");
 }
