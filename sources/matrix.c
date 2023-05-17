@@ -318,35 +318,86 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
 }
 
+void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type){ 
+    
+    for( int c = 0; c < matrix->number_columns; c++ ){
+        ListIterator *li = list_front_iterator(matrix->columns[c]);
+        data_type *val_1 = NULL, *val_2 = NULL, aux;
+
+
+        while( !list_iterator_is_over(li) ){
+            
+            if( list_iterator_return_place(li, list_type) == index_1 ){
+                val_1 = list_iterator_next(li, 'c');
+
+            } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 != NULL ){
+                val_2 = list_iterator_next(li, 'c');
+                
+                aux = *val_2;
+                *val_2 = *val_1;
+                *val_1 = aux;
+
+                break;
+
+            } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 == NULL ){
+                val_2 = list_iterator_next(li, 'c');
+
+                list_increment(matrix->lines[index_1], matrix->columns[c], index_1, c, *val_2);
+                list_decrement(matrix->lines[index_2], matrix->columns[c], index_2, c);
+
+                break;
+
+            } else if( list_iterator_return_place(li, list_type) > index_2 && val_1 != NULL ){
+
+                list_increment(matrix->lines[index_2], matrix->columns[c], index_2, c, *val_1);
+                list_decrement(matrix->lines[index_1], matrix->columns[c], index_1, c);
+
+                break;
+                
+            } else {
+                list_iterator_next(li, 'c');
+          }          
+        }
+        free(li);
+    }
+
+
+}
+
 // void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type){ 
 //     List **row = NULL;
-//     char position_type;
 //     int *r, *l1, *l2, *c1, *c2;
+//     int qty_rows = 0;
+//     char type_next;
+
 
 //     if( list_type == 'c' ){
+//         qty_rows = matrix->number_lines;
 //         row = matrix->lines;
-//         position_type = 'l';
-//         l1 = r, c1 = index_1, c2 = index_2;
+//         type_next = 'l';
+//         l1 = l2 = r;
+//         c1 = index_1, c2 = index_2;
 
-//     } else if( list_type == 'l' ){
+//     } else if( list_type == ' l' ){
+//         qty_rows = matrix->number_columns;
 //         row = matrix->columns;
-//         position_type = 'c';
-//         c1 = r, l1 = index_1, l2 = index_2;
-//     }
+//         type_next = 'c';
+//         c1 = c2 = r;
+//         l1 = index_1, l2 = index_2;
+//     } 
 
     
-//     for( *r = 0; *r < matrix->number_lines; *r++ ){
+//     for( *r = 0; *r < qty_rows; *r++ ){
 //         ListIterator *li = list_front_iterator(row[*r]);
 //         data_type *val_1 = NULL, *val_2 = NULL, aux;
-
 
 //         while( !list_iterator_is_over(li) ){
             
 //             if( list_iterator_return_place(li, list_type) == index_1 ){
-//                 val_1 = list_iterator_next(li, position_type);
+//                 val_1 = list_iterator_next(li, type_next);
 
 //             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 != NULL ){
-//                 val_2 = list_iterator_next(li, position_type);
+//                 val_2 = list_iterator_next(li, type_next);
                 
 //                 aux = *val_2;
 //                 *val_2 = *val_1;
@@ -355,22 +406,22 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 //                 break;
 
 //             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 == NULL ){
-//                 val_2 = list_iterator_next(li, position_type);
+//                 val_2 = list_iterator_next(li, type_next);
 
-//                 list_increment(matrix->lines[*l1], matrix->columns[*c1], l1, index_1, *val_2);
-//                 list_decrement(matrix->lines[*l1], matrix->columns[*c2], l2, index_2);
+//                 list_increment(matrix->lines[*l1], matrix->columns[*c1], *l1, *c1, *val_2);
+//                 list_decrement(matrix->lines[*l2], matrix->columns[*c2], *l2, *c2);
 
 //                 break;
 
 //             } else if( list_iterator_return_place(li, list_type) > index_2 && val_1 != NULL ){
 
-//                 list_increment(matrix->lines[l], matrix->columns[index_2], l, index_2, *val_1);
-//                 list_decrement(matrix->lines[l], matrix->columns[index_1], l, index_1);
+//                 list_increment(matrix->lines[*l2], matrix->columns[*c2], *l2, *c2, *val_1);
+//                 list_decrement(matrix->lines[*l1], matrix->columns[*c1], *l1, *c1);
 
 //                 break;
                 
 //             } else {
-//                 list_iterator_next(li, 'l');
+//                 list_iterator_next(li, type_next);
 //           }          
 //         }
 //         free(li);
