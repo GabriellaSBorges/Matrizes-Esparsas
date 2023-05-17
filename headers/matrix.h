@@ -32,12 +32,13 @@ void add_matrices(Matrix **matrix, int index_1, int index_2);
 
 void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar);
 
-void multiply_matrices(Matrix **matrix, int index_1, int index_2);
+void matrices_multiply(Matrix **matrix, int index_1, int index_2);
 
 void multiply_point_to_point(Matrix **matrix, int index_1, int index_2);
 
+void matrix_swap_row(Matrix *matrix, int index_1, int index_2, char list_type);
 
-
+void matrix_transposed(Matrix **matrix, int index);
 
 
 void print_dense_matrix(Matrix *matrix);

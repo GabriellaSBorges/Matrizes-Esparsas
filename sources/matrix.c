@@ -91,7 +91,7 @@ void matrix_destroy(Matrix **matrix){
 }
 
 void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
-    
+
     int position_occupied = verify_position_occupied(matrix->lines[l], c, 'c');
 
     if( position_occupied && val != 0 )
@@ -168,8 +168,6 @@ void add_matrices(Matrix **matrix, int index_1, int index_2){
 
 }
 
-
-
 void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar){
     ListIterator *li = NULL;
     data_type *val;
@@ -186,7 +184,7 @@ void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar){
 
 }
 
-void multiply_matrices(Matrix **matrix, int index_1, int index_2){
+void matrices_multiply(Matrix **matrix, int index_1, int index_2){
     data_type value_1 = 0, value_2 = 0, new_value = 0;
 
     if( matrix[index_1]->number_columns != matrix[index_2]->number_lines ){
@@ -273,6 +271,84 @@ void multiply_point_to_point(Matrix **matrix, int index_1, int index_2){
         }     
     }
 }
+
+void matrix_swap_row(Matrix *matrix, int index_1, int index_2, char list_type){ 
+    List **rows = NULL;
+    data_type *val_1 = 0, *val_2 = 0, *aux = 0;
+    int qty_rows = 0, x1 = 0, x2 = 0;
+    char list_type_next;
+    
+    if( list_type == 'l' ){
+        qty_rows = matrix->number_columns;
+        rows = matrix->columns;     
+        list_type_next = 'c';
+
+    } else if( list_type == 'c' ){
+        qty_rows = matrix->number_lines;
+        rows = matrix->lines;
+        list_type_next = 'l';
+    }
+
+    for( int r = 0; r < qty_rows; r++ ){
+        ListIterator *li = list_front_iterator(rows[r]);
+
+        while( !list_iterator_is_over(li) ){
+            
+            if( list_iterator_return_place(li, list_type) == index_1 ){
+                val_1 = list_iterator_next(li, list_type_next);
+
+            } else if( list_iterator_return_place(li, list_type) == index_2 ){
+                val_2 = list_iterator_next(li, list_type_next);
+                
+                aux = val_2;
+                val_2 = val_1;
+                val_1 = aux;
+
+                break;
+            } else {
+                list_iterator_next(li, list_type_next);
+            }
+        }
+        free(li);
+    }
+
+
+}
+//se pedir pra trocar com um espaco vazio
+
+
+void matrix_transposed(Matrix **matrix, int index){
+
+    int qty_lines = matrix[index]->number_columns;
+    int qty_columns = matrix[index]->number_lines;
+
+    matrix = matrix_construct(matrix, qty_lines, qty_columns);
+    int new_index = matrix[0]->quantity-1;
+    print_dense_matrix(matrix[new_index]);
+
+    for( int l = 0; l < matrix[index]->number_lines; l++ ){
+        ListIterator *li = list_front_iterator(matrix[index]->lines[l]);
+
+        while( !list_iterator_is_over(li) ){
+            int c = list_iterator_return_place(li, 'c');
+            data_type val = *list_iterator_next(li, 'l');
+            
+            list_increment(matrix[new_index]->lines[c], matrix[new_index]->columns[l], c, l, val);
+        }
+
+        free(li);
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 void print_dense_matrix(Matrix *matrix){
