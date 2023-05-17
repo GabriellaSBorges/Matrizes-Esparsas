@@ -142,23 +142,6 @@ void list_increment(List *line, List *column, int l, int c, data_type val){
     Node *next_column = find_node_row(column, l, 'n', 'c', 'l');
     Node *prev_column = find_node_row(column, l, 'p', 'c', 'l');
 
-    // if( next_line != NULL )
-    //     printf("%d ", node_return_place(next_line, 'c'));
-    // else 
-    //     printf("NL ");
-    // if( next_column != NULL )
-    //     printf("%d ", node_return_place(next_column, 'l'));
-    // else 
-    //     printf("NC ");
-    // if( prev_line != NULL )
-    //     printf("%d ", node_return_place(prev_line, 'c'));
-    // else 
-    //     printf("PL ");
-    //  if( prev_column != NULL )
-    //     printf("%d ", node_return_place(prev_column, 'c'));
-    // else 
-    //     printf("PC ");
-
     Node *n = node_construct(val, l, c, next_line, prev_line, next_column, prev_column);
 
     line->size++;
@@ -276,19 +259,11 @@ void list_iterator_node_destroy(ListIterator *li, char list_type){
 }
 
 int list_iterator_return_place(ListIterator *li, int position_type){
-    if( li->current == NULL) // é necessário?
-        return -1;
-
-    if( position_type == 'l')
-        return node_return_place(li->current, 'l');
-    if( position_type == 'c')
-        return node_return_place(li->current, 'c');
-
+    return node_return_place(li->current, position_type);
 }
 
 data_type *list_iterator_next(ListIterator *li, char list_type){
     
-    // data_type *n = NULL;
     data_type *n = node_return_value(li->current);
     li->current = node_return_next(li->current, list_type);
 

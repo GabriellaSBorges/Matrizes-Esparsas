@@ -7,7 +7,6 @@ int main(){
 
 
     matrix = matrix_construct(matrix, 2, 3); // matriz 0
-    matrix = matrix_construct(matrix, 2, 3); // matriz 1
 
     matrix_assign_value(matrix[0], 0, 0, 1); 
     matrix_assign_value(matrix[0], 0, 1, 2); 
@@ -18,6 +17,8 @@ int main(){
     
     // print_sparse_matrix(matrix[0]);
     print_dense_matrix(matrix[0]);
+
+    matrix = matrix_construct(matrix, 2, 3); // matriz 1
 
     matrix_assign_value(matrix[1], 0, 0, 5); 
     matrix_assign_value(matrix[1], 0, 1, 6); 
@@ -43,9 +44,13 @@ int main(){
 
     // multiply_point_to_point(matrix, 0, 1); // matriz 4
     // print_dense_matrix(matrix[4]);
+
+    matrix_swap_columns(matrix[2], 1, 2, 'c');
+    print_dense_matrix(matrix[2]);
+
     
-    matrix_transposed(matrix, 2);
-    print_dense_matrix(matrix[3]);
+    // matrix_transposed(matrix, 2); //matriz 3
+    // print_dense_matrix(matrix[3]);
 
 
     matrix_destroy(matrix);

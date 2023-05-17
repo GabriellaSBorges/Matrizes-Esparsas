@@ -36,7 +36,7 @@ void matrices_multiply(Matrix **matrix, int index_1, int index_2);
 
 void multiply_point_to_point(Matrix **matrix, int index_1, int index_2);
 
-void matrix_swap_row(Matrix *matrix, int index_1, int index_2, char list_type);
+void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type);
 
 void matrix_transposed(Matrix **matrix, int index);
 
