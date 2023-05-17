@@ -190,7 +190,7 @@ void multiply_matrices(Matrix **matrix, int index_1, int index_2){
     data_type value_1 = 0, value_2 = 0, new_value = 0;
 
     if( matrix[index_1]->number_columns != matrix[index_2]->number_lines ){
-        printf("These matrices cannot be added!\n\n");
+        printf("These matrices cannot be multiplied!\n\n");
 
     } else {
         matrix = matrix_construct(matrix, matrix[index_1]->number_lines, matrix[index_1]->number_columns);
@@ -237,7 +237,7 @@ void multiply_point_to_point(Matrix **matrix, int index_1, int index_2){
 
     if( matrix[index_1]->number_lines != matrix[index_2]->number_lines || 
     matrix[index_1]->number_columns != matrix[index_2]->number_columns ){
-        printf("These matrices cannot be added!\n\n");
+        printf("These matrices cannot be multiplied!\n\n");
 
     } else {
         matrix = matrix_construct(matrix, matrix[index_1]->number_lines, matrix[index_1]->number_columns);
