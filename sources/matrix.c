@@ -318,6 +318,67 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
 }
 
+// void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type){ 
+//     List **row = NULL;
+//     char position_type;
+//     int *r, *l1, *l2, *c1, *c2;
+
+//     if( list_type == 'c' ){
+//         row = matrix->lines;
+//         position_type = 'l';
+//         l1 = r, c1 = index_1, c2 = index_2;
+
+//     } else if( list_type == 'l' ){
+//         row = matrix->columns;
+//         position_type = 'c';
+//         c1 = r, l1 = index_1, l2 = index_2;
+//     }
+
+    
+//     for( *r = 0; *r < matrix->number_lines; *r++ ){
+//         ListIterator *li = list_front_iterator(row[*r]);
+//         data_type *val_1 = NULL, *val_2 = NULL, aux;
+
+
+//         while( !list_iterator_is_over(li) ){
+            
+//             if( list_iterator_return_place(li, list_type) == index_1 ){
+//                 val_1 = list_iterator_next(li, position_type);
+
+//             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 != NULL ){
+//                 val_2 = list_iterator_next(li, position_type);
+                
+//                 aux = *val_2;
+//                 *val_2 = *val_1;
+//                 *val_1 = aux;
+
+//                 break;
+
+//             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 == NULL ){
+//                 val_2 = list_iterator_next(li, position_type);
+
+//                 list_increment(matrix->lines[*l1], matrix->columns[*c1], l1, index_1, *val_2);
+//                 list_decrement(matrix->lines[*l1], matrix->columns[*c2], l2, index_2);
+
+//                 break;
+
+//             } else if( list_iterator_return_place(li, list_type) > index_2 && val_1 != NULL ){
+
+//                 list_increment(matrix->lines[l], matrix->columns[index_2], l, index_2, *val_1);
+//                 list_decrement(matrix->lines[l], matrix->columns[index_1], l, index_1);
+
+//                 break;
+                
+//             } else {
+//                 list_iterator_next(li, 'l');
+//           }          
+//         }
+//         free(li);
+//     }
+
+
+// }
+
 
 void matrix_transposed(Matrix **matrix, int index){
 
