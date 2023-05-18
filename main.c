@@ -53,6 +53,8 @@ int main(){
     // print_dense_matrix(matrix[3]);
 
     save_binary_matrix(matrix[2]);
+    read_binary_matrix(matrix); // matriz 3
+    print_dense_matrix(matrix[3]);
 
 
 

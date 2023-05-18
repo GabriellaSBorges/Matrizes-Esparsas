@@ -276,35 +276,39 @@ int list_return_size(List *row){
     return row->size;
 }
 
-
-// List **read_binary_list(FILE *arq, int number_lists){
-
-//     List **list = (List**) malloc( sizeof(List*) );
-
-//     for( int i = 0; i < number_lists; i++ ){
-//         list[i] = (List*) malloc( sizeof(List) );
-        
-//         fread( &list[i]->size, sizeof(int), 1, arq);
-
-//         list[i]->head = read_binary_node(arq);
-
-//         for( int i = 0; i < list[i]->size-1; i++ ){
-            
-//         }
-//     }
-
-    
-// }
-
 void save_binary_list(FILE *arq, List *row){
+    data_type *val = 0;
+    int l = 0, c = 0;
 
     fwrite( &row->size, sizeof(int), 1, arq);
     
     ListIterator *li = list_front_iterator(row);
 
     while( !list_iterator_is_over(li) ){
-        save_binary_node(arq, li->current);
-        list_iterator_next(li, 'l');
+        l = node_return_place(li->current, 'l');
+        c = node_return_place(li->current, 'c');
+
+        val = list_iterator_next(li, 'l');
+
+        fwrite( &l, sizeof(int), 1, arq);
+        fwrite( &c, sizeof(int), 1, arq);
+        fwrite( val, sizeof(data_type), 1, arq);
     }
+
     free(li);
+}
+
+void read_binary_list(FILE *arq, List **lines, List **columns, int index_line){
+    data_type val = 0;
+    int size = 0, l = 0, c = 0;
+
+    fread( &size, sizeof(int), 1, arq );
+
+    for( int i = 0; i < size; i++ ){
+        fread( &l, sizeof(int), 1, arq);
+        fread( &c, sizeof(int), 1, arq);
+        fread( &val, sizeof(data_type), 1, arq);
+
+        list_increment(lines[l], columns[c], l, c, val);
+    }
 }

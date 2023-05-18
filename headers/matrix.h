@@ -48,8 +48,12 @@ void print_dense_matrix(Matrix *matrix);
 
 void print_sparse_matrix(Matrix *matrix);
 
-// Matrix *read_binary_matrix();
 
 void save_binary_matrix(Matrix *matrix);
+
+Matrix *read_binary_matrix(Matrix **matrix);
+
+
+
 
 #endif

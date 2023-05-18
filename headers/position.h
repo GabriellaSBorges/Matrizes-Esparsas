@@ -17,8 +17,5 @@ int position_return_line(Position_pt p);
 
 int position_return_column(Position_pt p);
 
-// Position *read_binary_position(FILE *arq);
-
-void save_binary_position(FILE *arq, Position *p);
 
 #endif

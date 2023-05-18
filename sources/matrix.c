@@ -517,24 +517,6 @@ void print_sparse_matrix(Matrix *matrix){
     printf("\n");
 }
 
-// Matrix *read_binary_matrix(){
-//     char path[11] = PATH_FILE;
-//     FILE *arq = fopen(path, "rb");
-
-//     if( !arq ){
-//         printf("ERROR: couldn't open the file!\n");
-//         exit(1);
-//     }
-//     printf("File open!\n");  
-
-//     Matrix *matrix = (Matrix*) malloc( sizeof(Matrix) );
-
-//     fread( &matrix->number_lines, sizeof(int), 1, arq);
-//     fread( &matrix->number_columns, sizeof(int), 1, arq);
-//     fread( &matrix->qty_allocated, sizeof(int), 1, arq);
-//     fread( &matrix->quantity, sizeof(int), 1, arq);
-// }
-
 void save_binary_matrix(Matrix *matrix){
     char path[11] = PATH_FILE;
     FILE *arq = fopen(path, "wb");
@@ -550,6 +532,32 @@ void save_binary_matrix(Matrix *matrix){
 
     for( int i = 0; i < matrix->number_lines; i++ )
         save_binary_list(arq, matrix->lines[i]);
+
+    fclose(arq);
+}
+
+Matrix *read_binary_matrix(Matrix **matrix){
+    char path[11] = PATH_FILE;
+    FILE *arq = fopen(path, "rb");
+
+    if( !arq ){
+        printf("ERROR: couldn't open the file!\n");
+        exit(1);
+    }
+    printf("File open!\n");  
+
+
+    int number_lines, number_columns;
+    int index = matrix[0]->quantity;
+
+    fread( &number_lines, sizeof(int), 1, arq);
+    fread( &number_columns, sizeof(int), 1, arq);
+
+    matrix = matrix_construct(matrix, number_lines, number_columns);
+
+
+    for( int i = 0; i < matrix[index]->number_lines; i++ )
+        read_binary_list(arq, matrix[index]->lines, matrix[index]->columns, i);
 
     fclose(arq);
 }
