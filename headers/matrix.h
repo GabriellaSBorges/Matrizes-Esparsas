@@ -41,6 +41,8 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
 void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type);
 
+void matrix_slice(Matrix **matrix, int index, int start_line, int start_column, int end_line, int end_column);
+
 void matrix_transposed(Matrix **matrix, int index);
 
 
@@ -51,7 +53,7 @@ void print_sparse_matrix(Matrix *matrix);
 
 void save_binary_matrix(Matrix *matrix);
 
-Matrix *read_binary_matrix(Matrix **matrix);
+void read_binary_matrix(Matrix **matrix);
 
 
 

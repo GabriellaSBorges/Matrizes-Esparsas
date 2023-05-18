@@ -52,10 +52,16 @@ int main(){
     // matrix_transposed(matrix, 2); //matriz 3
     // print_dense_matrix(matrix[3]);
 
-    save_binary_matrix(matrix[2]);
-    read_binary_matrix(matrix); // matriz 3
-    print_dense_matrix(matrix[3]);
+    // save_binary_matrix(matrix[2]);
+    // read_binary_matrix(matrix); // matriz 3
+    // print_dense_matrix(matrix[3]);
 
+    // Position *start = NULL, *end = NULL;
+    // start = position_construct(start, 0, 0); 
+    // end = position_construct(end, 1, 1); 
+
+    matrix_slice(matrix, 2, 0, 0, 1, 1);
+    print_dense_matrix(matrix[3]);
 
 
     matrix_destroy(matrix);

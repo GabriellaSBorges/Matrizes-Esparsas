@@ -432,6 +432,33 @@ void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type)
 
 // }
 
+void matrix_slice(Matrix **matrix, int index, int start_line, int start_column, int end_line, int end_column){
+
+    int qty_lines = end_line - start_line + 1;
+    int qty_columns = end_column - start_column + 1;
+
+    matrix = matrix_construct(matrix, qty_lines, qty_columns);
+    int new_index = matrix[0]->quantity-1;
+
+
+    for( int l = start_line; l <= end_line; l++ ){
+        ListIterator *li = list_front_iterator(matrix[index]->lines[l]);
+
+        while( !list_iterator_is_over(li) ){
+            int c = list_iterator_return_place(li, 'c');
+            data_type val = *list_iterator_next(li, 'l');
+
+            if( c >= start_column && c <= end_column ){
+                int new_line = l - start_line;
+                int new_column = c - start_column;
+
+                list_increment(matrix[new_index]->lines[new_line], matrix[new_index]->columns[new_column], new_line, new_column, val);
+            }            
+        }
+        free(li);
+    }
+
+}
 
 void matrix_transposed(Matrix **matrix, int index){
 
@@ -536,7 +563,7 @@ void save_binary_matrix(Matrix *matrix){
     fclose(arq);
 }
 
-Matrix *read_binary_matrix(Matrix **matrix){
+void read_binary_matrix(Matrix **matrix){
     char path[11] = PATH_FILE;
     FILE *arq = fopen(path, "rb");
 
