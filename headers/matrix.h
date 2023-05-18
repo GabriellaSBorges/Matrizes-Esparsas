@@ -4,7 +4,7 @@
 #include "list.h"
 
 #define QTY_ALLOC_INITIALLY 10
-#define ARQUIVEMATRIX "BinaryMatrix.txt"
+#define PATH_FILE "matrix.bin"
 
 typedef struct Matrix Matrix;
 typedef Matrix* Matrix_pt;
@@ -48,6 +48,8 @@ void print_dense_matrix(Matrix *matrix);
 
 void print_sparse_matrix(Matrix *matrix);
 
-Matrix *read_binary_matrix();
+// Matrix *read_binary_matrix();
+
+void save_binary_matrix(Matrix *matrix);
 
 #endif

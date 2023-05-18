@@ -88,18 +88,24 @@ int node_return_place(Node_pt n, char position_type){
     return -1;
 }
 
-Node *read_binary_node(FILE *arq){
+// Node *read_binary_node(FILE *arq){
 
-    Node *node = (Node*) malloc( sizeof(Node) );
+//     Node *node = (Node*) malloc( sizeof(Node) );
 
-    node->place = read_binary_position(arq);
+//     node->place = read_binary_position(arq);
 
-    fread( &node->value, sizeof(data_type), 1, arq);
+//     fread( &node->value, sizeof(data_type), 1, arq);
 
-    fread( &node->next_line, sizeof(Node), 1, arq);
-    fread( &node->next_column, sizeof(Node), 1, arq);
-    fread( &node->prev_line, sizeof(Node), 1, arq);
-    fread( &node->prev_column, sizeof(Node), 1, arq);
+//     fread( &node->next_line, sizeof(Node), 1, arq);
+//     fread( &node->next_column, sizeof(Node), 1, arq);
+//     fread( &node->prev_line, sizeof(Node), 1, arq);
+//     fread( &node->prev_column, sizeof(Node), 1, arq);
 
 
+// }
+
+void save_binary_node(FILE *arq, Node *node){
+
+    fwrite( &node->value, sizeof(data_type), 1, arq);
+    save_binary_position(arq, node->place);
 }

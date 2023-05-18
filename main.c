@@ -45,12 +45,15 @@ int main(){
     // multiply_point_to_point(matrix, 0, 1); // matriz 4
     // print_dense_matrix(matrix[4]);
 
-    matrix_swap_columns(matrix[2], 1, 2, 'c');
+    matrix_swap_columns(matrix[2], 1, 2, 'c'); 
     print_dense_matrix(matrix[2]);
 
     
     // matrix_transposed(matrix, 2); //matriz 3
     // print_dense_matrix(matrix[3]);
+
+    save_binary_matrix(matrix[2]);
+
 
 
     matrix_destroy(matrix);
