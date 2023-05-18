@@ -218,9 +218,12 @@ Node *list_iterator_find_node(ListIterator *li, int index, char node_type, char 
 
         /* prev node */
         case 'p':
-            while( index > node_return_place(li->current, position_type)+1 )
+            while( index > node_return_place(li->current, position_type)+1 ){
                 li->current = node_return_next(li->current, list_type);
 
+                if( li->current == NULL )
+                    break;
+            }  
             return li->current;
 
         /* next node */

@@ -286,7 +286,7 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
             if( list_iterator_return_place(li, list_type) == index_1 ){
                 val_1 = list_iterator_next(li, 'l');
 
-            } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 != NULL ){
+            } else if( list_iterator_return_place(li, list_type) == index_2 && *val_1 != 0 ){
                 val_2 = list_iterator_next(li, 'l');
                 
                 aux = *val_2;
@@ -295,7 +295,7 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
                 break;
 
-            } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 == NULL ){
+            } else if( list_iterator_return_place(li, list_type) == index_2 && *val_1 == 0 ){
                 val_2 = list_iterator_next(li, 'l');
 
                 list_increment(matrix->lines[l], matrix->columns[index_1], l, index_1, *val_2);
@@ -303,7 +303,7 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
                 break;
 
-            } else if( list_iterator_return_place(li, list_type) > index_2 && val_1 != NULL ){
+            } else if( list_iterator_return_place(li, list_type) > index_2 && *val_1 != 0 ){
 
                 list_increment(matrix->lines[l], matrix->columns[index_2], l, index_2, *val_1);
                 list_decrement(matrix->lines[l], matrix->columns[index_1], l, index_1);
