@@ -48,4 +48,6 @@ data_type *list_iterator_next(ListIterator *li, char position_type);
 
 int list_return_size(List *row);
 
+List **read_binary_list(FILE *arq, int number_lists);
+
 #endif 

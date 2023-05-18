@@ -4,6 +4,7 @@
 #include "list.h"
 
 #define QTY_ALLOC_INITIALLY 10
+#define ARQUIVEMATRIX "BinaryMatrix.txt"
 
 typedef struct Matrix Matrix;
 typedef Matrix* Matrix_pt;
@@ -38,11 +39,15 @@ void multiply_point_to_point(Matrix **matrix, int index_1, int index_2);
 
 void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type);
 
+void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type);
+
 void matrix_transposed(Matrix **matrix, int index);
 
 
 void print_dense_matrix(Matrix *matrix);
 
 void print_sparse_matrix(Matrix *matrix);
+
+Matrix *read_binary_matrix();
 
 #endif

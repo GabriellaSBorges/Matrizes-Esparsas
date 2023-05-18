@@ -276,3 +276,34 @@ int list_return_size(List *row){
     return row->size;
 }
 
+List **read_binary_list(FILE *arq, int number_lists){
+
+    List **list = (List**) malloc( sizeof(List*) );
+
+    for( int i = 0; i < number_lists; i++ ){
+        list[i] = (List*) malloc( sizeof(List) );
+        
+        fread( &list[i]->size, sizeof(int), 1, arq);
+
+        list[i]->head = read_binary_node(arq);
+
+        for( int i = 0; i < list[i]->size-1; i++ ){
+            
+        }
+    }
+
+    
+}
+
+// void save_binary_matrix(Matrix *matrix, int index){
+//     FILE *arq = fopen(arquive, "wb");
+
+//     if( arq == NULL )
+//         printf("ERROR: couldn't open the file!\n");
+
+//     fwrite( &matrix->number_lines, sizeof(int), 1, arq);
+//     fwrite( &matrix->number_columns, sizeof(int), 1, arq);
+//     fwrite( &matrix->qty_allocated, sizeof(int), 1, arq);
+//     fwrite( &matrix->quantity, sizeof(int), 1, arq);
+
+// }

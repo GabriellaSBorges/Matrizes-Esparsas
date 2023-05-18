@@ -1,5 +1,6 @@
 all: clean main valgrind
 
+
 main: objects/main.o objects/position.o objects/node.o objects/list.o objects/matrix.o
 	gcc -g objects/main.o objects/position.o objects/node.o objects/list.o objects/matrix.o -o main
 	@echo
@@ -23,8 +24,10 @@ objects/matrix.o: sources/matrix.c headers/matrix.h
 	gcc -g -o objects/matrix.o sources/matrix.c -c -Wall
 
 
+
 valgrind: 
 	valgrind -s --leak-check=full --show-leak-kinds=all ./main
+
 
 org: clean
 	rm -r sources

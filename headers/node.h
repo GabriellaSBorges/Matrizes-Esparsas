@@ -26,6 +26,7 @@ Node_pt node_return_prev(Node_pt n, char list_type);
 
 int node_return_place(Node_pt n, char position_type);
 
-// Node_pt node_return(Node_pt n);
+Node *read_binary_node(FILE *arq);
+
 
 #endif

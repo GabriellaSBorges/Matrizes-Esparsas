@@ -9,6 +9,8 @@ struct Matrix{
     int quantity;
 };
 
+
+
 Matrix **matrix_construct(Matrix **matrix, int qty_lines, int qty_columns){
     int qty = 0;
 
@@ -514,3 +516,29 @@ void print_sparse_matrix(Matrix *matrix){
     }
     printf("\n");
 }
+
+Matrix *read_binary_matrix(){
+    char arquive[30] = ARQUIVEMATRIX;
+    FILE *arq = fopen(arquive, "rb");
+
+    Matrix *matrix = (Matrix*) malloc( sizeof(Matrix) );
+
+    fread( &matrix->number_lines, sizeof(int), 1, arq);
+    fread( &matrix->number_columns, sizeof(int), 1, arq);
+    fread( &matrix->qty_allocated, sizeof(int), 1, arq);
+    fread( &matrix->quantity, sizeof(int), 1, arq);
+}
+
+// void save_binary_matrix(Matrix *matrix, int index){
+//     char arquive[30] = ARQUIVEMATRIX;
+//     FILE *arq = fopen(arquive, "wb");
+
+//     if( arq == NULL )
+//         printf("ERROR: couldn't open the file!\n");
+
+//     fwrite( &matrix->number_lines, sizeof(int), 1, arq);
+//     fwrite( &matrix->number_columns, sizeof(int), 1, arq);
+//     fwrite( &matrix->qty_allocated, sizeof(int), 1, arq);
+//     fwrite( &matrix->quantity, sizeof(int), 1, arq);
+
+// }
