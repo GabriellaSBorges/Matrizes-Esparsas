@@ -65,6 +65,7 @@ Matrix **initialize_matrix(Matrix **matrix, int l, int c){
     return matrix;
 }
 
+//ta verificando so a primeira matriz
 void verify_matrix(Matrix **matrix){
 
     if( matrix != NULL ){
@@ -91,8 +92,8 @@ void destroy_one_matrix(Matrix **matrix, int index){
     list_destroy(matrix[index]->lines, matrix[index]->number_lines, 'l');
     list_destroy(matrix[index]->columns, matrix[index]->number_columns, 'c');  
 
-    if( matrix[0] )
-        matrix[0]->quantity--;
+    // if( matrix[0] != NULL )
+    //     matrix[0]->quantity--;
 
     free(matrix[index]);
 }
@@ -379,22 +380,27 @@ void matrix_slice(Matrix **matrix, int index, int start_line, int start_column, 
     matrix = matrix_construct(matrix, qty_lines, qty_columns);
     int new_index = matrix[0]->quantity-1;
 
+    // printf("Q %d %d %d", qty_lines, qty_columns, new_index);
+    
 
     for( int l = start_line; l <= end_line; l++ ){
-        ListIterator *li = list_front_iterator(matrix[index]->lines[l]);
 
-        while( !list_iterator_is_over(li) ){
-            int c = list_iterator_return_place(li, 'c');
-            data_type val = *list_iterator_next(li, 'l');
+        if( l >= 0 && l < matrix[index]->number_lines ){
+            ListIterator *li = list_front_iterator(matrix[index]->lines[l]);
 
-            if( c >= start_column && c <= end_column ){
-                int new_line = l - start_line;
-                int new_column = c - start_column;
+            while( !list_iterator_is_over(li) ){
+                int c = list_iterator_return_place(li, 'c');
+                data_type val = *list_iterator_next(li, 'l');
 
-                list_increment(matrix[new_index]->lines[new_line], matrix[new_index]->columns[new_column], new_line, new_column, val);
-            }            
-        }
-        free(li);
+                if( c >= start_column && c <= end_column ){
+                    int new_line = l - start_line;
+                    int new_column = c - start_column;
+
+                    list_increment(matrix[new_index]->lines[new_line], matrix[new_index]->columns[new_column], new_line, new_column, val);
+                }            
+            }
+            free(li);   
+        }              
     }
 
 }
@@ -422,14 +428,22 @@ void matrix_transposed(Matrix **matrix, int index){
 }
 
 void matrix_convolution(Matrix **matrix, int index_matrix, Matrix **kernel, int index_kernel){
-    Matrix **clone = matrix;
 
     /* Calcula a quantidade de linhas da célula central até a borda */
     int edge_kernel = kernel[index_kernel]->number_lines/2;
 
-    // matrix_slice(matrix, 0, 0, 0, 1, 1);
+    for( int l = 0; l < matrix[index_matrix]->number_lines; l++ ){
+        for( int c = 0; c < matrix[index_matrix]->number_columns; c++ ){
 
-    // free(clone);
+            matrix_slice(matrix, index_matrix, 0-edge_kernel, 0-edge_kernel, 0+edge_kernel, 0+edge_kernel);
+            print_dense_matrix(matrix[index_matrix+1]);
+
+            // destroy_one_matrix(matrix, index_matrix+1);          
+        }
+    }
+
+
+  
 }
 
 

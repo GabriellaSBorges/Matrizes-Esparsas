@@ -13,6 +13,8 @@ typedef Matrix* Matrix_pt;
 
 Matrix **matrix_construct(Matrix **matrix, int qty_lines, int qty_columns);
 
+Matrix *construct_one_matrix(int qty_lines, int qty_columns);
+
 Matrix **alloc_and_realloc_matrix(Matrix **matrix, int qty_matrices);
 
 Matrix **initialize_matrix(Matrix **matrix, int l, int c);

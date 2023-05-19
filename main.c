@@ -83,7 +83,7 @@ int main(){
 
     print_dense_matrix(kernel[0]);
 
-    // matrix_convolution(matrix, 0, kernel, 0);
+    matrix_convolution(matrix, 0, kernel, 0);
 
     matrices_destroy(matrix);
     matrices_destroy(kernel);
