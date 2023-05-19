@@ -81,21 +81,26 @@ void matrices_destroy(Matrix **matrix){
     int qty_allocated = matrix[0]->qty_allocated;
     int qty_matrices = matrix[0]->quantity;
 
-    for( int i = 0; i < qty_allocated; i++ )
-        ( i < qty_matrices ) ? destroy_one_matrix(matrix, i) : free(matrix[i]);
+    printf("%d %d\n", qty_matrices, qty_allocated);
+
+    for( int i = 0; i < qty_allocated; i++ ){
+        if( i < qty_matrices ) 
+            destroy_one_matrix(matrix, i);
+        
+        free(matrix[i]);
+    }
+        
     
     free(matrix);
 }
 
 void destroy_one_matrix(Matrix **matrix, int index){
 
+    if( matrix[0] )
+        matrix[0]->quantity--;
+       
     list_destroy(matrix[index]->lines, matrix[index]->number_lines, 'l');
     list_destroy(matrix[index]->columns, matrix[index]->number_columns, 'c');  
-
-    // if( matrix[0] != NULL )
-    //     matrix[0]->quantity--;
-
-    free(matrix[index]);
 }
 
 
@@ -436,9 +441,12 @@ void matrix_convolution(Matrix **matrix, int index_matrix, Matrix **kernel, int 
         for( int c = 0; c < matrix[index_matrix]->number_columns; c++ ){
 
             matrix_slice(matrix, index_matrix, 0-edge_kernel, 0-edge_kernel, 0+edge_kernel, 0+edge_kernel);
-            print_dense_matrix(matrix[index_matrix+1]);
+            print_dense_matrix(matrix[matrix[0]->quantity-1]);
 
-            // destroy_one_matrix(matrix, index_matrix+1);          
+            printf("Q %d\n", matrix[0]->quantity);
+
+            destroy_one_matrix(matrix, matrix[0]->quantity-1);   
+
         }
     }
 

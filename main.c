@@ -31,7 +31,7 @@ int main(){
     // matrix_assign_value(matrix[1], 0, 2, 1); 
     // matrix_assign_value(matrix[1], 1, 2, 1); 
 
-    // // print_sparse_matrix(matrix[1]);
+    // print_sparse_matrix(matrix[1]);
     // print_dense_matrix(matrix[1]);
 
 
