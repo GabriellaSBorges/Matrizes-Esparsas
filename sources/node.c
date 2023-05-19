@@ -16,6 +16,8 @@ Node_pt node_construct(data_type value, int l, int c, Node *next_line, Node *pre
     n->place = position_construct(n->place, l, c);
     n->value = value;
 
+    // printf("%f  ", n->value);
+
     n->next_line = next_line;
     n->prev_line = prev_line;
     n->next_column = next_column;

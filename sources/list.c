@@ -69,7 +69,7 @@ int verify_position_occupied(List *row, int p_searched, char position_type){
             return 1;
         }       
         
-        li->current = node_return_next(li->current, position_type);   
+        li->current = node_return_next(li->current, 'l');   
     }
 
     free(li);
@@ -77,7 +77,7 @@ int verify_position_occupied(List *row, int p_searched, char position_type){
     return 0;
 }
 
-// pode mesclar com a find row
+// assign value e decrement podem já receber o node, pra nao precisar percorrer tudo dnv!
 void list_assign_value(List *row, int p_searched, data_type val, char position_type){
     ListIterator *li = list_front_iterator(row);
     int p = 0;
@@ -151,6 +151,29 @@ void list_increment(List *line, List *column, int l, int c, data_type val){
     list_insert_node(column, n, next_column, prev_column, 'c');
 }
 
+// Node *find_node_row(List *row, int index_searched, char node_type, char list_type, char position_type){
+//     ListIterator *li = list_front_iterator(row);
+
+//     if( node_type == 'a' ){
+//         list_iterator_find_node(li, index_searched, node_type, list_type, position_type);
+
+//     } else if( row->head != NULL ) {
+//         int head_index = node_return_place(row->head, position_type);
+
+//         if( index_searched > head_index ){       
+//             list_iterator_find_node(li, index_searched, node_type, list_type, position_type);
+
+//         } else if( node_type == 'p' ) {
+//             li->current = NULL;
+//         } 
+//     }   
+
+//     Node *n = li->current;
+//     free(li);
+
+//     return n;
+// }
+
 Node *find_node_row(List *row, int index_searched, char node_type, char list_type, char position_type){
     ListIterator *li = list_front_iterator(row);
     Node *n = NULL;
@@ -218,40 +241,28 @@ Node *list_iterator_find_node(ListIterator *li, int index, char node_type, char 
 
         /* prev node */
         case 'p':
-            while( index > node_return_place(li->current, position_type)+1 ){
-                li->current = node_return_next(li->current, list_type);
+            while( !list_iterator_is_over(li)  &&  node_return_next(li->current, list_type) 
+            && index > node_return_place(li->current, position_type)+1 )
 
-                if( li->current == NULL )
-                    break;
-            }  
-            return li->current;
+                li->current = node_return_next(li->current, list_type);                     
+            break;
+
 
         /* next node */
         case 'n':
-            while( index > node_return_place(li->current, position_type)-1 ){
+            while( !list_iterator_is_over(li)  &&  index > node_return_place(li->current, position_type)-1 )
                 li->current = node_return_next(li->current, list_type);
+            break;
 
-                if( li->current == NULL )
-                    break;
-            }       
-            return li->current;
 
         /* actual node */
         case 'a':
-            int p = 0;
-
-            while( !list_iterator_is_over(li) ){
-                p = node_return_place(li->current, position_type);
-
-                if( p == index )
-                    return li->current;
-
+            while( !list_iterator_is_over(li)  &&  node_return_place(li->current, position_type) != index )
                 li->current = node_return_next(li->current, list_type);
-            }
-            
+            break;      
     }
 
-    return NULL;
+    return li->current;
 }
 
 void list_iterator_node_destroy(ListIterator *li, char list_type){

@@ -94,18 +94,17 @@ void matrix_destroy(Matrix **matrix){
 
 void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
 
-    int position_occupied = verify_position_occupied(matrix->lines[l], c, 'c');
+    // int position_occupied = verify_position_occupied(matrix->lines[l], c, 'c');
+    int position_occupied = find_node_row(matrix->lines[l], c, 'a', 'l', 'c') ? 1 : 0;
 
     if( position_occupied && val != 0 )
-        list_assign_value(matrix->lines[l], c, val, 'c');
+        list_assign_value(matrix->lines[l], c, val, 'c');       
 
     else if( position_occupied && val == 0 )
         list_decrement(matrix->lines[l], matrix->columns[c], l, c);
 
-    else if( !position_occupied && val != 0 ){
+    else if( !position_occupied && val != 0 )
         list_increment(matrix->lines[l], matrix->columns[c], l, c, val);
-
-    }
 }
 
 void matrix_read_value(Matrix *matrix, int index, int l, int c){
