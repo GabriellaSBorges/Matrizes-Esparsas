@@ -76,21 +76,27 @@ void verify_matrix(Matrix **matrix){
     }
 }
 
-void matrix_destroy(Matrix **matrix){
-    int qty_alloc = matrix[0]->qty_allocated;
+void matrices_destroy(Matrix **matrix){
+    int qty_allocated = matrix[0]->qty_allocated;
     int qty_matrices = matrix[0]->quantity;
 
-    for( int i = 0; i < qty_alloc; i++ ){
-
-        if( i < qty_matrices ){
-            list_destroy(matrix[i]->lines, matrix[i]->number_lines, 'l');
-            list_destroy(matrix[i]->columns, matrix[i]->number_columns, 'c');
-        }
-       
-        free(matrix[i]);
-    }
+    for( int i = 0; i < qty_allocated; i++ )
+        ( i < qty_matrices ) ? destroy_one_matrix(matrix, i) : free(matrix[i]);
+    
     free(matrix);
 }
+
+void destroy_one_matrix(Matrix **matrix, int index){
+
+    list_destroy(matrix[index]->lines, matrix[index]->number_lines, 'l');
+    list_destroy(matrix[index]->columns, matrix[index]->number_columns, 'c');  
+
+    if( matrix[0] )
+        matrix[0]->quantity--;
+
+    free(matrix[index]);
+}
+
 
 void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
 
@@ -365,72 +371,6 @@ void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type)
 
 }
 
-// void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type){ 
-//     List **row = NULL;
-//     int *r, *l1, *l2, *c1, *c2;
-//     int qty_rows = 0;
-//     char type_next;
-
-
-//     if( list_type == 'c' ){
-//         qty_rows = matrix->number_lines;
-//         row = matrix->lines;
-//         type_next = 'l';
-//         l1 = l2 = r;
-//         c1 = index_1, c2 = index_2;
-
-//     } else if( list_type == ' l' ){
-//         qty_rows = matrix->number_columns;
-//         row = matrix->columns;
-//         type_next = 'c';
-//         c1 = c2 = r;
-//         l1 = index_1, l2 = index_2;
-//     } 
-
-    
-//     for( *r = 0; *r < qty_rows; *r++ ){
-//         ListIterator *li = list_front_iterator(row[*r]);
-//         data_type *val_1 = NULL, *val_2 = NULL, aux;
-
-//         while( !list_iterator_is_over(li) ){
-            
-//             if( list_iterator_return_place(li, list_type) == index_1 ){
-//                 val_1 = list_iterator_next(li, type_next);
-
-//             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 != NULL ){
-//                 val_2 = list_iterator_next(li, type_next);
-                
-//                 aux = *val_2;
-//                 *val_2 = *val_1;
-//                 *val_1 = aux;
-
-//                 break;
-
-//             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 == NULL ){
-//                 val_2 = list_iterator_next(li, type_next);
-
-//                 list_increment(matrix->lines[*l1], matrix->columns[*c1], *l1, *c1, *val_2);
-//                 list_decrement(matrix->lines[*l2], matrix->columns[*c2], *l2, *c2);
-
-//                 break;
-
-//             } else if( list_iterator_return_place(li, list_type) > index_2 && val_1 != NULL ){
-
-//                 list_increment(matrix->lines[*l2], matrix->columns[*c2], *l2, *c2, *val_1);
-//                 list_decrement(matrix->lines[*l1], matrix->columns[*c1], *l1, *c1);
-
-//                 break;
-                
-//             } else {
-//                 list_iterator_next(li, type_next);
-//           }          
-//         }
-//         free(li);
-//     }
-
-
-// }
-
 void matrix_slice(Matrix **matrix, int index, int start_line, int start_column, int end_line, int end_column){
 
     int qty_lines = end_line - start_line + 1;
@@ -481,7 +421,16 @@ void matrix_transposed(Matrix **matrix, int index){
     }
 }
 
+void matrix_convolution(Matrix **matrix, int index_matrix, Matrix **kernel, int index_kernel){
+    Matrix **clone = matrix;
 
+    /* Calcula a quantidade de linhas da célula central até a borda */
+    int edge_kernel = kernel[index_kernel]->number_lines/2;
+
+    // matrix_slice(matrix, 0, 0, 0, 1, 1);
+
+    // free(clone);
+}
 
 
 
@@ -502,8 +451,6 @@ void print_dense_matrix(Matrix *matrix){
         p = -1;
 
         for( int c = 0; c < matrix->number_columns; c++ ){
-            // data_type *value = (data_type*) malloc(sizeof(data_type));
-
             if( !list_iterator_is_over(li) )
                 p = list_iterator_return_place(li, 'c');
 
@@ -520,14 +467,11 @@ void print_dense_matrix(Matrix *matrix){
         printf("\n");
     }
     printf("\n");
-
-    // 
 }
 
 void print_sparse_matrix(Matrix *matrix){
     ListIterator *li = NULL;
     data_type value = 0;
-    // int p = -1;
 
     for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);

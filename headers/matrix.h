@@ -19,7 +19,9 @@ Matrix **initialize_matrix(Matrix **matrix, int l, int c);
 
 void verify_matrix(Matrix **matrix);
 
-void matrix_destroy(Matrix **matrix);
+void matrices_destroy(Matrix **matrix);
+
+void destroy_one_matrix(Matrix **matrix, int index);
 
 void matrix_assign_value(Matrix *matrix, int l, int c, data_type val);
 
@@ -45,6 +47,7 @@ void matrix_slice(Matrix **matrix, int index, int start_line, int start_column, 
 
 void matrix_transposed(Matrix **matrix, int index);
 
+void matrix_convolution(Matrix **matrix, int index_matrix, Matrix **kernel, int index_kernel);
 
 void print_dense_matrix(Matrix *matrix);
 
