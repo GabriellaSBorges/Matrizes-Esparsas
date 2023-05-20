@@ -32,6 +32,8 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
 void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type);
 
+Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int start_column, int end_line, int end_column);
+
 Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices);
 
 

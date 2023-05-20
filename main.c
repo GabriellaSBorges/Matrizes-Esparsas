@@ -61,23 +61,22 @@ int main(){
 
     matrix_swap_lines(matrix_5, 1, 2, 'l'); 
     print_dense_matrix(matrix_5);
-    
-    Matrix *matrix_6 = matrix_transposed(matrix_5, qty_matrices); 
+
+    Matrix *matrix_6 = matrix_slice(matrix_5, qty_matrices, 0, 0, 1, 1);
+    print_sparse_matrix(matrix_6);
     print_dense_matrix(matrix_6);
+    
+    Matrix *matrix_7 = matrix_transposed(matrix_5, qty_matrices); 
+    print_dense_matrix(matrix_7);
 
     save_binary_matrix(matrix_5);
     matrix_destroy(matrix_5);
 
-    Matrix *matrix_7 = read_binary_matrix(qty_matrices); 
-    print_dense_matrix(matrix_7);
+    Matrix *matrix_8 = read_binary_matrix(qty_matrices); 
+    print_dense_matrix(matrix_8);
 
-//     // Position *start = NULL, *end = NULL;
-//     // start = position_construct(start, 0, 0); 
-//     // end = position_construct(end, 1, 1); 
 
-//     // matrix_slice(matrix, 0, 0, 0, 1, 1);
-//     // print_dense_matrix(matrix[2]);
-
+    /* CONVOLUCAO */
     int *qty_kernels = (int*) malloc( sizeof(int) );
     *qty_kernels = 0;
 
@@ -105,6 +104,7 @@ int main(){
     // matrix_destroy(matrix_5);
     matrix_destroy(matrix_6);
     matrix_destroy(matrix_7);
+    matrix_destroy(matrix_8);
 
     matrix_destroy(kernel_0);
     free(qty_matrices);

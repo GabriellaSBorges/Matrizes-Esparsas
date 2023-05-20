@@ -328,7 +328,39 @@ void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type)
 
 }
 
+Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int start_column, int end_line, int end_column){
 
+    printf("\n|MATRIX SLICE|\n");
+
+    int qty_lines = end_line - start_line + 1;
+    int qty_columns = end_column - start_column + 1;
+
+    Matrix *new_matrix = matrix_construct(qty_matrices, qty_lines, qty_columns);
+
+    // printf("Q %d %d %d", qty_lines, qty_columns, new_index);
+
+    for( int l = start_line; l <= end_line; l++ ){
+
+        if( l >= 0 && l < matrix->number_lines ){
+            ListIterator *li = list_front_iterator(matrix->lines[l]);
+
+            while( !list_iterator_is_over(li) ){
+                int c = list_iterator_return_place(li, 'c');
+                data_type val = *list_iterator_next(li, 'l');
+
+                if( c >= start_column && c <= end_column ){
+                    int new_line = l - start_line;
+                    int new_column = c - start_column;
+
+                    list_increment(new_matrix->lines[new_line], new_matrix->columns[new_column], new_line, new_column, val);
+                }            
+            }
+            free(li);   
+        }              
+    }
+
+    return new_matrix;
+}
 
 Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices){
 
@@ -369,7 +401,7 @@ void print_dense_matrix(Matrix *matrix){
     ListIterator *li = NULL;
     data_type value = 0;
 
-    printf("\n|DENSE MATRIX|\n");
+    printf(":dense matrix:\n");
 
     for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);
@@ -396,7 +428,7 @@ void print_sparse_matrix(Matrix *matrix){
     data_type value = 0;
     int c = 0;
 
-    printf("\n|SPARSE MATRIX|\n");
+    printf("\n:sparse matrix:\n");
 
     for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);
