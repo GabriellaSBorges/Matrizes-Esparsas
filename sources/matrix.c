@@ -380,6 +380,8 @@ Matrix *matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices){
     Matrix *support_1 = NULL, *support_2 = NULL;
     int *qty_supports = (int*) malloc( sizeof(int) );
 
+    printf("\n===============|CONVOLUTION|===============\n");
+
     /* Calcula a quantidade de linhas da célula central até a borda */
     int edge_kernel = kernel->number_lines/2;
 
