@@ -8,7 +8,7 @@
 typedef struct Matrix Matrix;
 
 
-Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns);
+Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char hide_print);
 
 void matrix_destroy(Matrix *matrix);
 
@@ -26,17 +26,19 @@ Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type s
 
 Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices);
 
-Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices);
+Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices, char hide_print);
 
 void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type);
 
 void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type);
 
-Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int start_column, int end_line, int end_column);
+Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int start_column, int end_line, int end_column, char hide_print);
 
 Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices);
 
-void matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices);
+Matrix *matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices);
+
+data_type add_all_values(Matrix *matrix);
 
 void print_dense_matrix(Matrix *matrix);
 

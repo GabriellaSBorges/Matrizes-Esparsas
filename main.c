@@ -7,7 +7,7 @@ int main(){
     printf("---------------\n Bem-vindo! :) \n---------------\n");
 
 
-    Matrix *matrix_0 = matrix_construct(qty_matrices, 3, 3); 
+    Matrix *matrix_0 = matrix_construct(qty_matrices, 3, 3, 0); 
 
     matrix_assign_value(matrix_0, 0, 0, 1); 
     matrix_assign_value(matrix_0, 2, 1, 1); 
@@ -25,7 +25,7 @@ int main(){
     print_dense_matrix(matrix_0);
 
 
-    Matrix *matrix_1 = matrix_construct(qty_matrices, 3, 3);
+    Matrix *matrix_1 = matrix_construct(qty_matrices, 3, 3, 0);
 
     matrix_assign_value(matrix_1, 0, 0, 2); 
     matrix_assign_value(matrix_1, 0, 1, 3); 
@@ -53,7 +53,7 @@ int main(){
     Matrix *matrix_4 = matrices_multiply(matrix_0, matrix_1, qty_matrices); 
     print_dense_matrix(matrix_4);
 
-    Matrix *matrix_5 = multiply_point_to_point(matrix_0, matrix_1, qty_matrices); 
+    Matrix *matrix_5 = multiply_point_to_point(matrix_0, matrix_1, qty_matrices, 0); 
     print_dense_matrix(matrix_5);
 
     matrix_swap_columns(matrix_5, 1, 2, 'c'); 
@@ -62,7 +62,7 @@ int main(){
     matrix_swap_lines(matrix_5, 1, 2, 'l'); 
     print_dense_matrix(matrix_5);
 
-    Matrix *matrix_6 = matrix_slice(matrix_5, qty_matrices, 0, 0, 1, 1);
+    Matrix *matrix_6 = matrix_slice(matrix_5, qty_matrices, 0, 0, 1, 1, 0);
     print_sparse_matrix(matrix_6);
     print_dense_matrix(matrix_6);
     
@@ -80,7 +80,7 @@ int main(){
     int *qty_kernels = (int*) malloc( sizeof(int) );
     *qty_kernels = 0;
 
-    Matrix *kernel_0 = matrix_construct(qty_kernels, 3, 3); // kernel 0
+    Matrix *kernel_0 = matrix_construct(qty_kernels, 3, 3, 0); 
 
     matrix_assign_value(kernel_0, 0, 0, 1); 
     matrix_assign_value(kernel_0, 0, 1, 0); 
@@ -94,8 +94,9 @@ int main(){
 
     print_dense_matrix(kernel_0);
 
-    // matrix_convolution(matrix_8, kernel_0, qty_matrices);
-;
+    Matrix *matrix_9 = matrix_convolution(matrix_8, kernel_0, qty_matrices);
+    print_dense_matrix(matrix_9);
+
 
     matrix_destroy(matrix_0);
     matrix_destroy(matrix_1);
@@ -106,6 +107,7 @@ int main(){
     matrix_destroy(matrix_6);
     // matrix_destroy(matrix_7);
     matrix_destroy(matrix_8);
+    matrix_destroy(matrix_9);
 
     matrix_destroy(kernel_0);
 

@@ -225,6 +225,10 @@ int list_iterator_return_place(ListIterator *li, int position_type){
     return node_return_place(li->current, position_type);
 }
 
+// data_type *list_iterator_return_value(ListIterator *li){
+//     return node_return_value(li->current);
+// }
+
 void list_iterator_node_destroy(ListIterator *li, char list_type){
     Node *n = li->current;
 

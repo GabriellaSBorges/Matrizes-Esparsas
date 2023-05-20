@@ -36,6 +36,8 @@ data_type *list_iterator_next(ListIterator *li, char position_type);
 
 int list_iterator_return_place(ListIterator *li, int position_type);
 
+// data_type *list_iterator_return_value(ListIterator *li);
+
 void list_iterator_node_destroy(ListIterator *li, char list_type);
 
 

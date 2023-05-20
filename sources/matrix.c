@@ -8,7 +8,7 @@ struct Matrix{
 };
 
 
-Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns){
+Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char hide_print){
 
     Matrix *matrix = (Matrix*) malloc( sizeof(Matrix) );
 
@@ -16,10 +16,10 @@ Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns){
     matrix->number_columns = qty_columns;
     (*qty_matrices)++;
 
-    if( matrix != NULL ){
+    if( matrix != NULL && hide_print == 0 ){
         printf("\n|Matrix-%d was constructed!\n\n", (*qty_matrices)-1);
 
-    } else {
+    } else if( !matrix ) {
         printf("ERROR: failure to build the matrix.\n\n");
         exit(1);
     }
@@ -71,7 +71,7 @@ Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
 
     printf("\n|ADD MATRICES|\n");
 
-    Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_1->number_columns);
+    Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_1->number_columns, 0);
 
     for( int l = 0; l < matrix_1->number_lines; l++ ){
         ListIterator *li_1 = list_front_iterator(matrix_1->lines[l]);
@@ -112,7 +112,7 @@ Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type s
 
     printf("\n|MULTIPLY BY SCALAR|\n");
 
-    Matrix *new_matrix = matrix_construct(qty_matrices, matrix->number_lines, matrix->number_columns);
+    Matrix *new_matrix = matrix_construct(qty_matrices, matrix->number_lines, matrix->number_columns, 0);
 
     for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);
@@ -134,7 +134,7 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 
     printf("\n|MULTIPLY MATRICES|\n");
 
-    Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_2->number_columns);
+    Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_2->number_columns, 0);
 
     for( int l = 0; l < matrix_1->number_lines; l++ ){ 
         for( int c = 0; c < matrix_2->number_columns; c++ ){
@@ -169,11 +169,11 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
     return new_matrix;
 }
 
-Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
+Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices, char hide_print){
 
-    printf("\n|MULTIPLY POINT TO POINT|\n");
+    hide_print == 0 ? printf("\n|MULTIPLY POINT TO POINT|\n") : 1;
 
-    Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_2->number_columns);
+    Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_2->number_columns, hide_print);
 
 
     for( int l = 0; l < matrix_1->number_lines; l++ ){ 
@@ -320,16 +320,14 @@ void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type)
 
 }
 
-Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int start_column, int end_line, int end_column){
+Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int start_column, int end_line, int end_column, char hide_print){
 
-    printf("\n|MATRIX SLICE|\n");
+    hide_print == 0 ? printf("\n|MATRIX SLICE|\n") : 1;
 
     int qty_lines = end_line - start_line + 1;
     int qty_columns = end_column - start_column + 1;
 
-    Matrix *new_matrix = matrix_construct(qty_matrices, qty_lines, qty_columns);
-
-    // printf("Q %d %d %d", qty_lines, qty_columns, new_index);
+    Matrix *new_matrix = matrix_construct(qty_matrices, qty_lines, qty_columns, hide_print);
 
     for( int l = start_line; l <= end_line; l++ ){
 
@@ -361,7 +359,7 @@ Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices){
     int qty_lines = matrix->number_columns;
     int qty_columns = matrix->number_lines;
 
-    Matrix *new_matrix = matrix_construct(qty_matrices, qty_lines, qty_columns);
+    Matrix *new_matrix = matrix_construct(qty_matrices, qty_lines, qty_columns, 0);
 
     for( int l = 0; l < matrix->number_lines; l++ ){
         ListIterator *li = list_front_iterator(matrix->lines[l]);
@@ -378,34 +376,56 @@ Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices){
     return new_matrix;
 }
 
-void matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices){
+Matrix *matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices){
     Matrix *support_1 = NULL, *support_2 = NULL;
     int *qty_supports = (int*) malloc( sizeof(int) );
 
     /* Calcula a quantidade de linhas da célula central até a borda */
     int edge_kernel = kernel->number_lines/2;
 
+    Matrix *new_matrix = matrix_construct(qty_matrices, matrix->number_lines, matrix->number_columns, 0);
 
     for( int l = 0; l < matrix->number_lines; l++ ){
         for( int c = 0; c < matrix->number_columns; c++ ){
             (*qty_supports) = 0;
 
-            support_1 = matrix_slice(matrix, qty_matrices, l-edge_kernel, c-edge_kernel, l+edge_kernel, c+edge_kernel);
-            print_dense_matrix(support_1);
+            /* retorna a submatriz de mesmo tamanho que o kernel */
+            support_1 = matrix_slice(matrix, qty_supports, l-edge_kernel, c-edge_kernel, l+edge_kernel, c+edge_kernel, '1');
+            // print_dense_matrix(support_1);
 
-            support_2 = multiply_point_to_point(support_1, kernel, qty_supports);
+            /* retorna a matriz resultante da multiplicacao ponto a ponto da submatriz e do kernel */
+            support_2 = multiply_point_to_point(support_1, kernel, qty_supports, '1');
 
+            /* soma todos os valores da matriz 2 */
+            data_type new_value = add_all_values(support_2);
+
+            /* atribui a soma como uma célula da nova matriz */
+            matrix_assign_value(new_matrix, l, c, new_value);
 
             matrix_destroy(support_1);          
             matrix_destroy(support_2);          
         }
     }
-
-
     free(qty_supports);
+
+    return new_matrix;
 }
 
+data_type add_all_values(Matrix *matrix){
+    ListIterator *li = NULL;
+    data_type sum = 0;
 
+    for( int l = 0; l < matrix->number_lines; l++ ){
+        li = list_front_iterator(matrix->lines[l]);
+
+        while( !list_iterator_is_over(li) ){
+            sum += *list_iterator_next(li, 'l');
+        }
+        free(li);
+    }
+
+    return sum;
+}
 
 
 
@@ -500,7 +520,7 @@ Matrix *read_binary_matrix(int *qty_matrices){
     fread( &qty_lines, sizeof(int), 1, arq);
     fread( &qty_columns, sizeof(int), 1, arq);
 
-    Matrix *new_matrix = matrix_construct(qty_matrices, qty_lines, qty_columns);
+    Matrix *new_matrix = matrix_construct(qty_matrices, qty_lines, qty_columns, 0);
 
 
     for( int i = 0; i < new_matrix->number_lines; i++ )
