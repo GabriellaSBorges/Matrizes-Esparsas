@@ -60,16 +60,16 @@ void matrix_read_value(Matrix *matrix, int index, int l, int c){
     data_type *val = node_return_value(n);
 
     if( n == NULL )
-        printf("Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, 0.0);
+        printf("> Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, 0.0);
     else
-        printf("Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, *val);
+        printf("> Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, *val);
 }
 
 Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
     data_type new_value = 0;
     int c = 0;
 
-    printf("\n|ADD MATRICES|\n");
+    printf("\n================|ADD MATRICES|================\n");
 
     Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_1->number_columns, 0);
 
@@ -110,7 +110,7 @@ Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
 Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type scalar){
     ListIterator *li = NULL;
 
-    printf("\n|MULTIPLY BY SCALAR|\n");
+    printf("\n=============|MULTIPLY BY SCALAR|=============\n");
 
     Matrix *new_matrix = matrix_construct(qty_matrices, matrix->number_lines, matrix->number_columns, 0);
 
@@ -132,7 +132,7 @@ Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type s
 Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
     data_type value_1 = 0, value_2 = 0, new_value = 0;
 
-    printf("\n|MULTIPLY MATRICES|\n");
+    printf("\n=============|MULTIPLY MATRICES|=============\n");
 
     Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_2->number_columns, 0);
 
@@ -171,7 +171,7 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 
 Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices, char hide_print){
 
-    hide_print == 0 ? printf("\n|MULTIPLY POINT TO POINT|\n") : 1;
+    hide_print == 0 ? printf("\n==========|MULTIPLY POINT TO POINT|==========\n") : 1;
 
     Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_2->number_columns, hide_print);
 
@@ -207,7 +207,7 @@ Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_mat
 
 void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type){ 
 
-    printf("\n|SWAP COLUMNS|\n");
+    printf("\n===============|SWAP COLUMNS|===============\n");
     
     for( int l = 0; l < matrix->number_lines; l++ ){
         ListIterator *li = list_front_iterator(matrix->lines[l]);
@@ -265,7 +265,7 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
 void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type){ 
 
-    printf("\n|SWAP LINES|\n");
+    printf("\n================|SWAP LINES|================\n");
     
     for( int c = 0; c < matrix->number_columns; c++ ){
         ListIterator *li = list_front_iterator(matrix->columns[c]);
@@ -322,7 +322,7 @@ void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type)
 
 Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int start_column, int end_line, int end_column, char hide_print){
 
-    hide_print == 0 ? printf("\n|MATRIX SLICE|\n") : 1;
+    hide_print == 0 ? printf("\n===============|MATRIX SLICE|===============\n") : 1;
 
     int qty_lines = end_line - start_line + 1;
     int qty_columns = end_column - start_column + 1;
@@ -354,7 +354,7 @@ Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int star
 
 Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices){
 
-    printf("\n|TRANSPOSED MATRIX|\n");
+    printf("\n============|TRANSPOSED MATRIX|============\n");
 
     int qty_lines = matrix->number_columns;
     int qty_columns = matrix->number_lines;
@@ -483,7 +483,7 @@ void save_binary_matrix(Matrix *matrix){
     char path[11] = PATH_FILE;
     FILE *arq = fopen(path, "wb");
 
-    printf("\n|SAVE MATRIX|\n");
+    printf("\n===============|SAVE MATRIX|===============\n");
 
     if( !arq ){
         printf("ERROR: couldn't open the file!\n");
@@ -497,7 +497,7 @@ void save_binary_matrix(Matrix *matrix){
     for( int i = 0; i < matrix->number_lines; i++ )
         save_binary_list(arq, matrix->lines[i]);
     
-    printf("\nThe matrix was saved in the file '%s'!\n", PATH_FILE);    
+    printf("\nThe matrix was saved in the file '%s'!\n\n", PATH_FILE);    
 
     fclose(arq);
 }
@@ -506,7 +506,7 @@ Matrix *read_binary_matrix(int *qty_matrices){
     char path[11] = PATH_FILE;
     FILE *arq = fopen(path, "rb");
 
-    printf("\n|READ MATRIX|\n");
+    printf("\n===============|READ MATRIX|===============\n");
 
     if( !arq ){
         printf("ERROR: couldn't open the file!\n");
