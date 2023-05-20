@@ -1,51 +1,56 @@
 #include "headers/matrix.h"
 
 int main(){
-    Matrix **matrix = NULL, **kernel = NULL;
+    int *qty_matrices = (int*) malloc( sizeof(int) );
+    *qty_matrices = 0;
 
     printf("---------------\n Bem-vindo! :) \n---------------\n");
 
 
-    matrix = matrix_construct(matrix, 3, 3); // matriz 0
+    Matrix *matrix_0 = matrix_construct(qty_matrices, 3, 3); 
 
-    matrix_assign_value(matrix[0], 0, 0, 1); 
-    matrix_assign_value(matrix[0], 2, 1, 1); 
-    matrix_assign_value(matrix[0], 2, 2, 2); 
-    matrix_assign_value(matrix[0], 0, 1, 2); 
+    matrix_assign_value(matrix_0, 0, 0, 1); 
+    matrix_assign_value(matrix_0, 2, 1, 1); 
+    matrix_assign_value(matrix_0, 2, 2, 2); 
+    matrix_assign_value(matrix_0, 0, 1, 2); 
     
-    matrix_assign_value(matrix[0], 1, 1, 5); 
-    matrix_assign_value(matrix[0], 1, 2, 6); 
-    matrix_assign_value(matrix[0], 2, 0, 2); 
-    matrix_assign_value(matrix[0], 0, 2, 3); 
-    matrix_assign_value(matrix[0], 1, 0, 4); 
+    matrix_assign_value(matrix_0, 1, 1, 1); 
+    matrix_assign_value(matrix_0, 1, 2, 1); 
+    matrix_assign_value(matrix_0, 2, 0, 2); 
+    matrix_assign_value(matrix_0, 0, 2, 3); 
+    matrix_assign_value(matrix_0, 1, 0, 4); 
   
-    // // print_sparse_matrix(matrix[0]);
-    print_dense_matrix(matrix[0]);
-
-    // matrix = matrix_construct(matrix, 2, 3); // matriz 1
-
-    // matrix_assign_value(matrix[1], 0, 0, 5); 
-    // matrix_assign_value(matrix[1], 0, 1, 6); 
-    // matrix_assign_value(matrix[1], 1, 0, 7); 
-    // matrix_assign_value(matrix[1], 1, 1, 8); 
-    // matrix_assign_value(matrix[1], 0, 2, 1); 
-    // matrix_assign_value(matrix[1], 1, 2, 1); 
-
-    // print_sparse_matrix(matrix[1]);
-    // print_dense_matrix(matrix[1]);
+    // print_sparse_matrix(matrix_0);
+    print_dense_matrix(matrix_0);
 
 
-    // matrix_read_value(matrix[0], 0, 0, 0); 
-    // matrix_read_value(matrix[0], 0, 1, 1); 
+    Matrix *matrix_1 = matrix_construct(qty_matrices, 3, 3);
+
+    matrix_assign_value(matrix_1, 0, 0, 2); 
+    matrix_assign_value(matrix_1, 0, 1, 3); 
+    matrix_assign_value(matrix_1, 1, 0, 1); 
+    matrix_assign_value(matrix_1, 1, 1, 3); 
+    matrix_assign_value(matrix_1, 0, 2, 1); 
+    matrix_assign_value(matrix_1, 1, 2, 1); 
+    matrix_assign_value(matrix_1, 1, 1, 2); 
+    matrix_assign_value(matrix_1, 0, 2, 1); 
+    matrix_assign_value(matrix_1, 2, 2, 1); 
+
+    // print_sparse_matrix(matrix_1);
+    print_dense_matrix(matrix_1);
+
+
+    matrix_read_value(matrix_0, 0, 0, 0); 
+    matrix_read_value(matrix_0, 0, 1, 1); 
     
-    // add_matrices(matrix, 0, 1); // matriz 2
-    // print_dense_matrix(matrix[2]);
+    Matrix *matrix_2 = add_matrices(matrix_0, matrix_1, qty_matrices); 
+    print_dense_matrix(matrix_2);
 
-    // matrix_multiply_by_scalar(matrix[2], 2); // substitui matriz 2
-    // print_dense_matrix(matrix[2]);
+    Matrix *matrix_3 = matrix_multiply_by_scalar(matrix_2, qty_matrices, 2); 
+    print_dense_matrix(matrix_3);
 
-    // matrices_multiply(matrix, 0, 1); // matriz 3
-    // print_dense_matrix(matrix[3]);
+    Matrix *matrix_4 = matrices_multiply(matrix_0, matrix_1, qty_matrices); 
+    print_dense_matrix(matrix_4);
 
     // multiply_point_to_point(matrix, 0, 1); // matriz 4
     // print_dense_matrix(matrix[4]);
@@ -68,26 +73,33 @@ int main(){
     // matrix_slice(matrix, 0, 0, 0, 1, 1);
     // print_dense_matrix(matrix[2]);
 
+    int *qty_kernels = (int*) malloc( sizeof(int) );
+    *qty_kernels = 0;
 
-    kernel = matrix_construct(kernel, 3, 3); // kernel 0
+    Matrix *kernel_0 = matrix_construct(qty_kernels, 3, 3); // kernel 0
 
-    matrix_assign_value(kernel[0], 0, 0, 1); 
-    matrix_assign_value(kernel[0], 0, 1, 0); 
-    matrix_assign_value(kernel[0], 0, 2, 1); 
-    matrix_assign_value(kernel[0], 1, 0, 0); 
-    matrix_assign_value(kernel[0], 1, 1, 1); 
-    matrix_assign_value(kernel[0], 1, 2, 0); 
-    matrix_assign_value(kernel[0], 2, 0, 1); 
-    matrix_assign_value(kernel[0], 2, 1, 0); 
-    matrix_assign_value(kernel[0], 2, 2, 1); 
+    matrix_assign_value(kernel_0, 0, 0, 1); 
+    matrix_assign_value(kernel_0, 0, 1, 0); 
+    matrix_assign_value(kernel_0, 0, 2, 1); 
+    matrix_assign_value(kernel_0, 1, 0, 0); 
+    matrix_assign_value(kernel_0, 1, 1, 1); 
+    matrix_assign_value(kernel_0, 1, 2, 0); 
+    matrix_assign_value(kernel_0, 2, 0, 1); 
+    matrix_assign_value(kernel_0, 2, 1, 0); 
+    matrix_assign_value(kernel_0, 2, 2, 1); 
 
-    print_dense_matrix(kernel[0]);
+    print_dense_matrix(kernel_0);
 
-    matrix_convolution(matrix, 0, kernel, 0);
+    // matrix_convolution(matrix, 0, kernel, 0);
 
-    matrices_destroy(matrix);
-    matrices_destroy(kernel);
-
+    matrix_destroy(matrix_0);
+    matrix_destroy(matrix_1);
+    matrix_destroy(matrix_2);
+    matrix_destroy(matrix_3);
+    matrix_destroy(matrix_4);
+    matrix_destroy(kernel_0);
+    free(qty_matrices);
+    free(qty_kernels);
 
     return 0;
 }
