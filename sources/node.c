@@ -1,22 +1,20 @@
 #include "../headers/node.h" 
 
 struct Node{
-    Position *place;
+    Position_pt place;
     data_type value;
-    Node *next_line; // next in line
-    Node *next_column;
-    Node *prev_line;
-    Node *prev_column;
+    Node_pt next_line; // next in line
+    Node_pt next_column;
+    Node_pt prev_line;
+    Node_pt prev_column;
 };
 
-Node *node_construct(data_type value, int l, int c, Node *next_line, Node *prev_line, Node *next_column, Node *prev_column){
+Node_pt node_construct(data_type value, int l, int c, Node *next_line, Node *prev_line, Node *next_column, Node *prev_column){
 
-    Node *n = (Node*) malloc( sizeof(Node) );
+    Node_pt n = (Node_pt) malloc( sizeof(Node) );
 
     n->place = position_construct(n->place, l, c);
     n->value = value;
-
-    // printf("%f  ", n->value);
 
     n->next_line = next_line;
     n->prev_line = prev_line;
@@ -26,12 +24,12 @@ Node *node_construct(data_type value, int l, int c, Node *next_line, Node *prev_
     return n;
 }
 
-void node_destroy(Node *n){
+void node_destroy(Node_pt n){
     free(n->place);
     free(n);
 }
 
-void assign_value_prev_node(Node *node, Node *new_node, char list_type){
+void assign_value_prev_node(Node_pt node, Node_pt new_node, char list_type){
 
     if( list_type == 'l' )
         node->prev_line = new_node;
@@ -40,7 +38,7 @@ void assign_value_prev_node(Node *node, Node *new_node, char list_type){
 
 }
 
-void assign_value_next_node(Node *node, Node *new_node, char list_type){
+void assign_value_next_node(Node_pt node, Node_pt new_node, char list_type){
 
     if( list_type == 'l' )
         node->next_line = new_node;
@@ -49,15 +47,17 @@ void assign_value_next_node(Node *node, Node *new_node, char list_type){
 
 }
 
-void node_assign_value(Node *n, data_type val){
+void node_assign_value(Node_pt n, data_type val){
     n->value = val;
 }
 
-data_type node_return_value(Node *n){
-    return n->value;
+data_type *node_return_value(Node_pt n){
+    data_type *val = &n->value;
+
+    return val;
 }
 
-Node *node_return_next(Node *n, char list_type){
+Node_pt node_return_next(Node_pt n, char list_type){
     
     if( list_type == 'l' )
         return n->next_line;
@@ -67,7 +67,7 @@ Node *node_return_next(Node *n, char list_type){
     return NULL;
 }
 
-Node *node_return_prev(Node *n, char list_type){
+Node_pt node_return_prev(Node_pt n, char list_type){
     
     if( list_type == 'l' )
         return n->prev_line;
@@ -77,7 +77,7 @@ Node *node_return_prev(Node *n, char list_type){
     return NULL;
 }
 
-int node_return_place(Node *n, char position_type){
+int node_return_place(Node_pt n, char position_type){
 
     if( position_type == 'l')
         return position_return_line(n->place);
@@ -87,5 +87,4 @@ int node_return_place(Node *n, char position_type){
     
     return -1;
 }
-
 

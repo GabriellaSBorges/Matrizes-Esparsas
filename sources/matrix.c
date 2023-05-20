@@ -8,6 +8,7 @@ struct Matrix{
 };
 
 
+
 Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns){
 
     Matrix *matrix = (Matrix*) malloc( sizeof(Matrix) );
@@ -43,131 +44,140 @@ void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
     Node *node = find_node_row(matrix->lines[l], c, 'a', 'l', 'c');
 
     if( node && val != 0 )
-        node_assign_value(node, val);       
+        node_assign_value(node, val);
 
     else if( node && val == 0 )
-        list_decrement(node, matrix->lines[l], matrix->columns[c]);
+        list_decrement(matrix->lines[l], matrix->columns[c], l, c);
 
-    else if( !node && val != 0 )
+    else if( !node && val != 0 ){
         list_increment(matrix->lines[l], matrix->columns[c], l, c, val);
+
+    }
 }
 
 void matrix_read_value(Matrix *matrix, int index, int l, int c){
 
-    Node *n = find_node_row(matrix->lines[l], c, 'a', 'l', 'c');
-    data_type val = node_return_value(n);
+    Node_pt n = find_node_row(matrix->lines[l], c, 'a', 'l', 'c');
+    data_type *val = node_return_value(n);
 
     if( n == NULL )
-        printf("-Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, 0.0);
+        printf("Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, 0.0);
     else
-        printf("-Value of the node [%d,%d] in matrix '%d': %.1f\n\n", l, c, index, val);
+        printf("Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, *val);
 }
 
-Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
-    data_type value_1 = 0, value_2 = 0, new_value = 0;
-    int c = 0;
+// void add_matrices(Matrix **matrix, int index_1, int index_2){
+//     data_type value_1 = 0, value_2 = 0, new_value = 0;
+//     int c = 0;
 
-    printf("\n|ADD MATRICES|\n");
+//     if( matrix[index_1]->number_lines != matrix[index_2]->number_lines || 
+//     matrix[index_1]->number_columns != matrix[index_2]->number_columns ){
+//         printf("Matrices of different sizes cannot be added!\n\n");
 
-    Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_1->number_columns);
+//     } else {
+//         matrix = matrix_construct(matrix, matrix[index_1]->number_lines, matrix[index_1]->number_columns);
+//         int new_index = matrix[0]->quantity-1;
 
-    for( int l = 0; l < matrix_1->number_lines; l++ ){
-        ListIterator *li_1 = list_front_iterator(matrix_1->lines[l]);
-        ListIterator *li_2 = list_front_iterator(matrix_2->lines[l]);
+//         for( int l = 0; l < matrix[index_1]->number_lines; l++ ){
+//             ListIterator *li_1 = list_front_iterator(matrix[index_1]->lines[l]);
+//             ListIterator *li_2 = list_front_iterator(matrix[index_2]->lines[l]);
 
-        while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
+//             while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
 
-                if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
-                    list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'c') ){
-                    c = list_iterator_return_place(li_1, 'c');
+//                     if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
+//                      list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'c') ){
+//                         c = list_iterator_return_place(li_1, 'c');
 
-                    value_1 = list_iterator_next(li_1, 'l');
-                    value_2 = list_iterator_next(li_2, 'l');
+//                         value_1 = *list_iterator_next(li_1, 'l');
+//                         value_2 = *list_iterator_next(li_2, 'l');
 
-                    new_value = value_1 + value_2;
-                    list_increment(new_matrix->lines[l], new_matrix->columns[c], l, c, new_value);
+//                         new_value = value_1 + value_2;
+//                         list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
 
-                } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
-                list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c')) ){
-                    c = list_iterator_return_place(li_1, 'c');
-                    new_value = list_iterator_next(li_1, 'l');
+//                     } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
+//                     list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c')) ){
+//                         c = list_iterator_return_place(li_1, 'c');
+//                         new_value = *list_iterator_next(li_1, 'l');
 
-                    list_increment(new_matrix->lines[l], new_matrix->columns[c], l, c, new_value);
+//                         list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
 
-                } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
-                list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'c')) ){
-                    c = list_iterator_return_place(li_2, 'c');
-                    new_value = list_iterator_next(li_2, 'l');
+//                     } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
+//                     list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'c')) ){
+//                         c = list_iterator_return_place(li_2, 'c');
+//                         new_value = *list_iterator_next(li_2, 'l');
 
-                    list_increment(new_matrix->lines[l], new_matrix->columns[c], l, c, new_value);
-                }     
-        }  
-        free(li_1);
-        free(li_2);            
-    }   
-    
-    return new_matrix;
-}
-
-Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type scalar){
-    ListIterator *li = NULL;
-
-    printf("\n|MULTIPLY BY SCALAR|\n");
-
-    Matrix *new_matrix = matrix_construct(qty_matrices, matrix->number_lines, matrix->number_columns);
-
-    for( int l = 0; l < matrix->number_lines; l++ ){
-        li = list_front_iterator(matrix->lines[l]);
-
-        while( !list_iterator_is_over(li) ){
-            int c = list_iterator_return_place(li, 'c');
-            data_type val = list_iterator_next(li, 'l');
-
-            list_increment(new_matrix->lines[l], new_matrix->columns[c], l, c, val*scalar);
-        }
-        free(li);
-    }
-    return new_matrix;
-}
-
-Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
-    data_type new_value = 0;
-
-    printf("\n|MULTIPLY MATRICES|\n");
-
-    Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_2->number_columns);
-
-    for( int l = 0; l < matrix_1->number_lines; l++ ){ 
-        for( int c = 0; c < matrix_2->number_columns; c++ ){
-            ListIterator *li_1 = list_front_iterator(matrix_1->lines[l]);
-            ListIterator *li_2 = list_front_iterator(matrix_2->columns[c]);
-            new_value = 0;
-            
-            while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
-
-                if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
-                    list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'l') ){
-
-                    new_value += list_iterator_next(li_1, 'l') * list_iterator_next(li_2, 'c');
-
-                } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
-                list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'l')) ){
-                    list_iterator_next(li_1, 'l');
-
-                } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
-                list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'l')) ){
-                    list_iterator_next(li_2, 'c');
-                }     
-            }  
-            list_increment(new_matrix->lines[l], new_matrix->columns[c], l, c, new_value);
-            
-            free(li_1);
-            free(li_2);
-        }                     
-    }
+//                         list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+//                     }     
+//             }  
+//             free(li_1);
+//             free(li_2);            
+//         }
       
-    return new_matrix;
-}
+//     }
+
+// }
+
+// void matrix_multiply_by_scalar(Matrix *matrix, data_type scalar){
+//     ListIterator *li = NULL;
+//     data_type *val;
+
+//     for( int l = 0; l < matrix->number_lines; l++ ){
+//         li = list_front_iterator(matrix->lines[l]);
+
+//         while( !list_iterator_is_over(li) ){
+//             val = list_iterator_next(li, 'l');
+//             (*val) *= scalar;
+//         }
+//         free(li);
+//     }
+
+// }
+
+// void matrices_multiply(Matrix **matrix, int index_1, int index_2){
+//     data_type value_1 = 0, value_2 = 0, new_value = 0;
+
+//     if( matrix[index_1]->number_columns != matrix[index_2]->number_lines ){
+//         printf("These matrices cannot be multiplied!\n\n");
+
+//     } else {
+//         matrix = matrix_construct(matrix, matrix[index_1]->number_lines, matrix[index_1]->number_columns);
+//         int new_index = matrix[0]->quantity-1;
+
+//         for( int l = 0; l < matrix[index_1]->number_lines; l++ ){ 
+//             for( int c = 0; c < matrix[index_2]->number_columns; c++ ){
+//                 ListIterator *li_1 = list_front_iterator(matrix[index_1]->lines[l]);
+//                 ListIterator *li_2 = list_front_iterator(matrix[index_2]->columns[c]);
+//                 new_value = 0;
+                
+
+//                 while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
+
+//                     if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
+//                      list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'l') ){
+
+//                         value_1 = *list_iterator_next(li_1, 'l');
+//                         value_2 = *list_iterator_next(li_2, 'c');
+//                         new_value += value_1 * value_2;
+
+//                     } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
+//                     list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'l')) ){
+//                         list_iterator_next(li_1, 'l');
+
+//                     } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
+//                     list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'l')) ){
+//                         list_iterator_next(li_2, 'c');
+//                     }     
+//                 }  
+
+//                 list_increment(matrix[new_index]->lines[l], matrix[new_index]->columns[c], l, c, new_value);
+                
+//                 free(li_1);
+//                 free(li_2);
+//             }                     
+//         }
+      
+//     }
+// }
 
 // void multiply_point_to_point(Matrix **matrix, int index_1, int index_2){
 //     data_type value_1 = 0, value_2 = 0, new_value = 0;
@@ -223,7 +233,7 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 //             if( list_iterator_return_place(li, list_type) == index_1 ){
 //                 val_1 = list_iterator_next(li, 'l');
 
-//             } else if( list_iterator_return_place(li, list_type) == index_2 && *val_1 != 0 ){
+//             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 != NULL ){
 //                 val_2 = list_iterator_next(li, 'l');
                 
 //                 aux = *val_2;
@@ -232,7 +242,7 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 
 //                 break;
 
-//             } else if( list_iterator_return_place(li, list_type) == index_2 && *val_1 == 0 ){
+//             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 == NULL ){
 //                 val_2 = list_iterator_next(li, 'l');
 
 //                 list_increment(matrix->lines[l], matrix->columns[index_1], l, index_1, *val_2);
@@ -240,7 +250,7 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 
 //                 break;
 
-//             } else if( list_iterator_return_place(li, list_type) > index_2 && *val_1 != 0 ){
+//             } else if( list_iterator_return_place(li, list_type) > index_2 && val_1 != NULL ){
 
 //                 list_increment(matrix->lines[l], matrix->columns[index_2], l, index_2, *val_1);
 //                 list_decrement(matrix->lines[l], matrix->columns[index_1], l, index_1);
@@ -303,38 +313,72 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 
 // }
 
-// void matrix_slice(Matrix **matrix, int index, int start_line, int start_column, int end_line, int end_column){
+// void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type){ 
+//     List **row = NULL;
+//     int *r, *l1, *l2, *c1, *c2;
+//     int qty_rows = 0;
+//     char type_next;
 
-//     int qty_lines = end_line - start_line + 1;
-//     int qty_columns = end_column - start_column + 1;
 
-//     matrix = matrix_construct(matrix, qty_lines, qty_columns);
-//     int new_index = matrix[0]->quantity-1;
+//     if( list_type == 'c' ){
+//         qty_rows = matrix->number_lines;
+//         row = matrix->lines;
+//         type_next = 'l';
+//         l1 = l2 = r;
+//         c1 = index_1, c2 = index_2;
 
-//     // printf("Q %d %d %d", qty_lines, qty_columns, new_index);
+//     } else if( list_type == ' l' ){
+//         qty_rows = matrix->number_columns;
+//         row = matrix->columns;
+//         type_next = 'c';
+//         c1 = c2 = r;
+//         l1 = index_1, l2 = index_2;
+//     } 
+
     
+//     for( *r = 0; *r < qty_rows; *r++ ){
+//         ListIterator *li = list_front_iterator(row[*r]);
+//         data_type *val_1 = NULL, *val_2 = NULL, aux;
 
-//     for( int l = start_line; l <= end_line; l++ ){
+//         while( !list_iterator_is_over(li) ){
+            
+//             if( list_iterator_return_place(li, list_type) == index_1 ){
+//                 val_1 = list_iterator_next(li, type_next);
 
-//         if( l >= 0 && l < matrix[index]->number_lines ){
-//             ListIterator *li = list_front_iterator(matrix[index]->lines[l]);
+//             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 != NULL ){
+//                 val_2 = list_iterator_next(li, type_next);
+                
+//                 aux = *val_2;
+//                 *val_2 = *val_1;
+//                 *val_1 = aux;
 
-//             while( !list_iterator_is_over(li) ){
-//                 int c = list_iterator_return_place(li, 'c');
-//                 data_type val = *list_iterator_next(li, 'l');
+//                 break;
 
-//                 if( c >= start_column && c <= end_column ){
-//                     int new_line = l - start_line;
-//                     int new_column = c - start_column;
+//             } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 == NULL ){
+//                 val_2 = list_iterator_next(li, type_next);
 
-//                     list_increment(matrix[new_index]->lines[new_line], matrix[new_index]->columns[new_column], new_line, new_column, val);
-//                 }            
-//             }
-//             free(li);   
-//         }              
+//                 list_increment(matrix->lines[*l1], matrix->columns[*c1], *l1, *c1, *val_2);
+//                 list_decrement(matrix->lines[*l2], matrix->columns[*c2], *l2, *c2);
+
+//                 break;
+
+//             } else if( list_iterator_return_place(li, list_type) > index_2 && val_1 != NULL ){
+
+//                 list_increment(matrix->lines[*l2], matrix->columns[*c2], *l2, *c2, *val_1);
+//                 list_decrement(matrix->lines[*l1], matrix->columns[*c1], *l1, *c1);
+
+//                 break;
+                
+//             } else {
+//                 list_iterator_next(li, type_next);
+//           }          
+//         }
+//         free(li);
 //     }
 
+
 // }
+
 
 // void matrix_transposed(Matrix **matrix, int index){
 
@@ -358,28 +402,7 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 //     }
 // }
 
-// void matrix_convolution(Matrix **matrix, int index_matrix, Matrix **kernel, int index_kernel){
 
-//     /* Calcula a quantidade de linhas da célula central até a borda */
-//     int edge_kernel = kernel[index_kernel]->number_lines/2;
-
-//     for( int l = 0; l < matrix[index_matrix]->number_lines; l++ ){
-//         for( int c = 0; c < matrix[index_matrix]->number_columns; c++ ){
-
-//             matrix_slice(matrix, index_matrix, 0-edge_kernel, 0-edge_kernel, 0+edge_kernel, 0+edge_kernel);
-//             print_dense_matrix(matrix[matrix[0]->quantity-1]);
-
-//             multiply_point_to_point(Matrix **matrix, int index_1, int index_2);
-
-
-//             destroy_one_matrix(matrix, matrix[0]->quantity-1);   
-
-//         }
-//     }
-
-
-  
-// }
 
 
 
@@ -400,36 +423,57 @@ void print_dense_matrix(Matrix *matrix){
         for( int c = 0; c < matrix->number_columns; c++ ){
 
             if( !list_iterator_is_over(li) && list_iterator_return_place(li, 'c') == c )
-                value = list_iterator_next(li, 'l');
+                value = *list_iterator_next(li, 'l');
             else 
                 value = 0;
-            
+ 
             printf("%.0f ", value);
         }
-
         free(li);
         printf("\n");
     }
     printf("\n");
+
+    // 
 }
 
 void print_sparse_matrix(Matrix *matrix){
     ListIterator *li = NULL;
     data_type value = 0;
+    int c = 0;
 
     for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);
 
         while( !list_iterator_is_over(li) ){
-            value = list_iterator_next(li, 'l');
-            printf("%.0f ", value);
-        }
+            c = list_iterator_return_place(li, 'c');
+            value = *list_iterator_next(li, 'l');
 
+            printf("%.0f [%dx%d]  ", value, l, c);
+        }            
         free(li);
         printf("\n");
     }
     printf("\n");
 }
+
+// Matrix *read_binary_matrix(){
+//     char path[11] = PATH_FILE;
+//     FILE *arq = fopen(path, "rb");
+
+//     if( !arq ){
+//         printf("ERROR: couldn't open the file!\n");
+//         exit(1);
+//     }
+//     printf("File open!\n");  
+
+//     Matrix *matrix = (Matrix*) malloc( sizeof(Matrix) );
+
+//     fread( &matrix->number_lines, sizeof(int), 1, arq);
+//     fread( &matrix->number_columns, sizeof(int), 1, arq);
+//     fread( &matrix->qty_allocated, sizeof(int), 1, arq);
+//     fread( &matrix->quantity, sizeof(int), 1, arq);
+// }
 
 // void save_binary_matrix(Matrix *matrix){
 //     char path[11] = PATH_FILE;
@@ -449,31 +493,3 @@ void print_sparse_matrix(Matrix *matrix){
 
 //     fclose(arq);
 // }
-
-// void read_binary_matrix(Matrix **matrix){
-//     char path[11] = PATH_FILE;
-//     FILE *arq = fopen(path, "rb");
-
-//     if( !arq ){
-//         printf("ERROR: couldn't open the file!\n");
-//         exit(1);
-//     }
-//     printf("File open!\n");  
-
-
-//     int number_lines, number_columns;
-//     int index = matrix[0]->quantity;
-
-//     fread( &number_lines, sizeof(int), 1, arq);
-//     fread( &number_columns, sizeof(int), 1, arq);
-
-//     matrix = matrix_construct(matrix, number_lines, number_columns);
-
-
-//     for( int i = 0; i < matrix[index]->number_lines; i++ )
-//         read_binary_list(arq, matrix[index]->lines, matrix[index]->columns, i);
-
-//     fclose(arq);
-// }
-
-//550

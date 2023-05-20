@@ -5,9 +5,9 @@ struct Position{
     int column; 
 };
 
-Position *position_construct(Position *p, int l, int c){
+Position_pt position_construct(Position_pt p, int l, int c){
 
-    p = (Position*) malloc( sizeof(Position) );
+    p = (Position_pt) malloc( sizeof(Position) );
 
     p->line = l;
     p->column = c;
@@ -15,16 +15,15 @@ Position *position_construct(Position *p, int l, int c){
     return p; 
 }
 
-void position_destroy(Position *p){
+void position_destroy(Position_pt p){
     free(p);
 }
 
-int position_return_line(Position *p){
+int position_return_line(Position_pt p){
     return p->line;
 }
 
-int position_return_column(Position *p){
+int position_return_column(Position_pt p){
     return p->column;
 }
-
 

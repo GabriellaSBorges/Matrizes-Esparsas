@@ -6,16 +6,16 @@
 #include <string.h>
 
 typedef struct Position Position;
-// typedef Position* Position_pt;
+typedef Position* Position_pt;
 
 
-Position *position_construct(Position *p, int l, int c);
+Position_pt position_construct(Position_pt p, int l, int c);
 
-void position_destroy(Position *p);
+void position_destroy(Position_pt p);
 
-int position_return_line(Position *p);
+int position_return_line(Position_pt p);
 
-int position_return_column(Position *p);
+int position_return_column(Position_pt p);
 
 
 #endif
