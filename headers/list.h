@@ -4,10 +4,7 @@
 #include "node.h"
 
 typedef struct List List;
-typedef List* List_pt;
-
 typedef struct ListIterator ListIterator;
-typedef ListIterator* ListIterator_pt;
 
 
 List **list_construct(List **row, int size_row);
@@ -48,8 +45,9 @@ void list_iterator_node_destroy(ListIterator *li, char list_type);
 
 // int list_return_size(List *row);
 
-// List **read_binary_list(FILE *arq, int number_lists);
+void save_binary_list(FILE *arq, List *row);
 
-// void save_binary_list(FILE *arq, List *row);
+void read_binary_list(FILE *arq, List **lines, List **columns, int index_line);
+
 
 #endif 

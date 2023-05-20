@@ -8,7 +8,7 @@ struct List{
 };
 
 struct ListIterator{
-    Node_pt current;
+    Node *current;
 };
 
 
@@ -59,13 +59,13 @@ void list_decrement(List *line, List *column, int l, int c){
     Node *next_column = find_node_row(column, l, 'n', 'c', 'l');
     Node *prev_column = find_node_row(column, l, 'p', 'c', 'l');
 
-    line->size--;
-    column->size--;
-
     Node *n = find_node_row(line, c, 'a', 'l', 'c');
 
     list_remove_node(line, next_line, prev_line, 'l');
     list_remove_node(column, next_column, prev_column, 'c');
+
+    line->size--;
+    column->size--;
 
     node_destroy(n);
 }
@@ -107,6 +107,7 @@ void list_increment(List *line, List *column, int l, int c, data_type val){
     
     list_insert_node(line, n, next_line, prev_line, 'l');
     list_insert_node(column, n, next_column, prev_column, 'c');
+
 }
 
 void list_insert_node(List *row, Node *new_node, Node *next_node, Node *prev_node, char list_type){
@@ -214,7 +215,8 @@ ListIterator *list_front_iterator(List *l){
 
 data_type *list_iterator_next(ListIterator *li, char list_type){
     data_type *n = node_return_value(li->current);
-    li->current = node_return_next(li->current, list_type);
+
+    li->current = !li->current ? NULL : node_return_next(li->current, list_type);
 
     return n;
 }
@@ -238,35 +240,40 @@ void list_iterator_node_destroy(ListIterator *li, char list_type){
 //     return row->size;
 // }
 
+void save_binary_list(FILE *arq, List *row){
+    data_type *val = 0;
+    int l = 0, c = 0;
 
-// // List **read_binary_list(FILE *arq, int number_lists){
-
-// //     List **list = (List**) malloc( sizeof(List*) );
-
-// //     for( int i = 0; i < number_lists; i++ ){
-// //         list[i] = (List*) malloc( sizeof(List) );
-        
-// //         fread( &list[i]->size, sizeof(int), 1, arq);
-
-// //         list[i]->head = read_binary_node(arq);
-
-// //         for( int i = 0; i < list[i]->size-1; i++ ){
-            
-// //         }
-// //     }
-
+    fwrite( &row->size, sizeof(int), 1, arq);
     
-// // }
+    ListIterator *li = list_front_iterator(row);
 
-// // void save_binary_list(FILE *arq, List *row){
+    while( !list_iterator_is_over(li) ){
+        l = node_return_place(li->current, 'l');
+        c = node_return_place(li->current, 'c');
 
-// //     fwrite( &row->size, sizeof(int), 1, arq);
-    
-// //     ListIterator *li = list_front_iterator(row);
+        val = list_iterator_next(li, 'l');
 
-// //     while( !list_iterator_is_over(li) ){
-// //         save_binary_node(arq, li->current);
-// //         list_iterator_next(li, 'l');
-// //     }
-// //     free(li);
-// // }
+        fwrite( &l, sizeof(int), 1, arq);
+        fwrite( &c, sizeof(int), 1, arq);
+        fwrite( val, sizeof(data_type), 1, arq);
+    }
+
+    free(li);
+}
+
+void read_binary_list(FILE *arq, List **lines, List **columns, int index_line){
+    data_type val = 0;
+    int size = 0, l = 0, c = 0;
+
+    fread( &size, sizeof(int), 1, arq );
+
+    for( int i = 0; i < size; i++ ){
+        fread( &l, sizeof(int), 1, arq);
+        fread( &c, sizeof(int), 1, arq);
+        fread( &val, sizeof(data_type), 1, arq);
+
+        list_increment(lines[l], columns[c], l, c, val);
+    }
+}
+
