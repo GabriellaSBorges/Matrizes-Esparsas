@@ -69,8 +69,8 @@ int main(){
     Matrix *matrix_7 = matrix_transposed(matrix_5, qty_matrices); 
     print_dense_matrix(matrix_7);
 
-    save_binary_matrix(matrix_5);
-    matrix_destroy(matrix_5);
+    save_binary_matrix(matrix_7);
+    matrix_destroy(matrix_7);
 
     Matrix *matrix_8 = read_binary_matrix(qty_matrices); 
     print_dense_matrix(matrix_8);
@@ -94,19 +94,21 @@ int main(){
 
     print_dense_matrix(kernel_0);
 
-//     // matrix_convolution(matrix, 0, kernel, 0);
+    // matrix_convolution(matrix_8, kernel_0, qty_matrices);
+;
 
     matrix_destroy(matrix_0);
     matrix_destroy(matrix_1);
     matrix_destroy(matrix_2);
     matrix_destroy(matrix_3);
     matrix_destroy(matrix_4);
-    // matrix_destroy(matrix_5);
+    matrix_destroy(matrix_5);
     matrix_destroy(matrix_6);
-    matrix_destroy(matrix_7);
+    // matrix_destroy(matrix_7);
     matrix_destroy(matrix_8);
 
     matrix_destroy(kernel_0);
+
     free(qty_matrices);
     free(qty_kernels);
 

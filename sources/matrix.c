@@ -8,7 +8,6 @@ struct Matrix{
 };
 
 
-
 Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns){
 
     Matrix *matrix = (Matrix*) malloc( sizeof(Matrix) );
@@ -129,6 +128,7 @@ Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type s
     return new_matrix;
 }
 
+//mudar
 Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
     data_type value_1 = 0, value_2 = 0, new_value = 0;
 
@@ -143,21 +143,18 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
             new_value = 0;
             
 
-            while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
+            while( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) ){
 
-                if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
-                    list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'l') ){
+                if( list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'l') ){
 
                     value_1 = *list_iterator_next(li_1, 'l');
                     value_2 = *list_iterator_next(li_2, 'c');
                     new_value += value_1 * value_2;
 
-                } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
-                list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'l')) ){
+                } else if( list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'l') ){
                     list_iterator_next(li_1, 'l');
 
-                } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
-                list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'l')) ){
+                } else if ( list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'l') ){
                     list_iterator_next(li_2, 'c');
                 }     
             }  
@@ -183,26 +180,21 @@ Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_mat
         ListIterator *li_1 = list_front_iterator(matrix_1->lines[l]);
         ListIterator *li_2 = list_front_iterator(matrix_2->lines[l]);
 
-        while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
+        while( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) ){
 
-            if( !list_iterator_is_over(li_1) && !list_iterator_is_over(li_2) &&
-                list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'c') ){
+            if( list_iterator_return_place(li_1, 'c') == list_iterator_return_place(li_2, 'c') ){
                 int c = list_iterator_return_place(li_1, 'c');
 
                 data_type new_value = *list_iterator_next(li_1, 'l') * *list_iterator_next(li_2, 'l');
 
                 list_increment(new_matrix->lines[l], new_matrix->columns[c], l, c, new_value);
 
-            } else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
-            list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c')) ){
+
+            } else if( list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c') ){
                 list_iterator_next(li_1, 'l');
 
-                }else if( !list_iterator_is_over(li_1) && (list_iterator_is_over(li_2)  ||
-            list_iterator_return_place(li_1, 'c') < list_iterator_return_place(li_2, 'c')) ){
-                list_iterator_next(li_1, 'l');
 
-            } else if ( list_iterator_is_over(li_1) && (!list_iterator_is_over(li_2) ||
-            list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'c')) ){
+            } else if ( list_iterator_return_place(li_1, 'c') > list_iterator_return_place(li_2, 'c') ){
                 list_iterator_next(li_2, 'l');
             }     
         }  
@@ -386,10 +378,32 @@ Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices){
     return new_matrix;
 }
 
+void matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices){
+    Matrix *support_1 = NULL, *support_2 = NULL;
+    int *qty_supports = (int*) malloc( sizeof(int) );
+
+    /* Calcula a quantidade de linhas da célula central até a borda */
+    int edge_kernel = kernel->number_lines/2;
 
 
+    for( int l = 0; l < matrix->number_lines; l++ ){
+        for( int c = 0; c < matrix->number_columns; c++ ){
+            (*qty_supports) = 0;
+
+            support_1 = matrix_slice(matrix, qty_matrices, l-edge_kernel, c-edge_kernel, l+edge_kernel, c+edge_kernel);
+            print_dense_matrix(support_1);
+
+            support_2 = multiply_point_to_point(support_1, kernel, qty_supports);
 
 
+            matrix_destroy(support_1);          
+            matrix_destroy(support_2);          
+        }
+    }
+
+
+    free(qty_supports);
+}
 
 
 

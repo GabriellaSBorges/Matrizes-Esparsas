@@ -36,6 +36,7 @@ Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int star
 
 Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices);
 
+void matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices);
 
 void print_dense_matrix(Matrix *matrix);
 

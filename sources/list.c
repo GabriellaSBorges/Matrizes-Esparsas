@@ -232,14 +232,6 @@ void list_iterator_node_destroy(ListIterator *li, char list_type){
     node_destroy(n);
 }
 
-
-
-// /* FUNCOES DE RETORNO */
-
-// int list_return_size(List *row){
-//     return row->size;
-// }
-
 void save_binary_list(FILE *arq, List *row){
     data_type *val = 0;
     int l = 0, c = 0;

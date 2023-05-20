@@ -85,6 +85,6 @@ int node_return_place(Node *n, char position_type){
     if( position_type == 'c' )
         return position_return_column(n->place);
     
-    return -1;
+    return 0;
 }
 
