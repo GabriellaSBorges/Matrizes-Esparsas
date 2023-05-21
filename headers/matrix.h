@@ -100,9 +100,9 @@ Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_mat
  * @param matrix Matriz desejada
  * @param index_1 Índice da coluna 1 que será trocada
  * @param index_2 Índice da coluna 2 que será trocada
- * @param list_type Tipo da lista que será trocada -> coluna
+ * @note A operação é in-place, não cria uma nova matriz
  */
-void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type);
+void matrix_swap_columns(Matrix *matrix, int index_1, int index_2);
 
 /**
  * @brief Troca duas linhas de uma matriz
@@ -110,36 +110,83 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
  * @param matrix Matriz desejada
  * @param index_1 Índice da linha 1 que será trocada
  * @param index_2 Índice da linha 2 que será trocada
- * @param list_type Tipo da lista que será trocada -> linha
+ * @note A operação é in-place, não cria uma nova matriz
  */
-void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type);
+void matrix_swap_lines(Matrix *matrix, int index_1, int index_2);
 
 /**
- * @brief 
+ * @brief Cria e retorna uma submatriz a partir de uma matriz base e dois pontos: ínicio e fim
  * 
- * @param matrix 
- * @param qty_matrices 
- * @param start_line 
- * @param start_column 
- * @param end_line 
- * @param end_column 
- * @param hide_print 
- * @return Matrix* 
+ * @param matrix Matriz base
+ * @param qty_matrices Ponteiro para a quantidade de matrizes construídas pelo programa
+ * @param start_line Linha do ponto inicial
+ * @param start_column Coluna do ponto inicial
+ * @param end_line Linha do ponto final
+ * @param end_column Coluna do ponto final
+ * @param hide_print Variável de apoio
+ * Se for igual a 0, irá printar a confirmação de construção; se for igual a 1, irá bloquear o printf
+ * 
+ * @return Matrix* Submatriz
  */
 Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int start_column, int end_line, int end_column, char hide_print);
 
+/**
+ * @brief Cria uma nova matriz, transposta à matriz base
+ * 
+ * @param matrix Matriz base
+ * @param qty_matrices Ponteiro para a quantidade de matrizes construídas pelo programa
+ * @return Matrix* Nova matriz
+ * @note A nova matriz terá:
+ * qtd de linhas = qtd de colunas da matriz base
+ * qtd de colunas = qtd de linhas da matriz base
+ */
 Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices);
 
+/**
+ * @brief Realiza a convolução de uma matriz por um kernel e retorna a matriz resultante
+ * 
+ * @param matrix Matriz base
+ * @param kernel Matriz usada no cálculo da convolução
+ * @param qty_matrices Ponteiro para a quantidade de matrizes construídas pelo programa
+ * @return Matrix* Nova matriz
+ */
 Matrix *matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices);
 
+/**
+ * @brief Soma todos os valores presentes em uma matriz
+ * 
+ * @param matrix Matriz desejada
+ * @return data_type Resultado da soma
+ */
 data_type add_all_values(Matrix *matrix);
 
+/**
+ * @brief Imprime uma matriz de forma densa (apresnetando os zeros)
+ * 
+ * @param matrix Matriz desejada
+ */
 void print_dense_matrix(Matrix *matrix);
 
+/**
+ * @brief Imprime uma matriz de forma esparsa (sem os zeros)
+ * 
+ * @param matrix Matriz desejada 
+ */
 void print_sparse_matrix(Matrix *matrix);
 
+/**
+ * @brief Salva uma matriz em um arquivo binário
+ * 
+ * @param matrix Matriz desejada
+ */
 void save_binary_matrix(Matrix *matrix);
 
+/**
+ * @brief Lê uma matriz de um arquivo binário e aloca memória para ela
+ * 
+ * @param qty_matrices Ponteiro para a quantidade de matrizes construídas pelo programa
+ * @return Matrix* Matriz lida
+ */
 Matrix *read_binary_matrix(int *qty_matrices);
 
 

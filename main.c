@@ -59,10 +59,10 @@ int main(){
     print_dense_matrix(matrix_5);
 
 
-    matrix_swap_columns(matrix_5, 1, 2, 'c'); 
+    matrix_swap_columns(matrix_5, 1, 2); 
     print_dense_matrix(matrix_5);
 
-    matrix_swap_lines(matrix_5, 1, 2, 'l'); 
+    matrix_swap_lines(matrix_5, 1, 2); 
     print_dense_matrix(matrix_5);
 
 

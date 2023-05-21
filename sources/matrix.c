@@ -212,7 +212,7 @@ Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_mat
     return new_matrix;
 }
 
-void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_type){ 
+void matrix_swap_columns(Matrix *matrix, int index_1, int index_2){ 
 
     printf("\n===============|SWAP COLUMNS|===============\n");
     
@@ -274,7 +274,7 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
 }
 
-void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type){ 
+void matrix_swap_lines(Matrix *matrix, int index_1, int index_2){ 
 
     printf("\n================|SWAP LINES|================\n");
     
@@ -286,11 +286,11 @@ void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type)
 
         while( !list_iterator_is_over(li) ){
             
-            if( list_iterator_return_place(li, list_type) == index_1 ){
+            if( list_iterator_return_place(li, 'l') == index_1 ){
                 val_1 = list_iterator_next(li, 'c');
 
             /* Se as posições 1 e 2 estiverem ocupadas, trocar seus valores */
-            } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 ){
+            } else if( list_iterator_return_place(li, 'l') == index_2 && val_1 ){
                 val_2 = list_iterator_next(li, 'c');
                 
                 aux = *val_2;
@@ -301,7 +301,7 @@ void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type)
                 break;
 
             /* Se não tiver um node na posição 1, mas na 2 sim, incrementar a 1 e remover o node da 2 */
-            } else if( list_iterator_return_place(li, list_type) == index_2 && !val_1 ){
+            } else if( list_iterator_return_place(li, 'l') == index_2 && !val_1 ){
                 val_2 = list_iterator_next(li, 'c');
 
                 list_increment(matrix->lines[index_1], matrix->columns[c], index_1, c, *val_2);
@@ -311,7 +311,7 @@ void matrix_swap_lines(Matrix *matrix, int index_1, int index_2, char list_type)
                 break;
 
             /* Se não tiver um node na posição 2, mas na 1 sim, incrementar a 2 e remover o node da 1 */
-            } else if( list_iterator_return_place(li, list_type) > index_2 && val_1 ){
+            } else if( list_iterator_return_place(li, 'l') > index_2 && val_1 ){
 
                 list_increment(matrix->lines[index_2], matrix->columns[c], index_2, c, *val_1);
                 list_decrement(matrix->lines[index_1], matrix->columns[c], index_1, c);
