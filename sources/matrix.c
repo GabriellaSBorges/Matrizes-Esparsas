@@ -339,12 +339,14 @@ Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int star
 
     hide_print == 0 ? printf("\n===============|MATRIX SLICE|===============\n") : 1;
 
+    /* Calcula a qty de linhas e colunas da nova matriz */
     int qty_lines = end_line - start_line + 1;
     int qty_columns = end_column - start_column + 1;
 
     Matrix *new_matrix = matrix_construct(qty_matrices, qty_lines, qty_columns, hide_print);
 
-
+    /* Itera sobre cada linha do intervalo dado */
+    /* Se uma linha for negativa (no caso da convolução), não realiza nenhuma operação */
     for( int l = start_line; l <= end_line; l++ ){
 
         if( l >= 0 && l < matrix->number_lines ){
@@ -354,6 +356,7 @@ Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int star
                 int c = list_iterator_return_place(li, 'c');
                 data_type val = *list_iterator_next(li, 'l');
 
+                /* Verifica se a coluna está no intervalo dado e calcula as posições para a nova matriz */
                 if( c >= start_column && c <= end_column ){
                     int new_line = l - start_line;
                     int new_column = c - start_column;
@@ -377,6 +380,8 @@ Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices){
 
     Matrix *new_matrix = matrix_construct(qty_matrices, qty_lines, qty_columns, 0);
 
+    /* Itera sobre cada linha e incrementa a nova matrix 
+    -> linha 2 da matriz 1 equivale a coluna 2 da matriz 2 */
     for( int l = 0; l < matrix->number_lines; l++ ){
         ListIterator *li = list_front_iterator(matrix->lines[l]);
 
@@ -407,17 +412,16 @@ Matrix *matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices){
         for( int c = 0; c < matrix->number_columns; c++ ){
             (*qty_supports) = 0;
 
-            /* retorna a submatriz de mesmo tamanho que o kernel */
+            /* Retorna a submatriz de mesmo tamanho que o kernel */
             support_1 = matrix_slice(matrix, qty_supports, l-edge_kernel, c-edge_kernel, l+edge_kernel, c+edge_kernel, '1');
-            // print_dense_matrix(support_1);
 
-            /* retorna a matriz resultante da multiplicacao ponto a ponto da submatriz e do kernel */
+            /* Retorna a matriz resultante da multiplicacao ponto a ponto da submatriz e do kernel */
             support_2 = multiply_point_to_point(support_1, kernel, qty_supports, '1');
 
-            /* soma todos os valores da matriz 2 */
+            /* Soma todos os valores da matriz 2 */
             data_type new_value = add_all_values(support_2);
 
-            /* atribui a soma como uma célula da nova matriz */
+            /* Atribui a soma como uma célula da nova matriz */
             matrix_assign_value(new_matrix, l, c, new_value);
 
             matrix_destroy(support_1);          
@@ -433,6 +437,7 @@ data_type add_all_values(Matrix *matrix){
     ListIterator *li = NULL;
     data_type sum = 0;
 
+    /* Soma todos os valores de uma matriz */
     for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);
 
@@ -451,6 +456,8 @@ void print_dense_matrix(Matrix *matrix){
 
     printf(":dense matrix:\n");
 
+    /* Para cada linha, se tiver um node numa posição -> imprimir o seu valor
+    do contrário -> imprimir 0 */
     for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);
 
@@ -476,6 +483,7 @@ void print_sparse_matrix(Matrix *matrix){
 
     printf("\n:sparse matrix:\n");
 
+    /* Itera sobre cada linha e imprime os valores presentes cada node */
     for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);
 
