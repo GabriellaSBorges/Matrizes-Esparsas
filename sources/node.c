@@ -13,7 +13,7 @@ Node *node_construct(data_type value, int l, int c, Node *next_line, Node *prev_
 
     Node *n = (Node*) malloc( sizeof(Node) );
 
-    n->place = position_construct(n->place, l, c);
+    n->place = position_construct(l, c);
     n->value = value;
 
     n->next_line = next_line;

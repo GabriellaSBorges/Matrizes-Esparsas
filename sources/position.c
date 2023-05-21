@@ -5,9 +5,9 @@ struct Position{
     int column; 
 };
 
-Position *position_construct(Position *p, int l, int c){
+Position *position_construct(int l, int c){
 
-    p = (Position*) malloc( sizeof(Position) );
+    Position *p = (Position*) malloc( sizeof(Position) );
 
     p->line = l;
     p->column = c;
