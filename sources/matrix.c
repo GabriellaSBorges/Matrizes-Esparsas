@@ -24,6 +24,7 @@ Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char
         exit(1);
     }
 
+    /* Aloca memória para cada lista das linhas e das colunas da matriz */
     matrix->lines = list_construct( matrix->lines, matrix->number_lines );
     matrix->columns = list_construct( matrix->lines, matrix->number_columns );
 
@@ -40,15 +41,19 @@ void matrix_destroy(Matrix *matrix){
 
 void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
 
+    /* Procura o node desejado */
     Node *node = list_find_node(matrix->lines[l], c, 'a', 'l', 'c');
 
-    if( node && val != 0 )
+    /* Se ele já estiver alocado e o valor for diferente de 0, trocar o valor */
+    if( node && val )
         node_assign_value(node, val);
 
-    else if( node && val == 0 )
+    /* Se estiver alocado mas o valor for 0, remover o node */
+    else if( node && !val )
         list_decrement(matrix->lines[l], matrix->columns[c], l, c);
 
-    else if( !node && val != 0 )
+    /* Se ainda não estiver ocupado e o valor for diferente de 0, criar um novo node */
+    else if( !node && val )
         list_increment(matrix->lines[l], matrix->columns[c], l, c, val);
 }
 
@@ -57,10 +62,10 @@ void matrix_read_value(Matrix *matrix, int index, int l, int c){
     Node *n = list_find_node(matrix->lines[l], c, 'a', 'l', 'c');
     data_type *val = node_return_value(n);
 
-    if( n == NULL )
-        printf("> Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, 0.0);
+    if( !n )
+        printf("> Value of the node [%d,%d] in matrix '%d': %.1f\n\n", l, c, index, 0.0);
     else
-        printf("> Value of the node [%d,%d] in matrix '%d': %f\n\n", l, c, index, *val);
+        printf("> Value of the node [%d,%d] in matrix '%d': %.1f\n\n", l, c, index, *val);
 }
 
 Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
@@ -70,28 +75,31 @@ Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
 
     Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_1->number_columns, 0);
 
-
+    /* Para cada linha, cria um iterador para a matriz 1 e outro para a matriz 2 */
     for( int l = 0; l < matrix_1->number_lines; l++ ){
         ListIterator *li_1 = list_front_iterator(matrix_1->lines[l]);
         ListIterator *li_2 = list_front_iterator(matrix_2->lines[l]);
 
+        /* Itera sobre as listas simultaneamente e, a partir das posições das colunas, incrementa a nova matriz */
         while( !list_iterator_is_over(li_1) || !list_iterator_is_over(li_2) ){
             int column_li1 = !list_iterator_is_over(li_1) ? list_iterator_return_place(li_1, 'c') : -1;
             int column_li2 = !list_iterator_is_over(li_2) ? list_iterator_return_place(li_2, 'c') : -1;
 
+
+                /* Se tiver nodes na mesma posição nas duas matizes -> soma e preenche */
                 if( column_li1 == column_li2 ){
 
                     new_value = *list_iterator_next(li_1, 'l') + *list_iterator_next(li_2, 'l');
                     list_increment(new_matrix->lines[l], new_matrix->columns[column_li1], l, column_li1, new_value);
 
-
+                /* Node apenas na matriz 1 -> preenche */
                 } else if( (!list_iterator_is_over(li_1) && list_iterator_is_over(li_2)) || 
                 (column_li1 < column_li2 && column_li1 != -1) ){
 
                     new_value = *list_iterator_next(li_1, 'l');
                     list_increment(new_matrix->lines[l], new_matrix->columns[column_li1], l, column_li1, new_value);
 
-
+                /* Node apenas na matriz 2 -> preenche */
                 } else if( (list_iterator_is_over(li_1) && !list_iterator_is_over(li_2)) || 
                 (column_li1 > column_li2 && column_li2 != -1 ) ){
 
@@ -113,7 +121,7 @@ Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type s
 
     Matrix *new_matrix = matrix_construct(qty_matrices, matrix->number_lines, matrix->number_columns, 0);
 
-
+    /* Itera sobre cada linha da matriz base, multiplica seus itens pelo escalar e incrementa na nova matriz */
     for( int l = 0; l < matrix->number_lines; l++ ){
         li = list_front_iterator(matrix->lines[l]);
 
@@ -493,7 +501,7 @@ void save_binary_matrix(Matrix *matrix){
         save_binary_list(arq, matrix->lines[i]);
     
     printf("\nThe matrix was saved in the file '%s'!\n\n", PATH_FILE);    
-    
+
     fclose(arq);
 }
 

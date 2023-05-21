@@ -39,7 +39,7 @@ int main(){
     print_dense_matrix(matrix_1);
 
 
-    matrix_read_value(matrix_0, 0, 0, 0); 
+    matrix_read_value(matrix_0, 0, 1, 0); 
     matrix_read_value(matrix_1, 1, 2, 2); 
     
     Matrix *matrix_2 = add_matrices(matrix_0, matrix_1, qty_matrices); 
