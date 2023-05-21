@@ -224,11 +224,11 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
         while( !list_iterator_is_over(li) ){
             
-            if( list_iterator_return_place(li, list_type) == index_1 ){
+            if( list_iterator_return_place(li, 'c') == index_1 ){
                 val_1 = list_iterator_next(li, 'l');
 
             /* Se as posições 1 e 2 estiverem ocupadas, trocar seus valores */
-            } else if( list_iterator_return_place(li, list_type) == index_2 && val_1 ){
+            } else if( list_iterator_return_place(li, 'c') == index_2 && val_1 ){
                 val_2 = list_iterator_next(li, 'l');
                 
                 aux = *val_2;
@@ -239,7 +239,7 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
                 break;
 
             /* Se não tiver um node na posição 1, mas na 2 sim, incrementar a 1 e remover o node da 2 */
-            } else if( list_iterator_return_place(li, list_type) == index_2 && !val_1 ){
+            } else if( list_iterator_return_place(li, 'c') == index_2 && !val_1 ){
                 val_2 = list_iterator_next(li, 'l');
 
                 list_increment(matrix->lines[l], matrix->columns[index_1], l, index_1, *val_2);
@@ -249,7 +249,7 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
                 break;
 
             /* Se não tiver um node na posição 2, mas na 1 sim, incrementar a 2 e remover o node da 1 */
-            } else if( list_iterator_return_place(li, list_type) > index_2 && val_1 ){
+            } else if( list_iterator_return_place(li, 'c') > index_2 && val_1 ){
 
                 list_increment(matrix->lines[l], matrix->columns[index_2], l, index_2, *val_1);
                 list_decrement(matrix->lines[l], matrix->columns[index_1], l, index_1);

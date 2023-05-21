@@ -55,8 +55,9 @@ void list_decrement(List *line, List *column, int l, int c){
 
     Node *n = list_find_node(line, c, 'a', 'l', 'c');
 
-    Node *next_line = node_return_next(n, 'l');
-    Node *prev_line = node_return_prev(n, 'l');
+    Node *prev_line = list_find_node(line, c, 'p', 'l', 'c');
+    Node *next_line = node_return_next(prev_line, 'l');
+    
     Node *next_column = node_return_next(n, 'c');
     Node *prev_column = node_return_prev(n, 'c');
 
