@@ -78,18 +78,18 @@ void list_remove_node(List *row, Node *next_node, Node *prev_node, char list_typ
 
     /* O node está no meio da lista */
     } else if( prev_node != NULL && next_node != NULL ) { 
-        assign_value_prev_node(next_node, prev_node, list_type);
-        assign_value_next_node(prev_node, next_node, list_type);
+        assign_prev_node(next_node, prev_node, list_type);
+        assign_next_node(prev_node, next_node, list_type);
 
     /* O node está no início da lista */
     } else if( prev_node == NULL ) { 
         row->head = node_return_next(row->head, list_type);
-        assign_value_prev_node(row->head, NULL, list_type);
+        assign_prev_node(row->head, NULL, list_type);
 
     /* O node está no final da lista */
     } else if( next_node == NULL ) { 
         row->last = node_return_prev(row->last, list_type);
-        assign_value_next_node(row->last, NULL, list_type);       
+        assign_next_node(row->last, NULL, list_type);       
     } 
 }
 
@@ -118,17 +118,17 @@ void list_insert_node(List *row, Node *new_node, Node *next_node, Node *prev_nod
 
     /* Entrará no meio da lista */
     } else if( prev_node != NULL && next_node != NULL ){ 
-        assign_value_prev_node(next_node, new_node, list_type);
-        assign_value_next_node(prev_node, new_node, list_type);
+        assign_prev_node(next_node, new_node, list_type);
+        assign_next_node(prev_node, new_node, list_type);
 
     /* Entrará no início da lista */
     } else if( prev_node == NULL ) { 
-        assign_value_prev_node(row->head, new_node, list_type);
+        assign_prev_node(row->head, new_node, list_type);
         row->head = new_node;
 
     /* Entrará no final da lista */
     } else if( next_node == NULL ) { 
-        assign_value_next_node(row->last, new_node, list_type);
+        assign_next_node(row->last, new_node, list_type);
         row->last = new_node;
     } 
 }

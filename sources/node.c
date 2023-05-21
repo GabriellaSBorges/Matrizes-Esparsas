@@ -29,7 +29,7 @@ void node_destroy(Node *n){
     free(n);
 }
 
-void assign_value_prev_node(Node *node, Node *new_node, char list_type){
+void assign_prev_node(Node *node, Node *new_node, char list_type){
 
     if( list_type == 'l' )
         node->prev_line = new_node;
@@ -38,7 +38,7 @@ void assign_value_prev_node(Node *node, Node *new_node, char list_type){
 
 }
 
-void assign_value_next_node(Node *node, Node *new_node, char list_type){
+void assign_next_node(Node *node, Node *new_node, char list_type){
 
     if( list_type == 'l' )
         node->next_line = new_node;
