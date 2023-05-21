@@ -8,9 +8,9 @@ struct Matrix{
 };
 
 /*
-Complexidade: O(l + c)
+Complexidade: O(L + C)
 l = número de linhas; c = número de colunas
-Percorre o conjunto de linhas e de colunas, inicializando cada uma.
+-> Percorre o conjunto de linhas e de colunas, inicializando cada uma.
 */
 Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char hide_print){
 
@@ -36,9 +36,9 @@ Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char
 }
 
 /*
-Complexidade: O(l*nl + c)
-l = número de linhas; nl = qtd máxima de nodes em uma linha; c = número de colunas;
-Percorre todas as linhas e destrói cada um de seus nodes, depois acessa e libera a head de cada coluna
+Complexidade: O(L*nL + C)
+l = número de linhas; nl = qtd máxima de nodes em uma linha; c = número de colunas
+-> Percorre todas as linhas e destrói cada um de seus nodes, depois acessa e libera a head de cada coluna.
 */
 void matrix_destroy(Matrix *matrix){
 
@@ -51,8 +51,9 @@ void matrix_destroy(Matrix *matrix){
 }
 
 /*
-Complexidade: O(n1 )
-
+Complexidade: O(nL + nC)
+nL = qtd máxima de nodes em uma linha L; nC = qtd máxima de nodes em uma coluna C
+-> No pior caso (criar um novo node), percorre a linha até encontrar o node antes do novo, o mesmo ocorre com a coluna. 
 */
 void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
 
@@ -72,6 +73,11 @@ void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
         list_increment(matrix->lines[l], matrix->columns[c], l, c, val);
 }
 
+/*
+Complexidade: O(nL)
+nL = qtd máxima de nodes em uma linha L
+-> Itera sobre uma linha até encontrar o node desejado
+*/
 void matrix_read_value(Matrix *matrix, int index, int l, int c){
 
     Node *n = list_find_node(matrix->lines[l], c, 'a', 'l', 'c');
@@ -83,6 +89,14 @@ void matrix_read_value(Matrix *matrix, int index, int l, int c){
         printf("> Value of the node [%d,%d] in matrix '%d': %.1f\n\n", l, c, index, *val);
 }
 
+/*
+Complexidade: O((L1*nL1 + L2*nL2)*(nL + nC))
+L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; L2 = número de linhas da matriz 2; nL2 = qtd máxima de nodes na linha L2
+nL = qtd máxima de nodes em uma linha L da nova matriz; nC = qtd máxima de nodes em uma coluna C da nova matriz
+
+-> Para cada linha de cada uma das duas matrizes, itera sobre seus nodes e, quando achar uma posicao ocupada em pelo menos uma das linhas, incrementa:
+percorre a linha e a coluna correspondente na nova matriz até achar o prev node.
+*/
 Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
     data_type new_value = 0;
 
@@ -135,6 +149,11 @@ Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
     return new_matrix;
 }
 
+/*
+Complexidade;
+
+->
+*/
 Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type scalar){
     ListIterator *li = NULL;
 
