@@ -60,6 +60,7 @@ void list_decrement(List *line, List *column, int l, int c){
     Node *next_column = node_return_next(n, 'c');
     Node *prev_column = node_return_prev(n, 'c');
 
+    /* Ajusta a lista para que fique sem o node e o destrói */
     list_remove_node(line, next_line, prev_line, 'l');
     list_remove_node(column, next_column, prev_column, 'c');
 
@@ -136,6 +137,8 @@ Node *list_find_node(List *row, int index, char node_type, char list_type, char 
     ListIterator *li = list_front_iterator(row);
     Node *n = NULL;
 
+    /* Retorna o node procurado, seu next ou seu prev */
+
     if( list_iterator_is_over(li) ){
         free(li);
         return n;
@@ -143,12 +146,8 @@ Node *list_find_node(List *row, int index, char node_type, char list_type, char 
         
     switch(node_type){
         /* prev node */
-        case 'p':
-            if( node_return_place(row->head, position_type) > index ){
-                free(li);
-                return NULL;
-            }  //tentar excluir                    
-
+        case 'p':                
+            /* Acha o último node da lista ou o anterior ao índice desejado */
             while( node_return_next(li->current, list_type) && index > node_return_place(li->current, position_type)+1 )
                 li->current = node_return_next(li->current, list_type); 
 
@@ -157,12 +156,8 @@ Node *list_find_node(List *row, int index, char node_type, char list_type, char 
 
 
         /* next node */
-        case 'n':
-            if( node_return_place(row->head, position_type) > index ){
-                free(li);
-                return row->head;
-            } // tentar excluir
-                            
+        case 'n':     
+            /* Acha o primeiro node após o índice desejado */
             while( !list_iterator_is_over(li) && index > node_return_place(li->current, position_type)-1 )
                 li->current = node_return_next(li->current, list_type);
      
@@ -172,11 +167,12 @@ Node *list_find_node(List *row, int index, char node_type, char list_type, char 
 
         /* actual node */
         case 'a':
+            /* Acha o node de índice desejado */
             while( !list_iterator_is_over(li) && node_return_place(li->current, position_type) != index )
                 li->current = node_return_next(li->current, list_type);
 
             n = li->current;
-            break;           
+            break;  
     }
     
     free(li);
@@ -188,11 +184,7 @@ Node *list_find_node(List *row, int index, char node_type, char list_type, char 
 /* FUNCTIONS LIST ITERATOR */
 
 int list_iterator_is_over(ListIterator *li){
-
-    if( li->current == NULL )
-        return 1;
-
-    return 0;
+    return ( li->current == NULL ) ? 1 : 0;
 }
 
 ListIterator *list_front_iterator(List *l){
@@ -205,8 +197,7 @@ ListIterator *list_front_iterator(List *l){
 data_type *list_iterator_next(ListIterator *li, char list_type){
     data_type *n = node_return_value(li->current);
 
-    li->current = !li->current ? NULL : node_return_next(li->current, list_type);
-
+    li->current = (!li->current) ? NULL : node_return_next(li->current, list_type);
     return n;
 }
 
@@ -229,6 +220,7 @@ void save_binary_list(FILE *arq, List *row){
     
     ListIterator *li = list_front_iterator(row);
 
+    /* Salva os dados de cada node */
     while( !list_iterator_is_over(li) ){
         l = node_return_place(li->current, 'l');
         c = node_return_place(li->current, 'c');
@@ -249,6 +241,7 @@ void read_binary_list(FILE *arq, List **lines, List **columns, int index_line){
 
     fread( &size, sizeof(int), 1, arq );
 
+    /* Lê os dados de cada node */
     for( int i = 0; i < size; i++ ){
         fread( &l, sizeof(int), 1, arq);
         fread( &c, sizeof(int), 1, arq);
