@@ -95,10 +95,11 @@ void list_remove_node(List *row, Node *next_node, Node *prev_node, char list_typ
 
 void list_increment(List *line, List *column, int l, int c, data_type val){
 
-    Node *next_line = list_find_node(line, c, 'n', 'l', 'c');
     Node *prev_line = list_find_node(line, c, 'p', 'l', 'c');
-    Node *next_column = list_find_node(column, l, 'n', 'c', 'l');
+    Node *next_line = ( line->size == 0 ) ? NULL : node_return_next(prev_line, 'l');
+    
     Node *prev_column = list_find_node(column, l, 'p', 'c', 'l');
+    Node *next_column = ( column->size == 0 ) ? NULL : node_return_next(prev_column, 'c');
 
     Node *n = node_construct(val, l, c, next_line, prev_line, next_column, prev_column);
     

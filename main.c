@@ -2,6 +2,7 @@
 
 // comentar a saida!
 
+
 int main(){
     int *qty_matrices = (int*) malloc( sizeof(int) );
     *qty_matrices = 0;

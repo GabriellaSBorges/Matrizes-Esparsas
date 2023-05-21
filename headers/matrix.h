@@ -190,5 +190,8 @@ void save_binary_matrix(Matrix *matrix, int index);
  */
 Matrix *read_binary_matrix(int *qty_matrices);
 
+Matrix* matrix_from_txt_file(const char* path, void (read)(FILE*, data_type*), int *qty_matrices);
+void read_int(FILE* file, data_type* value);
+
 
 #endif

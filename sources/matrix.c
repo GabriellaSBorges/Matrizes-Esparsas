@@ -7,7 +7,11 @@ struct Matrix{
     int number_columns;
 };
 
-
+/*
+Complexidade: O(l + c)
+l = número de linhas; c = número de colunas
+Percorre o conjunto de linhas e de colunas, inicializando cada uma.
+*/
 Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char hide_print){
 
     Matrix *matrix = (Matrix*) malloc( sizeof(Matrix) );
@@ -31,14 +35,25 @@ Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char
     return matrix;
 }
 
+/*
+Complexidade: O(l*nl + c)
+l = número de linhas; nl = qtd máxima de nodes em uma linha; c = número de colunas;
+Percorre todas as linhas e destrói cada um de seus nodes, depois acessa e libera a head de cada coluna
+*/
 void matrix_destroy(Matrix *matrix){
 
-    list_destroy(matrix->lines, matrix->number_lines, 'l');
-    list_destroy(matrix->columns, matrix->number_columns, 'c');
-    
-    free(matrix);
+    if( matrix ){
+        list_destroy(matrix->lines, matrix->number_lines, 'l');
+        list_destroy(matrix->columns, matrix->number_columns, 'c');
+
+        free(matrix);
+    }
 }
 
+/*
+Complexidade: O(n1 )
+
+*/
 void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
 
     /* Procura o node desejado */
@@ -72,6 +87,12 @@ Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
     data_type new_value = 0;
 
     printf("\n================|ADD MATRICES|================\n");
+
+    if( matrix_1->number_lines != matrix_2->number_lines || matrix_1->number_columns != matrix_2->number_columns ){
+        printf("Matrices of different sizes cannot be added!\n\n");
+        return NULL;
+    }      
+        
 
     Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_1->number_columns, 0);
 
@@ -141,6 +162,12 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 
     printf("\n=============|MULTIPLY MATRICES|=============\n");
 
+    if( matrix_1->number_columns != matrix_2->number_lines ){
+        printf("These matrices cannot be multiplied!\n\n");
+        return NULL;
+    }  
+
+
     Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_2->number_columns, 0);
 
     /* Para cada iterador de uma linha da matriz 1, cria um iterador para cada coluna da matriz 2 */
@@ -178,6 +205,12 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices, char hide_print){
 
     hide_print == 0 ? printf("\n==========|MULTIPLY POINT TO POINT|==========\n") : 1;
+
+    if( matrix_1->number_lines != matrix_2->number_lines || matrix_1->number_columns != matrix_2->number_columns ){
+        printf("These matrices cannot be multiplied!\n\n");
+        return NULL;
+    }
+
 
     Matrix *new_matrix = matrix_construct(qty_matrices, matrix_1->number_lines, matrix_2->number_columns, hide_print);
 
@@ -549,4 +582,34 @@ Matrix *read_binary_matrix(int *qty_matrices){
 
     fclose(arq);
     return new_matrix;
+}
+
+Matrix* matrix_from_txt_file(const char* path, void (read)(FILE*, data_type*), int *qty_matrices) {
+    FILE *file = fopen(path, "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return NULL;   
+    }
+
+    int lines, columns;
+    fscanf(file, "%d %d", &lines, &columns);
+
+    Matrix* matrix = matrix_construct(qty_matrices, lines, columns, 0);
+
+    // Lê os elementos do arquivo e armazena na matriz
+    for (int i = 0; i < lines; i++) {
+        for (int j = 0; j < columns; j++) {
+            data_type value;
+            read(file, &value);
+            if(value != 0) matrix_assign_value(matrix, i, j, value);
+        }
+    }
+
+    fclose(file);
+    return matrix;
+}
+
+// O(1)
+void read_int(FILE *file, data_type* value) {
+    fscanf(file, "%f", value);
 }
