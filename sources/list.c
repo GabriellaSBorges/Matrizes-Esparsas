@@ -12,6 +12,11 @@ struct ListIterator{
 };
 
 
+/*
+Complexidade: O(R)
+R = número de listas; 
+-> Percorre o conjunto de listas (linhas ou colunas), inicializando cada uma.
+*/
 List **list_construct(int qty_lists){
 
     List **list = (List **) malloc( qty_lists * sizeof(List*) );
@@ -32,6 +37,11 @@ List **list_construct(int qty_lists){
     return list;
 }
 
+/*
+Complexidade: O(L*nL)
+L = número de linhas; nL = qtd máxima de nodes em uma linha; 
+-> Percorre todas as linhas e destrói cada um de seus nodes.
+*/
 void list_destroy(List **list, int qty_lists, char list_type){
     ListIterator *li = NULL;
 
@@ -51,6 +61,11 @@ void list_destroy(List **list, int qty_lists, char list_type){
     free(list);  
 }
 
+/*
+Complexidade: O(nL)
+nL = qtd máxima de nodes em uma linha; 
+-> Percorre todos os nodes de uma linha até achar o desejado.
+*/
 void list_decrement(List *line, List *column, int l, int c){
 
     Node *n = list_find_node(line, c, 'a', 'l', 'c');
@@ -70,6 +85,9 @@ void list_decrement(List *line, List *column, int l, int c){
     node_destroy(n);
 }
 
+/*
+Complexidade: O(1)
+*/
 void list_remove_node(List *row, Node *next_node, Node *prev_node, char list_type){
 
     /* A lista possui um único node */
@@ -93,6 +111,11 @@ void list_remove_node(List *row, Node *next_node, Node *prev_node, char list_typ
     } 
 }
 
+/*
+Complexidade: O(nL + nC)
+nL = qtd máxima de nodes em uma linha; nC = qtd máxima de nodes em uma coluna; 
+-> Percorre todos os nodes de uma linha até achar o desejado (prev node), realiza o mesmo processo a coluna.
+*/
 void list_increment(List *line, List *column, int l, int c, data_type val){
 
     Node *prev_line = list_find_node(line, c, 'p', 'l', 'c');
@@ -111,6 +134,9 @@ void list_increment(List *line, List *column, int l, int c, data_type val){
     column->size++;
 }
 
+/*
+Complexidade: O(1)
+*/
 void list_insert_node(List *row, Node *new_node, Node *next_node, Node *prev_node, char list_type){
 
     /* O node é o primeiro a ser incluído */
@@ -134,6 +160,11 @@ void list_insert_node(List *row, Node *new_node, Node *next_node, Node *prev_nod
     } 
 }
 
+/*
+Complexidade: O(nL)
+nL = qtd máxima de nodes em uma linha;
+-> Percorre todos os nodes de uma linha até achar o desejado.
+*/
 Node *list_find_node(List *row, int index, char node_type, char list_type, char position_type){
     ListIterator *li = list_front_iterator(row);
     Node *n = NULL;
@@ -182,10 +213,16 @@ Node *list_find_node(List *row, int index, char node_type, char list_type, char 
 
 /* FUNCTIONS LIST ITERATOR */
 
+/*
+Complexidade: O(1)
+*/
 int list_iterator_is_over(ListIterator *li){
     return ( !li->current ) ? 1 : 0;
 }
 
+/*
+Complexidade: O(1)
+*/
 ListIterator *list_front_iterator(List *l){
     ListIterator *li = malloc( 1 * sizeof(ListIterator) );
     li->current = l->head;
@@ -193,6 +230,9 @@ ListIterator *list_front_iterator(List *l){
     return li;
 }
 
+/*
+Complexidade: O(1)
+*/
 data_type *list_iterator_next(ListIterator *li, char list_type){
     data_type *n = node_return_value(li->current);
 
@@ -200,10 +240,16 @@ data_type *list_iterator_next(ListIterator *li, char list_type){
     return n;
 }
 
+/*
+Complexidade: O(1)
+*/
 int list_iterator_return_place(ListIterator *li, int position_type){
     return node_return_place(li->current, position_type);
 }
 
+/*
+Complexidade: O(1)
+*/
 void list_iterator_node_destroy(ListIterator *li, char list_type){
     Node *n = li->current;
 
@@ -215,6 +261,12 @@ void list_iterator_node_destroy(ListIterator *li, char list_type){
 
 /* BINARY FILE */
 
+/*
+Complexidade: O(nL)
+nL = qtd máxima de nodes em uma linha;
+
+-> Percorre cada node de uma linha e salva seus dados em um arquivo binário.
+*/
 void save_binary_list(FILE *arq, List *row){
     data_type *val = 0;
     int l = 0, c = 0;
@@ -238,6 +290,13 @@ void save_binary_list(FILE *arq, List *row){
     free(li);
 }
 
+/*
+Complexidade: O(nL*(nL + nC)) = O(nL*i)
+nL = qtd máxima de nodes em uma linha; nC = qtd máxima de nodes em uma coluna;
+i = complexidade de list_increment ( O(nL + nC) );
+
+-> Para cada node de uma linha, lê seus dados e o incrementa.
+*/
 void read_binary_list(FILE *arq, List **lines, List **columns){
     data_type val = 0;
     int size = 0, l = 0, c = 0;

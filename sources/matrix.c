@@ -671,7 +671,7 @@ a =  complexidade de matrix_construct ( O(L + C) ); i = complexidade de list_inc
 L = número de linhas da nova matriz; nL = qtd máxima de nodes em uma linha L;
 L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; 
 
--> Cria uma nova matriz. Para cada node de cada linha da nova matriz, lê seus dados e o incrementa.
+-> Cria uma nova matriz. Para cada node de cada linha da nova matriz, lê seus dados e o incrementa na matriz.
 */
 Matrix *read_binary_matrix(int *qty_matrices){
     char path[11] = PATH_FILE;
