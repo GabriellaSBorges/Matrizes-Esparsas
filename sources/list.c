@@ -51,15 +51,14 @@ void list_destroy(List **list, int qty_lists, char list_type){
     free(list);  
 }
 
-
 void list_decrement(List *line, List *column, int l, int c){
 
-    Node *next_line = find_node_row(line, c, 'n', 'l', 'c');
-    Node *prev_line = find_node_row(line, c, 'p', 'l', 'c');
-    Node *next_column = find_node_row(column, l, 'n', 'c', 'l');
-    Node *prev_column = find_node_row(column, l, 'p', 'c', 'l');
+    Node *n = list_find_node(line, c, 'a', 'l', 'c');
 
-    Node *n = find_node_row(line, c, 'a', 'l', 'c');
+    Node *next_line = node_return_next(n, 'l');
+    Node *prev_line = node_return_prev(n, 'l');
+    Node *next_column = node_return_next(n, 'c');
+    Node *prev_column = node_return_prev(n, 'c');
 
     list_remove_node(line, next_line, prev_line, 'l');
     list_remove_node(column, next_column, prev_column, 'c');
@@ -72,126 +71,116 @@ void list_decrement(List *line, List *column, int l, int c){
 
 void list_remove_node(List *row, Node *next_node, Node *prev_node, char list_type){
 
-    if( row->size == 1 ){ // a lista ficara vazia
+    /* A lista possui um único node */
+    if( row->size == 1 ){ // 
         row->last = row->head = NULL; 
 
-    } else if( prev_node != NULL && next_node != NULL ) { // esta no meio da lista
+    /* O node está no meio da lista */
+    } else if( prev_node != NULL && next_node != NULL ) { 
         assign_value_prev_node(next_node, prev_node, list_type);
         assign_value_next_node(prev_node, next_node, list_type);
 
-    } else if( prev_node == NULL ) { // esta no inicio da lista
+    /* O node está no início da lista */
+    } else if( prev_node == NULL ) { 
         row->head = node_return_next(row->head, list_type);
+        assign_value_prev_node(row->head, NULL, list_type);
 
-        if( row->head != NULL )
-            assign_value_prev_node(row->head, NULL, list_type);
-
-    } else if( next_node == NULL ) { // esta no final da lista
+    /* O node está no final da lista */
+    } else if( next_node == NULL ) { 
         row->last = node_return_prev(row->last, list_type);
-
-        if( row->last != NULL )
-            assign_value_next_node(row->last, NULL, list_type);
+        assign_value_next_node(row->last, NULL, list_type);       
     } 
 }
 
 void list_increment(List *line, List *column, int l, int c, data_type val){
 
-    Node *next_line = find_node_row(line, c, 'n', 'l', 'c');
-    Node *prev_line = find_node_row(line, c, 'p', 'l', 'c');
-    Node *next_column = find_node_row(column, l, 'n', 'c', 'l');
-    Node *prev_column = find_node_row(column, l, 'p', 'c', 'l');
+    Node *next_line = list_find_node(line, c, 'n', 'l', 'c');
+    Node *prev_line = list_find_node(line, c, 'p', 'l', 'c');
+    Node *next_column = list_find_node(column, l, 'n', 'c', 'l');
+    Node *prev_column = list_find_node(column, l, 'p', 'c', 'l');
 
     Node *n = node_construct(val, l, c, next_line, prev_line, next_column, prev_column);
-
-    line->size++;
-    column->size++;
     
+    /* Após construir o novo node, liga ele à linha e à coluna */
     list_insert_node(line, n, next_line, prev_line, 'l');
     list_insert_node(column, n, next_column, prev_column, 'c');
 
+    line->size++;
+    column->size++;
 }
 
 void list_insert_node(List *row, Node *new_node, Node *next_node, Node *prev_node, char list_type){
-    
-    if( row->head == NULL ) { // a lista estava vazia
+
+    /* O node é o primeiro a ser incluído */
+    if( row->head == NULL ) {
         row->last = row->head = new_node; 
 
-    } else if( prev_node != NULL && next_node != NULL ){ // entrara no meio da lista
+    /* Entrará no meio da lista */
+    } else if( prev_node != NULL && next_node != NULL ){ 
         assign_value_prev_node(next_node, new_node, list_type);
         assign_value_next_node(prev_node, new_node, list_type);
 
-    } else if( prev_node == NULL ) { // esta no inicio da lista
+    /* Entrará no início da lista */
+    } else if( prev_node == NULL ) { 
         assign_value_prev_node(row->head, new_node, list_type);
         row->head = new_node;
 
-    } else if( next_node == NULL ) { // esta no final da lista
+    /* Entrará no final da lista */
+    } else if( next_node == NULL ) { 
         assign_value_next_node(row->last, new_node, list_type);
         row->last = new_node;
     } 
-
 }
 
-Node *find_node_row(List *row, int index_searched, char node_type, char list_type, char position_type){
+Node *list_find_node(List *row, int index, char node_type, char list_type, char position_type){
     ListIterator *li = list_front_iterator(row);
     Node *n = NULL;
 
-    if( node_type == 'a' ){
-        n = list_iterator_find_node(li, index_searched, node_type, list_type, position_type);
-
-    } else if( row->head != NULL ) {
-        int head_index = node_return_place(row->head, position_type);
-
-        if( index_searched > head_index ){       
-            n = list_iterator_find_node(li, index_searched, node_type, list_type, position_type);
-
-        } else {
-            if( node_type == 'n' )
-                n = row->head;
-        } 
-    }   
-    free(li);
-
-    return n;
-}
-
-Node *list_iterator_find_node(ListIterator *li, int index, char node_type, char list_type, char position_type){
-
+    if( list_iterator_is_over(li) ){
+        free(li);
+        return n;
+    }
+        
     switch(node_type){
-
         /* prev node */
         case 'p':
-            while( !list_iterator_is_over(li)  &&  node_return_next(li->current, list_type) 
-            && index > node_return_place(li->current, position_type)+1 )
+            if( node_return_place(row->head, position_type) > index ){
+                free(li);
+                return NULL;
+            }  //tentar excluir                    
 
-            li->current = node_return_next(li->current, list_type); 
+            while( node_return_next(li->current, list_type) && index > node_return_place(li->current, position_type)+1 )
+                li->current = node_return_next(li->current, list_type); 
 
-            return li->current;
+            n = li->current;
+            break;
+
 
         /* next node */
         case 'n':
-            while( index > node_return_place(li->current, position_type)-1 ){
+            if( node_return_place(row->head, position_type) > index ){
+                free(li);
+                return row->head;
+            } // tentar excluir
+                            
+            while( !list_iterator_is_over(li) && index > node_return_place(li->current, position_type)-1 )
                 li->current = node_return_next(li->current, list_type);
+     
+            n = li->current;
+            break;
 
-                if( li->current == NULL )
-                    break;
-            }       
-            return li->current;
 
         /* actual node */
         case 'a':
-            int p = 0;
-
-            while( !list_iterator_is_over(li) ){
-                p = node_return_place(li->current, position_type);
-
-                if( p == index )
-                    return li->current;
-
+            while( !list_iterator_is_over(li) && node_return_place(li->current, position_type) != index )
                 li->current = node_return_next(li->current, list_type);
-            }
-            
-    }
 
-    return NULL;
+            n = li->current;
+            break;           
+    }
+    
+    free(li);
+    return n;
 }
 
 
@@ -224,10 +213,6 @@ data_type *list_iterator_next(ListIterator *li, char list_type){
 int list_iterator_return_place(ListIterator *li, int position_type){
     return node_return_place(li->current, position_type);
 }
-
-// data_type *list_iterator_return_value(ListIterator *li){
-//     return node_return_value(li->current);
-// }
 
 void list_iterator_node_destroy(ListIterator *li, char list_type){
     Node *n = li->current;

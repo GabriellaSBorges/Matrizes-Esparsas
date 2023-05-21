@@ -19,9 +19,7 @@ void list_increment(List *line, List *column, int l, int c, data_type val);
 
 void list_insert_node(List *row, Node *new_node, Node *next_node, Node *prev_node, char list_type);
 
-Node *find_node_row(List *row, int index, char node_type, char list_type, char position_type);
-
-Node *list_iterator_find_node(ListIterator *li, int index, char node_type, char list_type, char position_type);
+Node *list_find_node(List *row, int index, char node_type, char list_type, char position_type);
 
 
 

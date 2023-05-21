@@ -8,6 +8,15 @@
 typedef struct Matrix Matrix;
 
 
+/**
+ * @brief 
+ * 
+ * @param qty_matrices 
+ * @param qty_lines 
+ * @param qty_columns 
+ * @param hide_print 
+ * @return Matrix* 
+ */
 Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char hide_print);
 
 void matrix_destroy(Matrix *matrix);

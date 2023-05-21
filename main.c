@@ -10,44 +10,42 @@ int main(){
     Matrix *matrix_0 = matrix_construct(qty_matrices, 3, 3, 0); 
 
     matrix_assign_value(matrix_0, 0, 0, 1); 
-    matrix_assign_value(matrix_0, 2, 1, 1); 
-    matrix_assign_value(matrix_0, 2, 2, 2); 
-    matrix_assign_value(matrix_0, 0, 1, 2); 
-    // matrix_assign_value(matrix_0, 2, 2, 0); 
-    matrix_assign_value(matrix_0, 1, 1, 1); 
-    matrix_assign_value(matrix_0, 1, 2, 1); 
-    matrix_assign_value(matrix_0, 2, 0, 2); 
-    // matrix_assign_value(matrix_0, 2, 0, 0); 
+    matrix_assign_value(matrix_0, 0, 1, 2);
     matrix_assign_value(matrix_0, 0, 2, 3); 
-    matrix_assign_value(matrix_0, 1, 0, 4); 
-  
+    matrix_assign_value(matrix_0, 1, 0, 0);
+    matrix_assign_value(matrix_0, 1, 1, 1); 
+    matrix_assign_value(matrix_0, 1, 2, 0); 
+    matrix_assign_value(matrix_0, 2, 0, 4); 
+    matrix_assign_value(matrix_0, 2, 1, 3); 
+    matrix_assign_value(matrix_0, 2, 2, 2); 
+   
     // print_sparse_matrix(matrix_0);
     print_dense_matrix(matrix_0);
 
 
     Matrix *matrix_1 = matrix_construct(qty_matrices, 3, 3, 0);
 
-    matrix_assign_value(matrix_1, 0, 0, 2); 
+    matrix_assign_value(matrix_1, 0, 0, 3); 
     matrix_assign_value(matrix_1, 0, 1, 3); 
+    matrix_assign_value(matrix_1, 0, 2, 0); 
     matrix_assign_value(matrix_1, 1, 0, 1); 
-    matrix_assign_value(matrix_1, 1, 1, 3); 
-    matrix_assign_value(matrix_1, 0, 2, 1); 
+    matrix_assign_value(matrix_1, 1, 1, 0); 
     matrix_assign_value(matrix_1, 1, 2, 1); 
-    matrix_assign_value(matrix_1, 1, 1, 2); 
-    matrix_assign_value(matrix_1, 0, 2, 1); 
-    matrix_assign_value(matrix_1, 2, 2, 1); 
+    matrix_assign_value(matrix_1, 2, 1, 2); 
+    matrix_assign_value(matrix_1, 2, 0, 0); 
+    matrix_assign_value(matrix_1, 2, 2, 2); 
 
     // print_sparse_matrix(matrix_1);
     print_dense_matrix(matrix_1);
 
 
     matrix_read_value(matrix_0, 0, 0, 0); 
-    matrix_read_value(matrix_1, 0, 2, 0); 
+    matrix_read_value(matrix_1, 1, 2, 2); 
     
     Matrix *matrix_2 = add_matrices(matrix_0, matrix_1, qty_matrices); 
     print_dense_matrix(matrix_2);
 
-    Matrix *matrix_3 = matrix_multiply_by_scalar(matrix_2, qty_matrices, 2); 
+    Matrix *matrix_3 = matrix_multiply_by_scalar(matrix_0, qty_matrices, 2); 
     print_dense_matrix(matrix_3);
 
     Matrix *matrix_4 = matrices_multiply(matrix_0, matrix_1, qty_matrices); 
