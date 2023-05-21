@@ -37,7 +37,7 @@ Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char
 
 /*
 Complexidade: O(L*nL + C)
-l = número de linhas; nl = qtd máxima de nodes em uma linha; c = número de colunas
+L = número de linhas; nL = qtd máxima de nodes em uma linha; C = número de colunas
 -> Percorre todas as linhas e destrói cada um de seus nodes, depois acessa e libera a head de cada coluna.
 */
 void matrix_destroy(Matrix *matrix){
@@ -51,9 +51,11 @@ void matrix_destroy(Matrix *matrix){
 }
 
 /*
-Complexidade: O(nL + nC)
+Complexidade: O(2nL + nC)
 nL = qtd máxima de nodes em uma linha L; nC = qtd máxima de nodes em uma coluna C
--> No pior caso (criar um novo node), percorre a linha até encontrar o node antes do novo, o mesmo ocorre com a coluna. 
+
+-> No pior caso, percorre a linha procurando o node desejado mas não o acha, então cria um:
+percorre a linha até encontrar o node antes do novo, o mesmo ocorre com a coluna. 
 */
 void matrix_assign_value(Matrix *matrix, int l, int c, data_type val){
 
@@ -90,12 +92,13 @@ void matrix_read_value(Matrix *matrix, int index, int l, int c){
 }
 
 /*
-Complexidade: O((L1*nL1 + L2*nL2)*(nL + nC))
-L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; L2 = número de linhas da matriz 2; nL2 = qtd máxima de nodes na linha L2
-nL = qtd máxima de nodes em uma linha L da nova matriz; nC = qtd máxima de nodes em uma coluna C da nova matriz
+Complexidade: O((L + C) + (L1*nL1 + L2*nL2)*(nL + nC)) = O(a + (L1*nL1 + L2*nL2)*i)
+a =  complexidade de matrix_construct ( O(L + C) ); i = complexidade de list_increment ( O(nL + nC) );
+L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; L2 = número de linhas da matriz 2; nL2 = qtd máxima de nodes na linha L2;
+L = número de linhas da nova matriz; nL = qtd máxima de nodes na linha L; C = número de colunas da nova matriz; nC = qtd máxima de nodes na coluna C;
 
--> Para cada linha de cada uma das duas matrizes, itera sobre seus nodes e, quando achar uma posicao ocupada em pelo menos uma das linhas, incrementa:
-percorre a linha e a coluna correspondente na nova matriz até achar o prev node.
+-> Cria uma nova matriz. Para cada linha de cada uma das duas matrizes(1 e 2), itera sobre seus nodes e, quando achar uma posicao ocupada em pelo menos uma das linhas, 
+incrementa na nova matriz: percorre a linha e a coluna correspondente na nova matriz até achar o prev node.
 */
 Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
     data_type new_value = 0;
@@ -150,9 +153,12 @@ Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
 }
 
 /*
-Complexidade;
+Complexidade: O((L + C) + L1*nL1*(nL + nC)) = O(a + L1*nL1*i)
+a =  complexidade de matrix_construct ( O(L + C); i = complexidade de list_increment ( O(nL + nC) );
+L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1
+L = número de linhas da nova matriz; nL = qtd máxima de nodes na linha L; C = número de colunas da nova matriz; nC = qtd máxima de nodes na coluna C;
 
-->
+-> Cria uma nova matriz. Percorre cada node de cada linha da matriz1 e incrementa o valor correspondente na matriz2.
 */
 Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type scalar){
     ListIterator *li = NULL;
@@ -177,6 +183,14 @@ Matrix *matrix_multiply_by_scalar(Matrix *matrix, int *qty_matrices, data_type s
     return new_matrix;
 }
 
+/*
+Complexidade: O((L + C) + (L1*nL1)*(C2*nC2)*(nL + nC)) = O(a + (L1*nL1)*(C2*nC2)**i )
+a =  complexidade de matrix_construct ( O(L + C) ); i = complexidade de list_increment ( O(nL + nC) );
+L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; C2 = número de colunas da matriz 2; nC2 = qtd máxima de nodes na coluna L2;
+L = número de linhas da nova matriz; nL = qtd máxima de nodes na linha L; C = número de colunas da nova matriz; nC = qtd máxima de nodes na coluna C;
+
+Cria uma nova matriz. Para cada linha da matriz1, percorre cada coluna da matriz2 e incrementa o novo valor na nova matriz.
+*/
 Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
 
     printf("\n=============|MULTIPLY MATRICES|=============\n");
@@ -221,6 +235,15 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
     return new_matrix;
 }
 
+/*
+Complexidade: O((L + C) + (L1*nL1 + L2*nL2)*(nL + nC)) = O(a + (L1*nL1 + L2*nL2)*i)
+a =  complexidade de matrix_construct ( O(L + C) ); i = complexidade de list_increment ( O(nL + nC) );
+L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; L2 = número de linhas da matriz 2; nL2 = qtd máxima de nodes na linha L2;
+L = número de linhas da nova matriz; nL = qtd máxima de nodes na linha L; C = número de colunas da nova matriz; nC = qtd máxima de nodes na coluna C;
+
+-> Cria uma nova matriz. Para cada linha de cada uma das duas matrizes(1 e 2), itera sobre seus nodes e, quando achar uma posicao ocupada nas duas linhas, 
+incrementa na nova matriz.
+*/
 Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices, char hide_print){
 
     hide_print == 0 ? printf("\n==========|MULTIPLY POINT TO POINT|==========\n") : 1;
@@ -264,6 +287,13 @@ Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_mat
     return new_matrix;
 }
 
+/*
+Complexidade: O(L*nL + L*((nL + nC) + nL)) = O(L*nL + L*(i + d))
+i = complexidade de list_increment ( O(nL + nC) ); d = complexidade de list_decrement ( O(nL) );
+L = número de linhas; nL = qtd máxima de nodes em uma linha; nC = qtd máxima de nodes em uma coluna
+
+-> Itera sobre cada linha da matriz. No pior caso, em cada linha um node será incrementado e outro será decrementado.
+*/
 void matrix_swap_columns(Matrix *matrix, int index_1, int index_2){ 
 
     printf("\n===============|SWAP COLUMNS|===============\n");
@@ -322,10 +352,15 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2){
 
         free(li);
     }
-
-
 }
 
+/*
+Complexidade: O(C*nC + C*((nL + nC) + nL)) = O(C*nC + C*(i + d))
+i = complexidade de list_increment ( O(nL + nC) ); d = complexidade de list_decrement ( O(nL) );
+C = número de colunas; nC = qtd máxima de nodes em uma coluna; nL = qtd máxima de nodes em uma linha
+
+-> Itera sobre cada coluna da matriz. No pior caso, em cada coluna um node será incrementado e outro será decrementado.
+*/
 void matrix_swap_lines(Matrix *matrix, int index_1, int index_2){ 
 
     printf("\n================|SWAP LINES|================\n");
@@ -387,6 +422,15 @@ void matrix_swap_lines(Matrix *matrix, int index_1, int index_2){
 
 }
 
+/*
+Complexidade: O((L + C) + (L1*nL1)*(nL + nC)) = O(a + (L1*nL1)*i)
+a =  complexidade de matrix_construct ( O(L + C) ); i = complexidade de list_increment ( O(nL + nC) );
+L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; 
+L = número de linhas da nova matriz; nL = qtd máxima de nodes na linha L; C = número de colunas da nova matriz; nC = qtd máxima de nodes na coluna C;
+
+-> Cria uma nova matriz. Para cada linha da matriz base pertencente ao intervalo dado (no pior caso, percorre todas as linhas), 
+itera sobre seus nodes e os incrementa na nova matriz.
+*/
 Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int start_column, int end_line, int end_column, char hide_print){
 
     hide_print == 0 ? printf("\n===============|MATRIX SLICE|===============\n") : 1;
@@ -423,6 +467,15 @@ Matrix *matrix_slice(Matrix *matrix, int *qty_matrices, int start_line, int star
     return new_matrix;
 }
 
+/*
+Complexidade: O((L + C) + (L1*nL1)*(nL + nC)) = O(a + (L1*nL1)*i)
+a =  complexidade de matrix_construct ( O(L + C) ); i = complexidade de list_increment ( O(nL + nC) );
+
+L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; 
+L = número de linhas da nova matriz; nL = qtd máxima de nodes na linha L; C = número de colunas da nova matriz; nC = qtd máxima de nodes na coluna C;
+
+-> Cria uma nova matriz. Para cada linha da matriz base, itera sobre seus nodes e os incrementa na nova matriz.
+*/
 Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices){
 
     printf("\n============|TRANSPOSED MATRIX|============\n");
@@ -449,6 +502,19 @@ Matrix *matrix_transposed(Matrix *matrix, int *qty_matrices){
     return new_matrix;
 }
 
+/*
+Complexidade: O(a + L*C(s + p + u + v + 2d))
+a =  complexidade de matrix_construct ( O(L + C) ); s = complexidade de matrix_slice ( O(a + (L1*nL1)*i) );
+p = complexidade de multiply_point_to_point ( O(a + (L1*nL1 + L2*nL2)*i) ); u = complexidade de add_all_values ( O(Li*nLi) )
+v = complexidade de matrix_assign_value ( O(2nL + nC) ); d = complexidade de matrix_destroy ( O(Li*nLi + Ci) );
+
+L = número de linhas da nova matriz; nL = qtd máxima de nodes na linha L; C = número de colunas da nova matriz; nC = qtd máxima de nodes na coluna C;
+L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; L2 = número de linhas da matriz 2; nL2 = qtd máxima de nodes na linha L2;
+Li = número de linhas da matriz de suporte; nLi = qtd máxima de nodes na linha Li; Ci = número de colunas da matriz de suporte;
+
+-> Cria uma nova matriz. Para cada célula da matriz base: cria uma matriz1 por slice; a multiplicacao da matriz1 pelo kernel cria a matriz2; 
+soma-se todos os valores da matriz2 e atribui esse valor à nova matriz; destrói as matrizes 1 e 2.
+*/
 Matrix *matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices){
     Matrix *support_1 = NULL, *support_2 = NULL;
     int *qty_supports = (int*) malloc( sizeof(int) );
@@ -485,6 +551,12 @@ Matrix *matrix_convolution(Matrix *matrix, Matrix *kernel, int *qty_matrices){
     return new_matrix;
 }
 
+/*
+Complexidade: O(L*nL)
+L = número de linhas; nL = qtd máxima de nodes em uma linha;
+
+-> Percorre cada node de cada linha.
+*/
 data_type add_all_values(Matrix *matrix){
     ListIterator *li = NULL;
     data_type sum = 0;
@@ -601,34 +673,4 @@ Matrix *read_binary_matrix(int *qty_matrices){
 
     fclose(arq);
     return new_matrix;
-}
-
-Matrix* matrix_from_txt_file(const char* path, void (read)(FILE*, data_type*), int *qty_matrices) {
-    FILE *file = fopen(path, "r");
-    if (file == NULL) {
-        printf("Erro ao abrir o arquivo.\n");
-        return NULL;   
-    }
-
-    int lines, columns;
-    fscanf(file, "%d %d", &lines, &columns);
-
-    Matrix* matrix = matrix_construct(qty_matrices, lines, columns, 0);
-
-    // Lê os elementos do arquivo e armazena na matriz
-    for (int i = 0; i < lines; i++) {
-        for (int j = 0; j < columns; j++) {
-            data_type value;
-            read(file, &value);
-            if(value != 0) matrix_assign_value(matrix, i, j, value);
-        }
-    }
-
-    fclose(file);
-    return matrix;
-}
-
-// O(1)
-void read_int(FILE *file, data_type* value) {
-    fscanf(file, "%f", value);
 }
