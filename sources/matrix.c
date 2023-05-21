@@ -491,7 +491,7 @@ void print_sparse_matrix(Matrix *matrix){
             c = list_iterator_return_place(li, 'c');
             value = *list_iterator_next(li, 'l');
 
-            printf("%.0f [%dx%d]  ", value, l, c);
+            printf("%.0f (%dx%d)  ", value, l, c);
         }            
         free(li);
         printf("\n");

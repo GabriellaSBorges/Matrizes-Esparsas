@@ -7,6 +7,7 @@ int main(){
     printf("---------------\n Bem-vindo! :) \n---------------\n");
 
 
+    /* CRIAÇÃO MATRIZES */
     Matrix *matrix_0 = matrix_construct(qty_matrices, 3, 3, 0); 
 
     matrix_assign_value(matrix_0, 0, 0, 1); 
@@ -17,11 +18,12 @@ int main(){
     matrix_assign_value(matrix_0, 1, 2, 0); 
     matrix_assign_value(matrix_0, 2, 0, 4); 
     matrix_assign_value(matrix_0, 2, 1, 3); 
+    matrix_assign_value(matrix_0, 2, 2, 0); 
     matrix_assign_value(matrix_0, 2, 2, 2); 
    
-    // print_sparse_matrix(matrix_0);
+    print_sparse_matrix(matrix_0);
     print_dense_matrix(matrix_0);
-
+    
 
     Matrix *matrix_1 = matrix_construct(qty_matrices, 3, 3, 0);
 
@@ -35,15 +37,17 @@ int main(){
     matrix_assign_value(matrix_1, 2, 0, 0); 
     matrix_assign_value(matrix_1, 2, 2, 2); 
 
-    // print_sparse_matrix(matrix_1);
+    print_sparse_matrix(matrix_1);
     print_dense_matrix(matrix_1);
 
 
+    /* OPERAÇÕES COM MATRIZES */
     matrix_read_value(matrix_0, 0, 1, 0); 
     matrix_read_value(matrix_1, 1, 2, 2); 
     
     Matrix *matrix_2 = add_matrices(matrix_0, matrix_1, qty_matrices); 
     print_dense_matrix(matrix_2);
+
 
     Matrix *matrix_3 = matrix_multiply_by_scalar(matrix_0, qty_matrices, 2); 
     print_dense_matrix(matrix_3);
@@ -54,18 +58,20 @@ int main(){
     Matrix *matrix_5 = multiply_point_to_point(matrix_0, matrix_1, qty_matrices, 0); 
     print_dense_matrix(matrix_5);
 
+
     matrix_swap_columns(matrix_5, 1, 2, 'c'); 
     print_dense_matrix(matrix_5);
 
     matrix_swap_lines(matrix_5, 1, 2, 'l'); 
     print_dense_matrix(matrix_5);
 
+
     Matrix *matrix_6 = matrix_slice(matrix_5, qty_matrices, 0, 0, 1, 1, 0);
-    print_sparse_matrix(matrix_6);
     print_dense_matrix(matrix_6);
     
     Matrix *matrix_7 = matrix_transposed(matrix_5, qty_matrices); 
     print_dense_matrix(matrix_7);
+
 
     save_binary_matrix(matrix_7);
     matrix_destroy(matrix_7);
@@ -92,8 +98,10 @@ int main(){
 
     print_dense_matrix(kernel_0);
 
+
     Matrix *matrix_9 = matrix_convolution(matrix_8, kernel_0, qty_matrices);
     print_dense_matrix(matrix_9);
+
 
 
     matrix_destroy(matrix_0);
@@ -103,7 +111,6 @@ int main(){
     matrix_destroy(matrix_4);
     matrix_destroy(matrix_5);
     matrix_destroy(matrix_6);
-    // matrix_destroy(matrix_7);
     matrix_destroy(matrix_8);
     matrix_destroy(matrix_9);
 
