@@ -499,7 +499,7 @@ void print_sparse_matrix(Matrix *matrix){
     printf("\n");
 }
 
-void save_binary_matrix(Matrix *matrix){
+void save_binary_matrix(Matrix *matrix, int index){
     char path[11] = PATH_FILE;
     FILE *arq = fopen(path, "wb");
 
@@ -518,7 +518,7 @@ void save_binary_matrix(Matrix *matrix){
     for( int i = 0; i < matrix->number_lines; i++ )
         save_binary_list(arq, matrix->lines[i]);
     
-    printf("\nThe matrix was saved in the file '%s'!\n\n", PATH_FILE);    
+    printf("\nThe matrix '%d' was saved in the file '%s'!\n\n", index, PATH_FILE);    
 
     fclose(arq);
 }
@@ -545,7 +545,7 @@ Matrix *read_binary_matrix(int *qty_matrices){
 
 
     for( int i = 0; i < new_matrix->number_lines; i++ )
-        read_binary_list(arq, new_matrix->lines, new_matrix->columns, i);
+        read_binary_list(arq, new_matrix->lines, new_matrix->columns);
 
     fclose(arq);
     return new_matrix;

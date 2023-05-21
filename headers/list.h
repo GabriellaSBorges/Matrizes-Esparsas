@@ -82,56 +82,63 @@ void list_insert_node(List *row, Node *new_node, Node *next_node, Node *prev_nod
 Node *list_find_node(List *row, int index, char node_type, char list_type, char position_type);
 
 /**
- * @brief 
+ * @brief Verifica se a lista iterada chegou ao fim
  * 
- * @param li 
- * @return int 
+ * @param li Ponteiro para o iterador
+ * @return int Retorna 1 se a lista terminou
  */
 int list_iterator_is_over(ListIterator *li);
 
 /**
- * @brief 
+ * @brief Retorna um iterador para o primeiro node da lista duplamente encadeada
  * 
- * @param l 
- * @return ListIterator* 
+ * @param l Lista desejada
+ * @return ListIterator* Ponteiro para o iterador
  */
 ListIterator *list_front_iterator(List *l);
 
 /**
- * @brief 
+ * @brief Retorna o valor de um node e atualiza o iterador para o próximo node
  * 
- * @param li 
- * @param position_type 
- * @return data_type* 
+ * @param li Ponteiro para o iterador
+ * @param list_type Tipo da lista que está sendo iterada 
+ * @return data_type* Ponteiro para o valor armazenado no node
  */
-data_type *list_iterator_next(ListIterator *li, char position_type);
+data_type *list_iterator_next(ListIterator *li, char list_type);
 
 /**
- * @brief 
+ * @brief Retorna a posição (linha ou coluna) do node o qual o iterador aponta
  * 
- * @param li 
- * @param position_type 
- * @return int 
+ * @param li Ponteiro para o iterador
+ * @param position_type Tipo de posição procurada
+ * @return int Posição do node (linha ou coluna)
  */
 int list_iterator_return_place(ListIterator *li, int position_type);
 
 /**
- * @brief 
+ * @brief Atualiza o iterador para o próximo node e destrói o anterior
  * 
- * @param li 
- * @param list_type 
+ * @param li Ponteiro para o iterador
+ * @param list_type Tipo da lista que está sendo iterada 
  */
 void list_iterator_node_destroy(ListIterator *li, char list_type);
 
-
-
-
-
-
-
+/**
+ * @brief Salva uma lista em um arquivo binário
+ * 
+ * @param arq Arquivo em que será salvada
+ * @param row Lista que será salvada
+ */
 void save_binary_list(FILE *arq, List *row);
 
-void read_binary_list(FILE *arq, List **lines, List **columns, int index_line);
+/**
+ * @brief Lê uma lista de um arquivo binário, aloca e incrementa seus nodes
+ * 
+ * @param arq Arquivo lido
+ * @param lines Ponteiro para o conjunto de linhas da matriz
+ * @param columns Ponteiro para o conjunto de colunas da matriz
+ */
+void read_binary_list(FILE *arq, List **lines, List **columns);
 
 
 #endif 

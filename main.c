@@ -73,7 +73,7 @@ int main(){
     print_dense_matrix(matrix_7);
 
 
-    save_binary_matrix(matrix_7);
+    save_binary_matrix(matrix_7, 7);
     matrix_destroy(matrix_7);
 
     Matrix *matrix_8 = read_binary_matrix(qty_matrices); 

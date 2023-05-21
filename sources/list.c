@@ -182,7 +182,7 @@ Node *list_find_node(List *row, int index, char node_type, char list_type, char 
 /* FUNCTIONS LIST ITERATOR */
 
 int list_iterator_is_over(ListIterator *li){
-    return ( li->current == NULL ) ? 1 : 0;
+    return ( !li->current ) ? 1 : 0;
 }
 
 ListIterator *list_front_iterator(List *l){
@@ -210,6 +210,10 @@ void list_iterator_node_destroy(ListIterator *li, char list_type){
     node_destroy(n);
 }
 
+
+
+/* BINARY FILE */
+
 void save_binary_list(FILE *arq, List *row){
     data_type *val = 0;
     int l = 0, c = 0;
@@ -233,7 +237,7 @@ void save_binary_list(FILE *arq, List *row){
     free(li);
 }
 
-void read_binary_list(FILE *arq, List **lines, List **columns, int index_line){
+void read_binary_list(FILE *arq, List **lines, List **columns){
     data_type val = 0;
     int size = 0, l = 0, c = 0;
 

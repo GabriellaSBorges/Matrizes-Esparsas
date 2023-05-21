@@ -178,8 +178,9 @@ void print_sparse_matrix(Matrix *matrix);
  * @brief Salva uma matriz em um arquivo binário
  * 
  * @param matrix Matriz desejada
+ * @param index Índice da matriz na main (qtd de matrizes no momento em que foi construída)
  */
-void save_binary_matrix(Matrix *matrix);
+void save_binary_matrix(Matrix *matrix, int index);
 
 /**
  * @brief Lê uma matriz de um arquivo binário e aloca memória para ela
