@@ -9,6 +9,10 @@ struct Node{
     Node *prev_column;
 };
 
+
+/*
+Complexidade: O(1)
+*/
 Node *node_construct(data_type value, int l, int c, Node *next_line, Node *prev_line, Node *next_column, Node *prev_column){
 
     Node *n = (Node*) malloc( sizeof(Node) );
@@ -24,11 +28,17 @@ Node *node_construct(data_type value, int l, int c, Node *next_line, Node *prev_
     return n;
 }
 
+/*
+Complexidade: O(1)
+*/
 void node_destroy(Node *n){
     free(n->place);
     free(n);
 }
 
+/*
+Complexidade: O(1)
+*/
 void assign_prev_node(Node *node, Node *new_node, char list_type){
 
     if( list_type == 'l' )
@@ -38,6 +48,9 @@ void assign_prev_node(Node *node, Node *new_node, char list_type){
 
 }
 
+/*
+Complexidade: O(1)
+*/
 void assign_next_node(Node *node, Node *new_node, char list_type){
 
     if( list_type == 'l' )
@@ -47,16 +60,25 @@ void assign_next_node(Node *node, Node *new_node, char list_type){
 
 }
 
+/*
+Complexidade: O(1)
+*/
 void node_assign_value(Node *n, data_type val){
     n->value = val;
 }
 
+/*
+Complexidade: O(1)
+*/
 data_type *node_return_value(Node *n){
     data_type *val = &n->value;
 
     return val;
 }
 
+/*
+Complexidade: O(1)
+*/
 Node *node_return_next(Node *n, char list_type){
     
     if( list_type == 'l' )
@@ -67,6 +89,9 @@ Node *node_return_next(Node *n, char list_type){
     return NULL;
 }
 
+/*
+Complexidade: O(1)
+*/
 Node *node_return_prev(Node *n, char list_type){
     
     if( list_type == 'l' )
@@ -77,6 +102,9 @@ Node *node_return_prev(Node *n, char list_type){
     return NULL;
 }
 
+/*
+Complexidade: O(1)
+*/
 int node_return_place(Node *n, char position_type){
 
     if( position_type == 'l')
