@@ -4,7 +4,6 @@
 #include "position.h"
 
 typedef float data_type;
-
 typedef struct Node Node;
 
 /**
