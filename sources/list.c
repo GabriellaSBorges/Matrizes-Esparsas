@@ -12,9 +12,9 @@ struct ListIterator{
 };
 
 
-List **list_construct(List **list, int qty_lists){
+List **list_construct(int qty_lists){
 
-    list = (List **) malloc( qty_lists * sizeof(List*) );
+    List **list = (List **) malloc( qty_lists * sizeof(List*) );
 
     for( int i = 0; i < qty_lists; i++ ){
         list[i] = (List*) malloc( sizeof(List) );
@@ -136,8 +136,6 @@ void list_insert_node(List *row, Node *new_node, Node *next_node, Node *prev_nod
 Node *list_find_node(List *row, int index, char node_type, char list_type, char position_type){
     ListIterator *li = list_front_iterator(row);
     Node *n = NULL;
-
-    /* Retorna o node procurado, seu next ou seu prev */
 
     if( list_iterator_is_over(li) ){
         free(li);

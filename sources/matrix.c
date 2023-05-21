@@ -25,8 +25,8 @@ Matrix *matrix_construct(int *qty_matrices, int qty_lines, int qty_columns, char
     }
 
     /* Aloca memória para cada lista das linhas e das colunas da matriz */
-    matrix->lines = list_construct( matrix->lines, matrix->number_lines );
-    matrix->columns = list_construct( matrix->lines, matrix->number_columns );
+    matrix->lines = list_construct( matrix->number_lines );
+    matrix->columns = list_construct( matrix->number_columns );
 
     return matrix;
 }
