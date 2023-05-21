@@ -253,8 +253,8 @@ void matrix_swap_columns(Matrix *matrix, int index_1, int index_2, char list_typ
 
         /* se a lista acabou antes de chegar ao índice 2, realiza o swap */
         if( val_1 != NULL && !swap_confirm ){
-            list_increment(matrix->lines[index_2], matrix->columns[l], l, index_2, *val_1);
-            list_decrement(matrix->lines[index_1], matrix->columns[l], l, index_1);
+            list_increment(matrix->lines[l], matrix->columns[index_2], l, index_2, *val_1);
+            list_decrement(matrix->lines[l], matrix->columns[index_1], l, index_1);
         }
 
         free(li);
