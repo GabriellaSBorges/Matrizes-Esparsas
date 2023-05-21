@@ -574,6 +574,12 @@ data_type add_all_values(Matrix *matrix){
     return sum;
 }
 
+/*
+Complexidade: O(L*nL)
+L = número de linhas; nL = qtd máxima de nodes em uma linha;
+
+-> Percorre cada node de cada linha.
+*/
 void print_dense_matrix(Matrix *matrix){
     ListIterator *li = NULL;
     data_type value = 0;
@@ -590,7 +596,7 @@ void print_dense_matrix(Matrix *matrix){
             value = ( !list_iterator_is_over(li) && list_iterator_return_place(li, 'c') == c ) ? 
             (*list_iterator_next(li, 'l')) : 0;
  
-            printf("%.0f ", value);
+            printf("%.1f ", value);
         }
         free(li);
         printf("\n");
@@ -600,6 +606,12 @@ void print_dense_matrix(Matrix *matrix){
     // 
 }
 
+/*
+Complexidade: O(L*nL)
+L = número de linhas; nL = qtd máxima de nodes em uma linha;
+
+-> Percorre cada node de cada linha.
+*/
 void print_sparse_matrix(Matrix *matrix){
     ListIterator *li = NULL;
     data_type value = 0;
@@ -615,7 +627,7 @@ void print_sparse_matrix(Matrix *matrix){
             c = list_iterator_return_place(li, 'c');
             value = *list_iterator_next(li, 'l');
 
-            printf("%.0f (%dx%d)  ", value, l, c);
+            printf("%.1f (%dx%d)  ", value, l, c);
         }            
         free(li);
         printf("\n");
@@ -623,6 +635,12 @@ void print_sparse_matrix(Matrix *matrix){
     printf("\n");
 }
 
+/*
+Complexidade: O(L*nL)
+L = número de linhas; nL = qtd máxima de nodes em uma linha;
+
+-> Percorre cada node de cada linha e salva seus dados em um arquivo binário.
+*/
 void save_binary_matrix(Matrix *matrix, int index){
     char path[11] = PATH_FILE;
     FILE *arq = fopen(path, "wb");
@@ -647,6 +665,14 @@ void save_binary_matrix(Matrix *matrix, int index){
     fclose(arq);
 }
 
+/*
+Complexidade: O((L + C) + (L1*nL1)*(nL + nC)) = O(a + (L1*nL1)*i)
+a =  complexidade de matrix_construct ( O(L + C) ); i = complexidade de list_increment ( O(nL + nC) );
+L = número de linhas da nova matriz; nL = qtd máxima de nodes em uma linha L;
+L1 = número de linhas da matriz 1; nL1 = qtd máxima de nodes na linha L1; 
+
+-> Cria uma nova matriz. Para cada node de cada linha da nova matriz, lê seus dados e o incrementa.
+*/
 Matrix *read_binary_matrix(int *qty_matrices){
     char path[11] = PATH_FILE;
     FILE *arq = fopen(path, "rb");
