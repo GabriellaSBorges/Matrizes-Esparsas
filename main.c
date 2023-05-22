@@ -68,27 +68,34 @@ int main(){
     Matrix *matrix_4 = matrices_multiply(matrix_0, matrix_1, qty_matrices); 
     print_dense_matrix(matrix_4);
 
+    /* Multiplica a matriz_0 e a matriz_1 ponto a ponto */
     Matrix *matrix_5 = multiply_point_to_point(matrix_0, matrix_1, qty_matrices, 0); 
     print_dense_matrix(matrix_5);
 
-
+    /* Troca as colunas 1 e 2 da matriz_5 */
     matrix_swap_columns(matrix_5, 1, 2); 
     print_dense_matrix(matrix_5);
 
+    /* Troca as linhas 1 e 2 da matriz_5 */
     matrix_swap_lines(matrix_5, 1, 2); 
     print_dense_matrix(matrix_5);
 
-
-    Matrix *matrix_6 = matrix_slice(matrix_5, qty_matrices, 0, 0, 1, 1, 0);
+    /* Retorna uma submatriz da matriz_5, sendo
+    ponto inicial = linha 0 e coluna 0
+    ponto final = linha 1 e coluna 2 */
+    Matrix *matrix_6 = matrix_slice(matrix_5, qty_matrices, 0, 0, 1, 2, 0);
     print_dense_matrix(matrix_6);
+    print_sparse_matrix(matrix_6);
     
+    /* Retorna a matriz transposta da matriz 5 */
     Matrix *matrix_7 = matrix_transposed(matrix_5, qty_matrices); 
     print_dense_matrix(matrix_7);
 
-
+    /* Salva a matriz 7 em um arquivo binário */
     save_binary_matrix(matrix_7, 7);
     matrix_destroy(matrix_7);
 
+    /* Lê e inicializa uma matriz de um arquivo binário */
     Matrix *matrix_8 = read_binary_matrix(qty_matrices); 
     print_dense_matrix(matrix_8);
 
@@ -100,6 +107,7 @@ int main(){
     int *qty_kernels = (int*) malloc( sizeof(int) );
     *qty_kernels = 0;
 
+    /* Cria um kernel 0 */
     Matrix *kernel_0 = matrix_construct(qty_kernels, 3, 3, 0); 
 
     matrix_assign_value(kernel_0, 0, 0, 1); 
@@ -114,7 +122,7 @@ int main(){
 
     print_dense_matrix(kernel_0);
 
-
+    /* Realiza a convolução a partir da matriz 8 e do kernel 0 */
     Matrix *matrix_9 = matrix_convolution(matrix_8, kernel_0, qty_matrices);
     print_dense_matrix(matrix_9);
 
