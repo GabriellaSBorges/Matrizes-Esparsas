@@ -81,6 +81,9 @@ nL = qtd máxima de nodes em uma linha L
 */
 void matrix_read_value(Matrix *matrix, int index, int l, int c){
 
+    printf("\n=================|READ VALUE|=================\n");
+
+
     Node *n = list_find_node(matrix->lines[l], c, 'a', 'l', 'c');
     data_type *val = node_return_value(n);
 
