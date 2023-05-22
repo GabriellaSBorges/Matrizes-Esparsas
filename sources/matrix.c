@@ -42,12 +42,11 @@ L = número de linhas; nL = qtd máxima de nodes em uma linha; C = número de co
 */
 void matrix_destroy(Matrix *matrix){
 
-    if( matrix ){
-        list_destroy(matrix->lines, matrix->number_lines, 'l');
-        list_destroy(matrix->columns, matrix->number_columns, 'c');
+    list_destroy(matrix->lines, matrix->number_lines, 'l');
+    list_destroy(matrix->columns, matrix->number_columns, 'c');
 
-        free(matrix);
-    }
+    free(matrix);
+    
 }
 
 /*
@@ -107,7 +106,7 @@ Matrix *add_matrices(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices){
 
     if( matrix_1->number_lines != matrix_2->number_lines || matrix_1->number_columns != matrix_2->number_columns ){
         printf("Matrices of different sizes cannot be added!\n\n");
-        return NULL;
+        exit(1);
     }      
         
 
@@ -197,7 +196,7 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
 
     if( matrix_1->number_columns != matrix_2->number_lines ){
         printf("These matrices cannot be multiplied!\n\n");
-        return NULL;
+        exit(1);
     }  
 
 
@@ -225,7 +224,8 @@ Matrix *matrices_multiply(Matrix *matrix_1, Matrix *matrix_2, int *qty_matrices)
                 }     
             }  
 
-            list_increment(new_matrix->lines[l], new_matrix->columns[c], l, c, new_value);
+            if( new_value )
+                list_increment(new_matrix->lines[l], new_matrix->columns[c], l, c, new_value);
             
             free(li_1);
             free(li_2);
@@ -250,7 +250,7 @@ Matrix *multiply_point_to_point(Matrix *matrix_1, Matrix *matrix_2, int *qty_mat
 
     if( matrix_1->number_lines != matrix_2->number_lines || matrix_1->number_columns != matrix_2->number_columns ){
         printf("These matrices cannot be multiplied!\n\n");
-        return NULL;
+        exit(1);
     }
 
 
@@ -596,7 +596,7 @@ void print_dense_matrix(Matrix *matrix){
             value = ( !list_iterator_is_over(li) && list_iterator_return_place(li, 'c') == c ) ? 
             (*list_iterator_next(li, 'l')) : 0;
  
-            printf("%.1f ", value);
+            printf("%.0f  ", value);
         }
         free(li);
         printf("\n");
@@ -627,7 +627,7 @@ void print_sparse_matrix(Matrix *matrix){
             c = list_iterator_return_place(li, 'c');
             value = *list_iterator_next(li, 'l');
 
-            printf("%.1f (%dx%d)  ", value, l, c);
+            printf("%.0f (%dx%d)  ", value, l, c);
         }            
         free(li);
         printf("\n");

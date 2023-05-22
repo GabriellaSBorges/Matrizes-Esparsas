@@ -10,35 +10,41 @@ int main(){
     printf("---------------\n Bem-vindo! :) \n---------------\n");
 
 
-    /* CRIAÇÃO MATRIZES */
+    printf("------------------ MATRIX 0 ------------------\n");
+
+    /* Cria a matriz 0 e atribui valores a ela */
     Matrix *matrix_0 = matrix_construct(qty_matrices, 3, 3, 0); 
 
+    matrix_assign_value(matrix_0, 2, 2, 0); 
     matrix_assign_value(matrix_0, 0, 0, 1); 
-    matrix_assign_value(matrix_0, 0, 1, 2);
-    matrix_assign_value(matrix_0, 0, 2, 3); 
     matrix_assign_value(matrix_0, 1, 0, 0);
     matrix_assign_value(matrix_0, 1, 1, 1); 
     matrix_assign_value(matrix_0, 1, 2, 0); 
+    matrix_assign_value(matrix_0, 0, 1, 2);
+    matrix_assign_value(matrix_0, 0, 2, 3); 
     matrix_assign_value(matrix_0, 2, 0, 4); 
     matrix_assign_value(matrix_0, 2, 1, 3); 
-    matrix_assign_value(matrix_0, 2, 2, 0); 
     matrix_assign_value(matrix_0, 2, 2, 2); 
    
     print_sparse_matrix(matrix_0);
     print_dense_matrix(matrix_0);
     
 
+    printf("------------------ MATRIX 1 ------------------\n");
+
+    /* Cria a matriz 1 e atribui valores a ela */
     Matrix *matrix_1 = matrix_construct(qty_matrices, 3, 3, 0);
 
     matrix_assign_value(matrix_1, 0, 0, 3); 
-    matrix_assign_value(matrix_1, 0, 1, 3); 
-    matrix_assign_value(matrix_1, 0, 2, 0); 
-    matrix_assign_value(matrix_1, 1, 0, 1); 
-    matrix_assign_value(matrix_1, 1, 1, 0); 
     matrix_assign_value(matrix_1, 1, 2, 1); 
+    matrix_assign_value(matrix_1, 2, 2, 0); 
     matrix_assign_value(matrix_1, 2, 1, 2); 
-    matrix_assign_value(matrix_1, 2, 0, 0); 
-    matrix_assign_value(matrix_1, 2, 2, 2); 
+    matrix_assign_value(matrix_1, 0, 1, 0); 
+    matrix_assign_value(matrix_1, 0, 2, 3); 
+    matrix_assign_value(matrix_1, 1, 0, 0); 
+    matrix_assign_value(matrix_1, 1, 1, 0); 
+    matrix_assign_value(matrix_1, 2, 0, 2); 
+   
 
     print_sparse_matrix(matrix_1);
     print_dense_matrix(matrix_1);
@@ -46,15 +52,19 @@ int main(){
 
     /* OPERAÇÕES COM MATRIZES */
     matrix_read_value(matrix_0, 0, 1, 0); 
-    matrix_read_value(matrix_1, 1, 2, 2); 
+    matrix_read_value(matrix_1, 1, 2, 1); 
+
+
     
+    /* Soma a matriz_0 com a matriz_1 */
     Matrix *matrix_2 = add_matrices(matrix_0, matrix_1, qty_matrices); 
     print_dense_matrix(matrix_2);
 
-
+    /* Multiplica a matriz_0 por 2 */
     Matrix *matrix_3 = matrix_multiply_by_scalar(matrix_0, qty_matrices, 2); 
     print_dense_matrix(matrix_3);
 
+    /* Multiplica a matriz_0 pela matriz_1 */
     Matrix *matrix_4 = matrices_multiply(matrix_0, matrix_1, qty_matrices); 
     print_dense_matrix(matrix_4);
 
@@ -83,7 +93,10 @@ int main(){
     print_dense_matrix(matrix_8);
 
 
-    /* CONVOLUCAO */
+    /* CONVOLUÇÃO */
+
+    printf("------------------ KERNEL ------------------\n");
+
     int *qty_kernels = (int*) malloc( sizeof(int) );
     *qty_kernels = 0;
 
@@ -106,7 +119,7 @@ int main(){
     print_dense_matrix(matrix_9);
 
 
-
+    /* Libera toda a memória */
     matrix_destroy(matrix_0);
     matrix_destroy(matrix_1);
     matrix_destroy(matrix_2);

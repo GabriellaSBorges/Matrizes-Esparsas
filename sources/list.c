@@ -114,24 +114,27 @@ void list_remove_node(List *row, Node *next_node, Node *prev_node, char list_typ
 /*
 Complexidade: O(nL + nC)
 nL = qtd máxima de nodes em uma linha; nC = qtd máxima de nodes em uma coluna; 
--> Percorre todos os nodes de uma linha até achar o desejado (prev node), realiza o mesmo processo a coluna.
+-> Percorre todos os nodes de uma linha até achar o desejado, realiza o mesmo processo a coluna.
+
+Se o prev node for nulo, a busca ocorrerá para achar o next node; caso contrário, a busca ocorrerá apenas para achar ele próprio.
 */
 void list_increment(List *line, List *column, int l, int c, data_type val){
 
     Node *prev_line = list_find_node(line, c, 'p', 'l', 'c');
-    Node *next_line = ( line->size == 0 ) ? NULL : node_return_next(prev_line, 'l');
-    
     Node *prev_column = list_find_node(column, l, 'p', 'c', 'l');
-    Node *next_column = ( column->size == 0 ) ? NULL : node_return_next(prev_column, 'c');
+
+    /* Se o prev node não for nulo, retorna o seu next, caso contrário, faz a busca com a list_find_node */
+    Node *next_line = ( prev_line ) ? node_return_next(prev_line, 'l') : list_find_node(line, c, 'n', 'l', 'c');;
+    Node *next_column = ( prev_column ) ?  node_return_next(prev_column, 'c') : list_find_node(column, l, 'n', 'c', 'l');
+
 
     Node *n = node_construct(val, l, c, next_line, prev_line, next_column, prev_column);
-    
-    /* Após construir o novo node, liga ele à linha e à coluna */
-    list_insert_node(line, n, next_line, prev_line, 'l');
-    list_insert_node(column, n, next_column, prev_column, 'c');
 
     line->size++;
     column->size++;
+    
+    list_insert_node(line, n, next_line, prev_line, 'l');
+    list_insert_node(column, n, next_column, prev_column, 'c');
 }
 
 /*
@@ -177,6 +180,12 @@ Node *list_find_node(List *row, int index, char node_type, char list_type, char 
     switch(node_type){
         /* prev node */
         case 'p':                
+            /* Se o índice desejado for menor do que o índice da head, prev_node = NULL */
+            if( index < node_return_place(li->current, position_type) ){
+                free(li);
+                return n;
+            }
+
             /* Acha o último node da lista ou o anterior ao índice desejado */
             while( node_return_next(li->current, list_type) && index > node_return_place(li->current, position_type)+1 )
                 li->current = node_return_next(li->current, list_type); 
@@ -208,8 +217,6 @@ Node *list_find_node(List *row, int index, char node_type, char list_type, char 
     free(li);
     return n;
 }
-
-
 
 /* FUNCTIONS LIST ITERATOR */
 
