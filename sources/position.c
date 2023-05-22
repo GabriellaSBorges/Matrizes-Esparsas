@@ -10,7 +10,6 @@ struct Position{
 Complexidade: O(1)
 */
 Position *position_construct(int l, int c){
-
     Position *p = (Position*) malloc( sizeof(Position) );
 
     p->line = l;

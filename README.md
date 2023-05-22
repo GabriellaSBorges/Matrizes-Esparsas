@@ -3,6 +3,9 @@
 Biblioteca para trabalhar com matrizes esparsas (maior parte dos valores são iguais a zero), a fim de economizar memória e tempo de operação.
 No entanto, é mais eficiente para a manipulação de poucas matrizes, visto que são alocadas separadamente.
 
+Para rodar o programa junto com o _valgrind_, digite `make`!
+
+
 
 ## ➕ Operações principais
 
@@ -24,9 +27,9 @@ No entanto, é mais eficiente para a manipulação de poucas matrizes, visto que
     - Mostrar uma matriz na tela em formato esparso;
     - Mostrar uma matriz na tela em formato denso;
 
-## ⚠ Operações principais
+## ⚠ Importante
 
-Na biblioteca, foram criadas algumas "flags" com o intuito facilitar o entendimento do programa e generalizar algumas funções para serem usadas com linhas e colunas.
+Na biblioteca, foram criadas algumas "flags" com o intuito facilitar o entendimento do programa e generalizar certas funções para serem usadas com linhas e colunas.
 
 `list_type` Tipo de lista  
 

@@ -596,7 +596,7 @@ void print_dense_matrix(Matrix *matrix){
             value = ( !list_iterator_is_over(li) && list_iterator_return_place(li, 'c') == c ) ? 
             (*list_iterator_next(li, 'l')) : 0;
  
-            printf("%.0f  ", value);
+            printf("%.1f  ", value);
         }
         free(li);
         printf("\n");
@@ -627,7 +627,7 @@ void print_sparse_matrix(Matrix *matrix){
             c = list_iterator_return_place(li, 'c');
             value = *list_iterator_next(li, 'l');
 
-            printf("%.0f (%dx%d)  ", value, l, c);
+            printf("%.1f (%dx%d)  ", value, l, c);
         }            
         free(li);
         printf("\n");

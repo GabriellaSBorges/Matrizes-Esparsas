@@ -45,7 +45,6 @@ void assign_prev_node(Node *node, Node *new_node, char list_type){
         node->prev_line = new_node;
     if( list_type == 'c' )
         node->prev_column = new_node;
-
 }
 
 /*
@@ -57,7 +56,6 @@ void assign_next_node(Node *node, Node *new_node, char list_type){
         node->next_line = new_node;
     if( list_type == 'c' )
         node->next_column = new_node;
-
 }
 
 /*
@@ -72,7 +70,6 @@ Complexidade: O(1)
 */
 data_type *node_return_value(Node *n){
     data_type *val = &n->value;
-
     return val;
 }
 
